@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.pokersimulator.databinding.FragmentRoomBinding
+import com.example.pokersimulator.databinding.RoomFragmentBinding
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
 class RoomFragment : Fragment() {
 
-    private var _binding: FragmentRoomBinding? = null
+    private var _binding: RoomFragmentBinding? = null
 
     private val args: RoomFragmentArgs by navArgs()
 
@@ -27,7 +27,7 @@ class RoomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentRoomBinding.inflate(inflater, container, false)
+        _binding = RoomFragmentBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -42,7 +42,8 @@ class RoomFragment : Fragment() {
             binding.buttonPrepareStart.setText(R.string.start_game)
 
         binding.buttonPrepareStart.setOnClickListener {
-//            TODO findNavController().navigate()
+            // TODO define client prepare and unprepare events' actions
+            findNavController().navigate(RoomFragmentDirections.actionStartGame(true))
         }
     }
 

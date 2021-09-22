@@ -9,7 +9,7 @@
         android:id="@+id/IndexPageFragment"
         android:name="com.example.pokersimulator.IndexPageFragment"
         android:label="@string/index_page_fragment_label"
-        tools:layout="@layout/fragment_index_page">
+        tools:layout="@layout/index_page_fragment">
 
         <action
             android:id="@+id/action_create_room"
@@ -19,10 +19,21 @@
         android:id="@+id/RoomFragment"
         android:name="com.example.pokersimulator.RoomFragment"
         android:label="@string/room_fragment_label"
-        tools:layout="@layout/fragment_room" >
+        tools:layout="@layout/room_fragment" >
         <argument
             android:name="isHost"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_start_game"
+            app:destination="@id/gameBoardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameBoardFragment"
+        android:name="com.example.pokersimulator.GameBoardFragment"
+        android:label="game_board_fragment"
+        tools:layout="@layout/game_board_fragment" >
+        <argument
+            android:name="isHost"
+            app:argType="boolean" />
     </fragment>
 </navigation>

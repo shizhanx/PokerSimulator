@@ -6,14 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.pokersimulator.databinding.FragmentIndexPageBinding
+import com.example.pokersimulator.databinding.IndexPageFragmentBinding
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class IndexPageFragment : Fragment() {
 
-    private var _binding: FragmentIndexPageBinding? = null
+    private var _binding: IndexPageFragmentBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -24,7 +24,7 @@ class IndexPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentIndexPageBinding.inflate(inflater, container, false)
+        _binding = IndexPageFragmentBinding.inflate(inflater, container, false)
         return binding.root
 
     }

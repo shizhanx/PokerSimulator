@@ -3,10 +3,17 @@
     <!-- Strings used for fragments for navigation -->
     <string name="index_page_fragment_label">Index Page Fragment</string>
     <string name="room_fragment_label">Room Fragment</string>
+    <!-- Buttons context strings -->
     <string name="create_room">Create your own room</string>
     <string name="join_room">Join existing room</string>
     <string name="prepare_to_start_game">Ready</string>
     <string name="start_game">Start</string>
-
+    <string name="empty_pile">No card here yet</string>
+    <!-- Text defaults and placeholders -->
     <string name="index_fragment_header">Welcome to the poker simulator</string>
+    <string name="pile_previous_card">Previous</string>
+    <string name="pile_next_card">Next</string>
+    <string name="start_turn">Start your turn</string>
+    <string name="end_turn">End your turn</string>
+    <string name="wait_turn">Wait now</string>
 </resources>
