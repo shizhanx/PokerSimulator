@@ -6,14 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.pokersimulator.databinding.FragmentSecondBinding
+import androidx.navigation.fragment.navArgs
+import com.example.pokersimulator.databinding.FragmentRoomBinding
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class SecondFragment : Fragment() {
+class RoomFragment : Fragment() {
 
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: FragmentRoomBinding? = null
+
+    private val args: RoomFragmentArgs by navArgs()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,9 +25,9 @@ class SecondFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        _binding = FragmentRoomBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -32,8 +35,14 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        // Decides the text of the prepare/start button with regard to the user type.
+        if (args.isHost)
+            binding.buttonPrepareStart.setText(R.string.prepare_to_start_game)
+        else
+            binding.buttonPrepareStart.setText(R.string.start_game)
+
+        binding.buttonPrepareStart.setOnClickListener {
+//            TODO findNavController().navigate()
         }
     }
 

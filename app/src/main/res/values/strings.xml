@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">PokerSimulator</string>
-    <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="index_page_fragment_label">Index Page Fragment</string>
+    <string name="room_fragment_label">Room Fragment</string>
+    <string name="create_room">Create your own room</string>
+    <string name="join_room">Join existing room</string>
+    <string name="prepare_to_start_game">Ready</string>
+    <string name="start_game">Start</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="index_fragment_header">Welcome to the poker simulator</string>
 </resources>
