@@ -33,8 +33,16 @@ class GameBoardFragment : Fragment() {
 
         // Setup the recycler views
         // TODO get rid of card coded pile for testing
-        val TEMP_pile = listOf(CardData(CardType.JOKER, 1), CardData(CardType.JOKER, 2))
+        val TEMP_pile = listOf(CardData(CardType.JOKER, 1), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2))
         with(binding.opponentPlayedPile) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = MyCardRecyclerViewAdapter(TEMP_pile.map { it.copy() }.toList())
+        }
+        with(binding.yourHand) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = MyCardRecyclerViewAdapter(TEMP_pile.map { it.copy() }.toList())
+        }
+        with(binding.yourPlayedPile) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(TEMP_pile.map { it.copy() }.toList())
         }
