@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
 import com.example.pokersimulator.domain_object.GameActionEnum
+import com.example.pokersimulator.listener.MyDragListener
 
 class GameBoardFragment : Fragment() {
 
@@ -24,53 +25,6 @@ class GameBoardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: GameBoardViewModel
-
-    private val dragListener = View.OnDragListener{ view, dragEvent ->
-        var gameActionType: GameActionEnum? = null
-        // Determine the possible game play option of this drag and drop action
-        if (dragEvent.clipDescription != null) {
-            if (view.id == R.id.your_hand && dragEvent.clipDescription.label == R.id.TEMP_draw_pile.toString()) {
-                gameActionType = GameActionEnum.DRAW
-            } else if (view.id == R.id.TEMP_draw_pile && dragEvent.clipDescription.label == R.id.your_hand.toString()) {
-                gameActionType = GameActionEnum.UNDO_DRAW
-            } else if (view.id == R.id.your_played_pile && dragEvent.clipDescription.label == R.id.your_hand.toString()) {
-                gameActionType = GameActionEnum.PLAY
-            } else if (view.id == R.id.your_hand && dragEvent.clipDescription.label == R.id.your_played_pile.toString()) {
-                gameActionType = GameActionEnum.UNDO_PLAY
-            }
-        } else Log.d("TAG", ": null clipdescription, ${dragEvent.action == DragEvent.ACTION_DRAG_ENDED}")
-
-        // TODO Add visual effect to highlight entering and exiting a droppable zone
-        when (dragEvent.action) {
-            DragEvent.ACTION_DRAG_STARTED -> {
-                Log.d("TAG", ": started!")
-                gameActionType != null
-            }
-            DragEvent.ACTION_DRAG_ENTERED -> {
-                Log.d("TAG", ": entered!$gameActionType")
-                gameActionType != null
-            }
-            DragEvent.ACTION_DRAG_LOCATION -> {
-                gameActionType != null
-            }
-            DragEvent.ACTION_DRAG_EXITED -> {
-                gameActionType != null
-            }
-            DragEvent.ACTION_DROP -> {
-                when (gameActionType) {
-                    GameActionEnum.DRAW -> {
-                        viewModel.drawCard()
-                    }
-                    // TODO finish the rest of actions
-                }
-                gameActionType != null
-            }
-            DragEvent.ACTION_DRAG_ENDED -> {
-                gameActionType != null
-            }
-            else -> false
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,16 +57,17 @@ class GameBoardFragment : Fragment() {
             it.startDragAndDrop(clipData, View.DragShadowBuilder(it), null, 0)
         }
 
-        // Setup the drag and drop listeners
-        // TODO set listener on other piles as well
-        binding.yourHand.setOnDragListener(dragListener)
-
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(GameBoardViewModel::class.java)
+
+        // Setup the drag and drop listeners
+        // TODO set listener on other piles as well
+        binding.yourHand.setOnDragListener(MyDragListener(viewModel))
+
         viewModel.yourHandLiveData.observe(viewLifecycleOwner, Observer {
             val adapter = binding.yourHand.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
