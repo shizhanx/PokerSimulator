@@ -2,18 +2,18 @@ package com.example.pokersimulator
 
 import android.content.ClipData
 import android.content.ClipDescription
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import android.view.DragEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
-import com.example.pokersimulator.domain_object.GameActionEnum
 import com.example.pokersimulator.listener.MyDragListener
 
 class GameBoardFragment : Fragment() {
@@ -25,12 +25,17 @@ class GameBoardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: GameBoardViewModel
+    private lateinit var sensorManager: SensorManager
+    private var mLinearAccelerometer: Sensor? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = GameBoardFragmentBinding.inflate(inflater, container, false)
+
+        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mLinearAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
         // Setup the recycler views
 //        val TEMP_pile = listOf(CardData(CardType.JOKER, 1), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2))
@@ -68,19 +73,24 @@ class GameBoardFragment : Fragment() {
         // TODO set listener on other piles as well
         binding.yourHand.setOnDragListener(MyDragListener(viewModel))
 
-        viewModel.yourHandLiveData.observe(viewLifecycleOwner, Observer {
+        // Setup the shake listener
+
+
+        // Setup the observers that reacts to changes in the pile data in viewModel
+        // TODO Please use these observers to update the visual effect
+        viewModel.yourHandLiveData.observe(viewLifecycleOwner, {
             val adapter = binding.yourHand.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
         })
-        viewModel.opponentPlayedPileLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.opponentPlayedPileLiveData.observe(viewLifecycleOwner, {
             val adapter = binding.opponentPlayedPile.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
         })
-        viewModel.yourPlayedPileLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.yourPlayedPileLiveData.observe(viewLifecycleOwner, {
             val adapter = binding.yourPlayedPile.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
         })
-        viewModel.drawPileLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.drawPileLiveData.observe(viewLifecycleOwner, {
             binding.TEMPDrawPile.text = it.count().toString()
         })
     }
