@@ -15,6 +15,11 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
 import com.example.pokersimulator.listener.MyDragListener
+import com.example.pokersimulator.listener.MyShakeListener
+import android.widget.Toast
+
+
+
 
 class GameBoardFragment : Fragment() {
 
@@ -27,6 +32,7 @@ class GameBoardFragment : Fragment() {
     private lateinit var viewModel: GameBoardViewModel
     private lateinit var sensorManager: SensorManager
     private var mLinearAccelerometer: Sensor? = null
+    private val myShakeListener = MyShakeListener()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,7 +80,12 @@ class GameBoardFragment : Fragment() {
         binding.yourHand.setOnDragListener(MyDragListener(viewModel))
 
         // Setup the shake listener
-
+        myShakeListener.setOnShakeListener(object : MyShakeListener.OnShakeListener {
+            override fun onShake() {
+                viewModel.shuffleDrawPile()
+            }
+        })
+        sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
 
         // Setup the observers that reacts to changes in the pile data in viewModel
         // TODO Please use these observers to update the visual effect
@@ -93,6 +104,16 @@ class GameBoardFragment : Fragment() {
         viewModel.drawPileLiveData.observe(viewLifecycleOwner, {
             binding.TEMPDrawPile.text = it.count().toString()
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
+    }
+
+    override fun onPause() {
+        sensorManager.unregisterListener(myShakeListener)
+        super.onPause()
     }
 
     override fun onDestroyView() {

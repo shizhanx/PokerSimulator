@@ -14,11 +14,6 @@ class MyCardRecyclerViewAdapter(
 )
     : RecyclerView.Adapter<MyCardRecyclerViewAdapter.ViewHolder>() {
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(CardFragmentBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }

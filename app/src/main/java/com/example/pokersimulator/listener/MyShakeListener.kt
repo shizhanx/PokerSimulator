@@ -3,6 +3,7 @@ package com.example.pokersimulator.listener
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
+import android.util.Log
 import kotlin.math.abs
 
 
@@ -14,19 +15,19 @@ import kotlin.math.abs
 class MyShakeListener: SensorEventListener {
 
     /** Minimum movement force to consider.  */
-    private val MIN_FORCE = 10
+    private val MIN_FORCE = 5
 
     /**
      * Minimum times in a shake gesture that the direction of movement needs to
      * change.
      */
-    private val MIN_DIRECTION_CHANGE = 2
+    private val MIN_ACCELERATION_CHANGE = 2
 
     /** Maximum pause between movements.  */
-    private val MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE = 200
+    private val MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE = 2000000000
 
     /** Maximum allowed time for shake gesture.  */
-    private val MAX_TOTAL_DURATION_OF_SHAKE = 400
+    private val MAX_TOTAL_DURATION_OF_SHAKE = 4000000000
 
     /** Time when the gesture started.  */
     private var mFirstDirectionChangeTime: Long = 0
@@ -68,11 +69,14 @@ class MyShakeListener: SensorEventListener {
         val x: Float = se.values[0]
         val y: Float = se.values[1]
         val z: Float = se.values[2]
+        if (lastX == 0f) lastX = x
+        if (lastY == 0f) lastY = y
+        if (lastZ == 0f) lastZ = z
 
         // calculate movement
-        val totalMovement = abs(x + y + z - lastX - lastY - lastZ)
+        val totalChange = abs(x + y + z - lastX - lastY - lastZ)
 
-        if (totalMovement > MIN_FORCE) {
+        if (totalChange > MIN_FORCE) {
 
             // get time
             val now = se.timestamp
@@ -82,10 +86,12 @@ class MyShakeListener: SensorEventListener {
                 mFirstDirectionChangeTime = now
                 mLastDirectionChangeTime = now
             }
+            Log.d("TAG", "total: $totalChange")
 
             // check if the last movement was not long ago
             val lastChangeWasAgo = now - mLastDirectionChangeTime
             if (lastChangeWasAgo < MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE) {
+                Log.d("TAG", "first: $mFirstDirectionChangeTime, last: $mLastDirectionChangeTime, now: $now, ago: $lastChangeWasAgo")
 
                 // store movement data
                 mLastDirectionChangeTime = now
@@ -97,8 +103,8 @@ class MyShakeListener: SensorEventListener {
                 lastZ = z
 
                 // check how many movements are so far
-                if (mDirectionChangeCount >= MIN_DIRECTION_CHANGE) {
-
+                if (mDirectionChangeCount >= MIN_ACCELERATION_CHANGE) {
+                    Log.d("TAG", "onSensorChanged: directionCount: $mDirectionChangeCount")
                     // check total duration
                     val totalDuration = now - mFirstDirectionChangeTime
                     if (totalDuration < MAX_TOTAL_DURATION_OF_SHAKE) {
