@@ -7,6 +7,9 @@ import com.example.pokersimulator.GameBoardViewModel
 import com.example.pokersimulator.R
 import com.example.pokersimulator.domain_object.GameActionEnum
 
+/**
+ * The drag event listener specifically for in game actions to the cards
+ */
 class MyDragListener(private val viewModel: GameBoardViewModel): View.OnDragListener {
     override fun onDrag(view: View, dragEvent: DragEvent): Boolean {
         var gameActionType: GameActionEnum? = null

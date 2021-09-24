@@ -31,6 +31,7 @@ class MyCardRecyclerViewAdapter(
     }
 
     inner class ViewHolder(binding: CardFragmentBinding) : RecyclerView.ViewHolder(binding.root) {
+        // TODO UI add graphical representation of each card so that moving the card is more enjoyable
         val cardInfoView = binding.cardInfo
     }
 
