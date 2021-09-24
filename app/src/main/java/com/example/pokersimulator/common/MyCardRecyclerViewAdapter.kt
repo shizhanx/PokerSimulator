@@ -1,4 +1,4 @@
-package com.example.pokersimulator
+package com.example.pokersimulator.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

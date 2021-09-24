@@ -11,14 +11,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
 import com.example.pokersimulator.listener.MyDragListener
 import com.example.pokersimulator.listener.MyShakeListener
-import android.widget.Toast
-
-
+import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
+import com.example.pokersimulator.common.MyYesNoDialog
 
 
 class GameBoardFragment : Fragment() {
@@ -82,7 +80,13 @@ class GameBoardFragment : Fragment() {
         // Setup the shake listener
         myShakeListener.setOnShakeListener(object : MyShakeListener.OnShakeListener {
             override fun onShake() {
-                viewModel.shuffleDrawPile()
+                MyYesNoDialog(
+                    getString(R.string.shuffle_draw_pile_confirm),
+                    "Yes",
+                    "No",
+                    { viewModel.shuffleDrawPile() },
+                    {},
+                ).show(parentFragmentManager, null)
             }
         })
         sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME)

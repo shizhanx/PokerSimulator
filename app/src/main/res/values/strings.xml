@@ -16,4 +16,6 @@
     <string name="start_turn">Start your turn</string>
     <string name="end_turn">End your turn</string>
     <string name="wait_turn">Wait now</string>
+    <!-- Text for user interactions -->
+    <string name="shuffle_draw_pile_confirm">Do you want to SHUFFLE the deck?</string>
 </resources>
