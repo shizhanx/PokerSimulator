@@ -1,4 +1,4 @@
-package com.example.pokersimulator
+package com.example.pokersimulator.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,11 +13,6 @@ class MyCardRecyclerViewAdapter(
     var pile: List<CardData>
 )
     : RecyclerView.Adapter<MyCardRecyclerViewAdapter.ViewHolder>() {
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(CardFragmentBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -36,6 +31,7 @@ class MyCardRecyclerViewAdapter(
     }
 
     inner class ViewHolder(binding: CardFragmentBinding) : RecyclerView.ViewHolder(binding.root) {
+        // TODO UI add graphical representation of each card so that moving the card is more enjoyable
         val cardInfoView = binding.cardInfo
     }
 

@@ -2,18 +2,22 @@ package com.example.pokersimulator
 
 import android.content.ClipData
 import android.content.ClipDescription
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import android.view.DragEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
-import com.example.pokersimulator.domain_object.GameActionEnum
+import com.example.pokersimulator.listener.MyDragListener
+import com.example.pokersimulator.listener.MyShakeListener
+import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
+import com.example.pokersimulator.common.MyYesNoDialog
+
 
 class GameBoardFragment : Fragment() {
 
@@ -24,59 +28,18 @@ class GameBoardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: GameBoardViewModel
-
-    private val dragListener = View.OnDragListener{ view, dragEvent ->
-        var gameActionType: GameActionEnum? = null
-        // Determine the possible game play option of this drag and drop action
-        if (dragEvent.clipDescription != null) {
-            if (view.id == R.id.your_hand && dragEvent.clipDescription.label == R.id.TEMP_draw_pile.toString()) {
-                gameActionType = GameActionEnum.DRAW
-            } else if (view.id == R.id.TEMP_draw_pile && dragEvent.clipDescription.label == R.id.your_hand.toString()) {
-                gameActionType = GameActionEnum.UNDO_DRAW
-            } else if (view.id == R.id.your_played_pile && dragEvent.clipDescription.label == R.id.your_hand.toString()) {
-                gameActionType = GameActionEnum.PLAY
-            } else if (view.id == R.id.your_hand && dragEvent.clipDescription.label == R.id.your_played_pile.toString()) {
-                gameActionType = GameActionEnum.UNDO_PLAY
-            }
-        } else Log.d("TAG", ": null clipdescription, ${dragEvent.action == DragEvent.ACTION_DRAG_ENDED}")
-
-        // TODO Add visual effect to highlight entering and exiting a droppable zone
-        when (dragEvent.action) {
-            DragEvent.ACTION_DRAG_STARTED -> {
-                Log.d("TAG", ": started!")
-                gameActionType != null
-            }
-            DragEvent.ACTION_DRAG_ENTERED -> {
-                Log.d("TAG", ": entered!$gameActionType")
-                gameActionType != null
-            }
-            DragEvent.ACTION_DRAG_LOCATION -> {
-                gameActionType != null
-            }
-            DragEvent.ACTION_DRAG_EXITED -> {
-                gameActionType != null
-            }
-            DragEvent.ACTION_DROP -> {
-                when (gameActionType) {
-                    GameActionEnum.DRAW -> {
-                        viewModel.drawCard()
-                    }
-                    // TODO finish the rest of actions
-                }
-                gameActionType != null
-            }
-            DragEvent.ACTION_DRAG_ENDED -> {
-                gameActionType != null
-            }
-            else -> false
-        }
-    }
+    private lateinit var sensorManager: SensorManager
+    private var mLinearAccelerometer: Sensor? = null
+    private val myShakeListener = MyShakeListener()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = GameBoardFragmentBinding.inflate(inflater, container, false)
+
+        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mLinearAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
         // Setup the recycler views
 //        val TEMP_pile = listOf(CardData(CardType.JOKER, 1), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2))
@@ -94,7 +57,12 @@ class GameBoardFragment : Fragment() {
         }
 
         // Setup the long click listeners for drag and drop
+        // TODO assign long click listeners to specific cards instead of a pile as a whole
         binding.TEMPDrawPile.setOnLongClickListener {
+            // Each ClipData should consist of the following stuff:
+            // label: id of the ViewGroup of this card, like draw pile/you hand/etc
+            // content type: array of ClipDescription.MIMETYPE_TEXT_PLAIN
+            // ClipData.item: the string representation of this card
             val clipData = ClipData(
                 R.id.TEMP_draw_pile.toString(),
                 arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
@@ -103,31 +71,58 @@ class GameBoardFragment : Fragment() {
             it.startDragAndDrop(clipData, View.DragShadowBuilder(it), null, 0)
         }
 
-        // Setup the drag and drop listeners
-        // TODO set listener on other piles as well
-        binding.yourHand.setOnDragListener(dragListener)
-
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(GameBoardViewModel::class.java)
-        viewModel.yourHandLiveData.observe(viewLifecycleOwner, Observer {
+
+        // Setup the drag and drop listeners
+        // TODO set listener on other piles as well
+        binding.yourHand.setOnDragListener(MyDragListener(viewModel))
+
+        // Setup the shake listener
+        myShakeListener.setOnShakeListener(object : MyShakeListener.OnShakeListener {
+            override fun onShake() {
+                MyYesNoDialog(
+                    getString(R.string.shuffle_draw_pile_confirm),
+                    "Yes",
+                    "No",
+                    { viewModel.shuffleDrawPile() },
+                    {},
+                ).show(parentFragmentManager, null)
+            }
+        })
+        sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
+
+        // Setup the observers that reacts to changes in the pile data in viewModel
+        // TODO Please use these observers to update the visual effect
+        viewModel.yourHandLiveData.observe(viewLifecycleOwner, {
             val adapter = binding.yourHand.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
         })
-        viewModel.opponentPlayedPileLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.opponentPlayedPileLiveData.observe(viewLifecycleOwner, {
             val adapter = binding.opponentPlayedPile.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
         })
-        viewModel.yourPlayedPileLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.yourPlayedPileLiveData.observe(viewLifecycleOwner, {
             val adapter = binding.yourPlayedPile.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
         })
-        viewModel.drawPileLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.drawPileLiveData.observe(viewLifecycleOwner, {
             binding.TEMPDrawPile.text = it.count().toString()
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
+    }
+
+    override fun onPause() {
+        sensorManager.unregisterListener(myShakeListener)
+        super.onPause()
     }
 
     override fun onDestroyView() {
