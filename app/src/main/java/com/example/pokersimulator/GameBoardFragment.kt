@@ -63,21 +63,6 @@ class GameBoardFragment : Fragment() {
             addItemDecoration(MyOverlapDecorator())
         }
 
-        // Setup the long click listeners for drag and drop
-        // TODO assign long click listeners to specific cards instead of a pile as a whole
-        binding.TEMPDrawPile.setOnLongClickListener {
-            // Each ClipData should consist of the following stuff:
-            // label: id of the ViewGroup of this card, like draw pile/you hand/etc
-            // content type: array of ClipDescription.MIMETYPE_TEXT_PLAIN
-            // ClipData.item: the string representation of this card
-            val clipData = ClipData(
-                R.id.TEMP_draw_pile.toString(),
-                arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-                ClipData.Item(R.id.TEMP_draw_pile.toString())
-            )
-            it.startDragAndDrop(clipData, View.DragShadowBuilder(it), null, 0)
-        }
-
         return binding.root
     }
 
@@ -120,6 +105,7 @@ class GameBoardFragment : Fragment() {
         viewModel.drawPileLiveData.observe(viewLifecycleOwner, {
             val adapter = binding.drawPile.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
+            binding.numberCardsInDrawPile.text = it.size.toString()
         })
     }
 

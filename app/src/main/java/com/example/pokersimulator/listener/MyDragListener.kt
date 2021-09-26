@@ -15,9 +15,9 @@ class MyDragListener(private val viewModel: GameBoardViewModel): View.OnDragList
         var gameActionType: GameActionEnum? = null
         // Determine the possible game play option of this drag and drop action
         if (dragEvent.clipDescription != null) {
-            if (view.id == R.id.your_hand && dragEvent.clipDescription.label == R.id.TEMP_draw_pile.toString()) {
+            if (view.id == R.id.your_hand && dragEvent.clipDescription.label == R.id.draw_pile.toString()) {
                 gameActionType = GameActionEnum.DRAW
-            } else if (view.id == R.id.TEMP_draw_pile && dragEvent.clipDescription.label == R.id.your_hand.toString()) {
+            } else if (view.id == R.id.draw_pile && dragEvent.clipDescription.label == R.id.your_hand.toString()) {
                 gameActionType = GameActionEnum.UNDO_DRAW
             } else if (view.id == R.id.your_played_pile && dragEvent.clipDescription.label == R.id.your_hand.toString()) {
                 gameActionType = GameActionEnum.PLAY
