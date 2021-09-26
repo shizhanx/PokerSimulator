@@ -15,13 +15,13 @@ import kotlin.math.abs
 class MyShakeListener: SensorEventListener {
 
     /** Minimum movement force to consider.  */
-    private val MIN_FORCE = 5
+    private val MIN_FORCE = 20
 
     /**
      * Minimum times in a shake gesture that the direction of movement needs to
      * change.
      */
-    private val MIN_ACCELERATION_CHANGE = 2
+    private val MIN_ACCELERATION_CHANGE = 4
 
     /** Maximum pause between movements.  */
     private val MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE = 2000000000
