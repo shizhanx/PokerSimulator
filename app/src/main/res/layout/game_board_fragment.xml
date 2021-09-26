@@ -18,17 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/TEMP_draw_pile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="Placeholder for draw pile here"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.37" />
-
     <Button
         android:id="@+id/button_turn_action"
         android:layout_width="wrap_content"
@@ -50,7 +39,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.7" />
+        app:layout_constraintVertical_bias="0.76" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/opponent_played_pile"
@@ -59,12 +48,12 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/TEMP_draw_pile"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_turn_action"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/opponent_name"
-        tools:itemCount="4"
+        tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -72,14 +61,14 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/your_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TEMP_draw_pile"
-        tools:itemCount="4"
+        app:layout_constraintTop_toBottomOf="@+id/button_turn_action"
+        tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -94,7 +83,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/your_name"
-        tools:itemCount="4"
+        tools:itemCount="1"
+        tools:listitem="@layout/card_fragment" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/draw_pile"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/your_played_pile"
+        app:layout_constraintEnd_toStartOf="@+id/button_turn_action"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/opponent_played_pile"
+        tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

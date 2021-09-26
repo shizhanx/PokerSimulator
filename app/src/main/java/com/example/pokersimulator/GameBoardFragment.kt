@@ -16,6 +16,7 @@ import com.example.pokersimulator.databinding.GameBoardFragmentBinding
 import com.example.pokersimulator.listener.MyDragListener
 import com.example.pokersimulator.listener.MyShakeListener
 import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
+import com.example.pokersimulator.common.MyOverlapDecorator
 import com.example.pokersimulator.common.MyYesNoDialog
 
 
@@ -54,6 +55,12 @@ class GameBoardFragment : Fragment() {
         with(binding.yourPlayedPile) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf())
+        }
+        with(binding.drawPile) {
+            // Draw pile's order is reversed
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+            adapter = MyCardRecyclerViewAdapter(listOf())
+            addItemDecoration(MyOverlapDecorator())
         }
 
         // Setup the long click listeners for drag and drop
@@ -111,7 +118,8 @@ class GameBoardFragment : Fragment() {
             adapter.updatePile(it.toList())
         })
         viewModel.drawPileLiveData.observe(viewLifecycleOwner, {
-            binding.TEMPDrawPile.text = it.count().toString()
+            val adapter = binding.drawPile.adapter as MyCardRecyclerViewAdapter
+            adapter.updatePile(it.toList())
         })
     }
 
