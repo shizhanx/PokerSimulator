@@ -1,7 +1,5 @@
 package com.example.pokersimulator
 
-import android.content.ClipData
-import android.content.ClipDescription
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
@@ -57,8 +55,7 @@ class GameBoardFragment : Fragment() {
             adapter = MyCardRecyclerViewAdapter(listOf())
         }
         with(binding.drawPile) {
-            // Draw pile's order is reversed
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf())
             addItemDecoration(MyOverlapDecorator())
         }
@@ -71,8 +68,10 @@ class GameBoardFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(GameBoardViewModel::class.java)
 
         // Setup the drag and drop listeners
-        // TODO set listener on other piles as well
-        binding.yourHand.setOnDragListener(MyDragListener(viewModel))
+        val dragListener = MyDragListener(viewModel)
+        binding.yourHand.setOnDragListener(dragListener)
+        binding.drawPile.setOnDragListener(dragListener)
+        binding.yourPlayedPile.setOnDragListener(dragListener)
 
         // Setup the shake listener
         myShakeListener.setOnShakeListener(object : MyShakeListener.OnShakeListener {

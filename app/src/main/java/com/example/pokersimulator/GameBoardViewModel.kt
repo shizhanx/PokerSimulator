@@ -44,4 +44,12 @@ class GameBoardViewModel: ViewModel() {
         drawPileLiveData.value = drawPile
         yourHandLiveData.value = yourHand
     }
+
+    fun undoDraw(position: Int) {
+        val drawPile = drawPileLiveData.value!!
+        val yourHand = yourHandLiveData.value!!
+        drawPile.add(yourHand.removeAt(position))
+        drawPileLiveData.value = drawPile
+        yourHandLiveData.value = yourHand
+    }
 }

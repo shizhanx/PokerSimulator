@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pokersimulator.R
 import com.example.pokersimulator.databinding.CardFragmentBinding
 import com.example.pokersimulator.domain_object.CardData
+import com.example.pokersimulator.listener.MyLongClickListener
 import kotlin.properties.Delegates
 
 /**
@@ -32,7 +33,7 @@ class MyCardRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val card = pile[position]
         holder.cardInfoView.text = card.toString()
-        holder.setListeners(card)
+        holder.setListeners(card, position)
     }
 
     override fun getItemCount(): Int = pile.size
@@ -46,8 +47,8 @@ class MyCardRecyclerViewAdapter(
         // TODO UI add graphical representation of each card so that moving the card is more enjoyable
         val cardInfoView = binding.cardInfo
 
-        fun setListeners(cardData: CardData) {
-            itemView.setOnLongClickListener(MyLongClickListener(parentViewId, cardData.toString()))
+        fun setListeners(cardData: CardData, position: Int) {
+            itemView.setOnLongClickListener(MyLongClickListener(parentViewId, position.toString()))
         }
     }
 
