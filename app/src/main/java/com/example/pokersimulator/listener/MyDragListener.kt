@@ -48,6 +48,12 @@ class MyDragListener(private val viewModel: GameBoardViewModel): View.OnDragList
                     GameActionEnum.UNDO_DRAW -> {
                         viewModel.undoDraw((dragEvent.clipData.getItemAt(0).text as String).toInt())
                     }
+                    GameActionEnum.PLAY -> {
+                        viewModel.play((dragEvent.clipData.getItemAt(0).text as String).toInt())
+                    }
+                    GameActionEnum.UNDO_PLAY -> {
+                        viewModel.undoPlay((dragEvent.clipData.getItemAt(0).text as String).toInt())
+                    }
                 }
                 gameActionType != null
             }

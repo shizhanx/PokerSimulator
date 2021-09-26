@@ -45,11 +45,36 @@ class GameBoardViewModel: ViewModel() {
         yourHandLiveData.value = yourHand
     }
 
+    /**
+     * Put the selected card back to the top of the draw pile
+     */
     fun undoDraw(position: Int) {
         val drawPile = drawPileLiveData.value!!
         val yourHand = yourHandLiveData.value!!
         drawPile.add(yourHand.removeAt(position))
         drawPileLiveData.value = drawPile
         yourHandLiveData.value = yourHand
+    }
+
+    /**
+     * Play the selected card to your played pile from your hand
+     */
+    fun play(position: Int) {
+        val yourHand = yourHandLiveData.value!!
+        val yourPlayedPile = yourPlayedPileLiveData.value!!
+        yourPlayedPile.add(yourHand.removeAt(position))
+        yourHandLiveData.value = yourHand
+        yourPlayedPileLiveData.value = yourPlayedPile
+    }
+
+    /**
+     * Retrieve the selected card from the played pile to your hand
+     */
+    fun undoPlay(position: Int) {
+        val yourHand = yourHandLiveData.value!!
+        val yourPlayedPile = yourPlayedPileLiveData.value!!
+        yourHand.add(yourPlayedPile.removeAt(position))
+        yourHandLiveData.value = yourHand
+        yourPlayedPileLiveData.value = yourPlayedPile
     }
 }
