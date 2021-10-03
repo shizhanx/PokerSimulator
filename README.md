@@ -25,5 +25,5 @@ Set themselves online/offline/invisible (extension)
 Send global messages to all players (extension)
  
 # Architecture:
-We can use a P2P architecture without a centualized server for all the game actions.
+We can use a P2P architecture without a centualised server for all the game actions.
 We can have a server if we want to store user data like friends, or to have a global chat channel. But all core features we need to make this app running can be done without one.
