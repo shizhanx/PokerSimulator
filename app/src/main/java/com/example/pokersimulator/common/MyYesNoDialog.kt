@@ -2,7 +2,9 @@ package com.example.pokersimulator.common
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.DialogFragment
 
 /**
@@ -14,6 +16,7 @@ class MyYesNoDialog(
     private val noOption: String,
     private val yesAction: () -> Unit,
     private val noAction: () -> Unit,
+    private val dismissAction: () -> Unit,
 ) : DialogFragment() {
 
     /**
@@ -31,5 +34,10 @@ class MyYesNoDialog(
                 }
             builder.create()
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        Log.d("TAG", "dismissed")
+        dismissAction()
     }
 }
