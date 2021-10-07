@@ -21,10 +21,10 @@ class MyShakeListener: SensorEventListener {
      * Minimum times in a shake gesture that the direction of movement needs to
      * change.
      */
-    private val MIN_ACCELERATION_CHANGE = 4
+    private val MIN_ACCELERATION_CHANGE = 2
 
     /** Maximum pause between movements.  */
-    private val MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE = 2000000000
+    private val MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE = 1000000000
 
     /** Maximum allowed time for shake gesture.  */
     private val MAX_TOTAL_DURATION_OF_SHAKE = 4000000000

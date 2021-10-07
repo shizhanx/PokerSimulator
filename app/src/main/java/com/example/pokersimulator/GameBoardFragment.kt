@@ -76,13 +76,16 @@ class GameBoardFragment : Fragment() {
         // Setup the shake listener
         myShakeListener.setOnShakeListener(object : MyShakeListener.OnShakeListener {
             override fun onShake() {
-                MyYesNoDialog(
+                sensorManager.unregisterListener(myShakeListener)
+                val myYesNoDialog = MyYesNoDialog(
                     getString(R.string.shuffle_draw_pile_confirm),
                     "Yes",
                     "No",
                     { viewModel.shuffleDrawPile() },
                     {},
-                ).show(parentFragmentManager, null)
+                    { sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME) }
+                )
+                myYesNoDialog.show(parentFragmentManager, null)
             }
         })
         sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
