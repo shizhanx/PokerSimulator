@@ -1,5 +1,6 @@
 package com.example.pokersimulator.common
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -32,8 +33,12 @@ class MyCardRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val card = pile[position]
-        holder.cardInfoView.text = card.toString()
-        holder.setListeners(card, position)
+        //holder.cardInfoView.text = card.toString()
+
+        val context: Context = holder.cardInfoView.context
+        val id: Int = context.resources.getIdentifier(card.toString(), "drawable", context.packageName)
+        holder.cardInfoView.setImageResource(id)
+        holder.setListeners(position)
     }
 
     override fun getItemCount(): Int = pile.size
@@ -47,7 +52,7 @@ class MyCardRecyclerViewAdapter(
         // TODO UI add graphical representation of each card so that moving the card is more enjoyable
         val cardInfoView = binding.cardInfo
 
-        fun setListeners(cardData: CardData, position: Int) {
+        fun setListeners(position: Int) {
             itemView.setOnLongClickListener(MyLongClickListener(parentViewId, position.toString()))
         }
     }
