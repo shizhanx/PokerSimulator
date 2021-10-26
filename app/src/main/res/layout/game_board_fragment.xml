@@ -10,7 +10,7 @@
     tools:context=".GameBoardFragment">
 
     <RelativeLayout
-        android:id="@+id/opponent_name_lay"
+        android:id="@+id/opponent_name_layout"
         android:layout_width="250sp"
         android:layout_height="50sp"
         android:background="@drawable/name_background"
@@ -40,7 +40,7 @@
         app:layout_constraintVertical_bias="0.37" />
 
     <RelativeLayout
-        android:id="@+id/your_name_lay"
+        android:id="@+id/your_name_layout"
         android:layout_width="250sp"
         android:layout_height="50sp"
         android:background="@drawable/name_background"
