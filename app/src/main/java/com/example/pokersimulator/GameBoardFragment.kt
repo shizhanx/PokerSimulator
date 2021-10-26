@@ -5,10 +5,12 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewConfigurationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
 import com.example.pokersimulator.listener.MyDragListener
@@ -40,8 +42,12 @@ class GameBoardFragment : Fragment() {
         sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mLinearAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
+        val cardImageDrawable = resources.getDrawable(R.drawable.club_1, null)
+        val cardWidthHeightRatio = 1.0 * cardImageDrawable.intrinsicWidth / cardImageDrawable.intrinsicHeight
+        Log.d("TAG", "sb: ${cardImageDrawable.intrinsicHeight} and ${cardImageDrawable.intrinsicWidth}")
+        val actualCardWidth = Math.floor(binding.drawPile.layoutParams.height * cardWidthHeightRatio).toInt()
+
         // Setup the recycler views
-//        val TEMP_pile = listOf(CardData(CardType.JOKER, 1), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2), CardData(CardType.JOKER, 2))
         with(binding.opponentPlayedPile) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf())
@@ -57,7 +63,7 @@ class GameBoardFragment : Fragment() {
         with(binding.drawPile) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf())
-            addItemDecoration(MyOverlapDecorator())
+            addItemDecoration(MyOverlapDecorator(actualCardWidth))
         }
 
         return binding.root
@@ -107,7 +113,7 @@ class GameBoardFragment : Fragment() {
         viewModel.drawPileLiveData.observe(viewLifecycleOwner, {
             val adapter = binding.drawPile.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
-            binding.numberCardsInDrawPile.text = it.size.toString()
+            binding.numberCardsInDrawPile.text = getString(R.string.number_cards_in_draw_pile, it.size)
         })
     }
 

@@ -4,11 +4,10 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class MyOverlapDecorator: RecyclerView.ItemDecoration() {
+class MyOverlapDecorator(offset: Int): RecyclerView.ItemDecoration() {
     // TODO change according to the image of cards we use
 
-   private val HORIZONTAL_OFFSET = -55
-  //  private val HORIZONTAL_OFFSET = -1
+   private val HORIZONTAL_OFFSET = -offset
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -16,7 +15,6 @@ class MyOverlapDecorator: RecyclerView.ItemDecoration() {
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        if (parent.getChildAdapterPosition(view) != 0)
-            outRect.set(0, 0, HORIZONTAL_OFFSET, 0)
+        outRect.set(0, 0, HORIZONTAL_OFFSET, 0)
     }
 }
