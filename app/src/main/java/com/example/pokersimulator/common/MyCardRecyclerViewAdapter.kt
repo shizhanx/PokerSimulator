@@ -28,7 +28,6 @@ class MyCardRecyclerViewAdapter(
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         parentViewId = recyclerView.id
-        Log.d("TAG", "onAttachedToRecyclerView: ${parentViewId == R.id.your_played_pile}")
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
