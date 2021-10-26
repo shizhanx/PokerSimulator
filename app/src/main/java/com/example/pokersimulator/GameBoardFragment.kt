@@ -42,10 +42,13 @@ class GameBoardFragment : Fragment() {
         sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mLinearAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
+        // Calculate the actual width of the card images showing on the screen for overlap decorator
         val cardImageDrawable = resources.getDrawable(R.drawable.club_1, null)
         val cardWidthHeightRatio = 1.0 * cardImageDrawable.intrinsicWidth / cardImageDrawable.intrinsicHeight
-        Log.d("TAG", "sb: ${cardImageDrawable.intrinsicHeight} and ${cardImageDrawable.intrinsicWidth}")
+        // The actual width is rounded to the floor so that cards overflows a little to the right hand side
         val actualCardWidth = Math.floor(binding.drawPile.layoutParams.height * cardWidthHeightRatio).toInt()
+        // Set the width of the draw pile to almost exactly covers the deck
+        binding.drawPile.layoutParams.width = actualCardWidth + 50
 
         // Setup the recycler views
         with(binding.opponentPlayedPile) {

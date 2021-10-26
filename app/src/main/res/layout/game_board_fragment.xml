@@ -58,7 +58,6 @@
         android:layout_width="0dp"
         android:layout_height="120dp"
         app:layout_constraintBottom_toBottomOf="@+id/button_turn_action"
-        app:layout_constraintEnd_toStartOf="@+id/button_turn_action"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button_turn_action"
         tools:itemCount="1"
@@ -68,11 +67,9 @@
         android:id="@+id/button_turn_action"
         android:layout_width="120sp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:src="@drawable/btn_turn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/draw_pile"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4" />
 
