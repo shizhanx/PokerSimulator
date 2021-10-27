@@ -81,4 +81,29 @@ class GameBoardViewModel: ViewModel() {
         yourHandLiveData.value = yourHand
         yourPlayedPileLiveData.value = yourPlayedPile
     }
+
+    /**
+     * Flip a card in a pile other than the opponent's played pile.
+     * If the pile is the draw pile, only flip the top card. Otherwise flip the card at the
+     * specified position.
+     */
+    fun flipCard(pileId: Int, position: Int) {
+        when (pileId) {
+            R.id.draw_pile -> {
+                val changePile = drawPileLiveData.value!!
+                changePile.last().faceUp = !changePile.last().faceUp
+                drawPileLiveData.value = changePile
+            }
+            R.id.your_played_pile -> {
+                val changePile = yourPlayedPileLiveData.value!!
+                changePile[position].faceUp = !changePile[position].faceUp
+                yourPlayedPileLiveData.value = changePile
+            }
+            R.id.your_hand -> {
+                val changePile = yourHandLiveData.value!!
+                changePile[position].faceUp = !changePile[position].faceUp
+                yourHandLiveData.value = changePile
+            }
+        }
+    }
 }

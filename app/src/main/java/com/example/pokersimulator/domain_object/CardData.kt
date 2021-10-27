@@ -1,7 +1,5 @@
 package com.example.pokersimulator.domain_object
 
-import java.util.*
-
 /**
  * Representation of one single poker card
  */
@@ -12,8 +10,6 @@ data class CardData(
     var faceUp = false
 
     override fun toString(): String {
-        //return cardType.name + cardNumber
-
-        return "${cardType.name.lowercase(Locale.getDefault())}_$cardNumber"
+        return "${cardType.name.lowercase()}_$cardNumber"
     }
 }

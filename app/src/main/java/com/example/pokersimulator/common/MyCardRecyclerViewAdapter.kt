@@ -5,9 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pokersimulator.GameBoardViewModel
 import com.example.pokersimulator.R
 import com.example.pokersimulator.databinding.CardFragmentBinding
 import com.example.pokersimulator.domain_object.CardData
+import com.example.pokersimulator.listener.MyCardClickListener
 import com.example.pokersimulator.listener.MyLongClickListener
 import kotlin.properties.Delegates
 
@@ -15,7 +17,8 @@ import kotlin.properties.Delegates
  * Adaptor for the recycler view of a pile of cards that can be shown as a list to the user
  */
 class MyCardRecyclerViewAdapter(
-    var pile: List<CardData>
+    var pile: List<CardData>,
+    val viewModel: GameBoardViewModel
 )
     : RecyclerView.Adapter<MyCardRecyclerViewAdapter.ViewHolder>() {
 
@@ -39,7 +42,7 @@ class MyCardRecyclerViewAdapter(
             context.resources.getIdentifier(card.toString(), "drawable", context.packageName)
         else
             //TODO add a image for the back side of poker cards
-            context.resources.getIdentifier(card.toString(), "drawable", context.packageName)
+            context.resources.getIdentifier("club_1", "drawable", context.packageName)
         holder.cardInfoView.setImageResource(id)
         holder.setListeners(position)
     }
@@ -57,6 +60,7 @@ class MyCardRecyclerViewAdapter(
 
         fun setListeners(position: Int) {
             itemView.setOnLongClickListener(MyLongClickListener(parentViewId, position.toString()))
+            itemView.setOnClickListener(MyCardClickListener(viewModel, parentViewId, position))
         }
     }
 
