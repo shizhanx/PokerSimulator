@@ -9,6 +9,8 @@ data class CardData(
     val cardType: CardType,
     val cardNumber: Int,
 ) {
+    var faceUp = false
+
     override fun toString(): String {
         //return cardType.name + cardNumber
 

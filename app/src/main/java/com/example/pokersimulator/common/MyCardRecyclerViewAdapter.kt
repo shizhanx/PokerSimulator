@@ -35,7 +35,11 @@ class MyCardRecyclerViewAdapter(
         //holder.cardInfoView.text = card.toString()
 
         val context: Context = holder.cardInfoView.context
-        val id: Int = context.resources.getIdentifier(card.toString(), "drawable", context.packageName)
+        val id: Int = if (card.faceUp)
+            context.resources.getIdentifier(card.toString(), "drawable", context.packageName)
+        else
+            //TODO add a image for the back side of poker cards
+            context.resources.getIdentifier(card.toString(), "drawable", context.packageName)
         holder.cardInfoView.setImageResource(id)
         holder.setListeners(position)
     }
