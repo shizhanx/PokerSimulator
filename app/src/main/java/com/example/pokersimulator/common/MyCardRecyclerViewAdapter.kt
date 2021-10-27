@@ -42,7 +42,7 @@ class MyCardRecyclerViewAdapter(
             context.resources.getIdentifier(card.toString(), "drawable", context.packageName)
         else
             //TODO add a image for the back side of poker cards
-            context.resources.getIdentifier("club_1", "drawable", context.packageName)
+            context.resources.getIdentifier("back_side", "drawable", context.packageName)
         holder.cardInfoView.setImageResource(id)
         holder.setListeners(position)
     }
