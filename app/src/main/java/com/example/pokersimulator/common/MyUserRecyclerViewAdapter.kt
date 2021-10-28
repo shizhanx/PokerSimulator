@@ -16,11 +16,12 @@ class MyUserRecyclerViewAdapter:  RecyclerView.Adapter<MyUserRecyclerViewAdapter
     }
 
     override fun onBindViewHolder(holder: MyUserRecyclerViewAdapter.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        // TODO Not yet implemented
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        //TODO Not yet implemented
+        return 0
     }
 
     inner class ViewHolder(binding: UserFragmentBinding) : RecyclerView.ViewHolder(binding.root) {
