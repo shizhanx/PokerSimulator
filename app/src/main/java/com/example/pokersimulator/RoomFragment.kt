@@ -26,10 +26,9 @@ class RoomFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = RoomFragmentBinding.inflate(inflater, container, false)
+        binding.textviewRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,11 +36,11 @@ class RoomFragment : Fragment() {
 
         // Decides the text of the prepare/start button with regard to the user type.
         if (activityViewModel.isHost)
-            binding.buttonPrepareStart.setText(R.string.prepare_to_start_game)
+            binding.textViewPrepareStart.setText(R.string.prepare_to_start_game)
         else
-            binding.buttonPrepareStart.setText(R.string.start_game)
+            binding.textViewPrepareStart.setText(R.string.start_game)
 
-        binding.buttonPrepareStart.setOnClickListener {
+        binding.buttonPrepareStartLayout.setOnClickListener {
             // TODO define client prepare and unprepare events' actions
             findNavController().navigate(RoomFragmentDirections.actionStartGame())
         }

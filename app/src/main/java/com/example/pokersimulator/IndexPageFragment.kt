@@ -31,7 +31,7 @@ class IndexPageFragment : Fragment() {
     ): View {
         _binding = IndexPageFragmentBinding.inflate(inflater, container, false)
         if (activityViewModel.username != "") {
-            binding.textViewUsernamePrompt.text = getString(R.string.welcome_username, activityViewModel.username)
+            binding.textviewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
             binding.buttonCreateRoom.visibility = View.VISIBLE
             binding.buttonJoinRoom.visibility = View.VISIBLE
         }
@@ -46,7 +46,7 @@ class IndexPageFragment : Fragment() {
             if (input != "" && input != "null") {
                 activityViewModel.username =
                     input + "#" + Random.nextInt(1000, 9999)
-                binding.textViewUsernamePrompt.text = getString(R.string.welcome_username, activityViewModel.username)
+                binding.textviewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
                 // Close keyboard and clear focus so that the user can see the buttons appearing below
                 binding.usernameInputLayout.clearFocus()
                 // this is for closing the keyboard after user finishes input
