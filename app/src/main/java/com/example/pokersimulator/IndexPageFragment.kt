@@ -57,9 +57,11 @@ class IndexPageFragment : Fragment() {
             }
         }
         binding.buttonCreateRoom.setOnClickListener {
+            activityViewModel.isHost = true
             findNavController().navigate(IndexPageFragmentDirections.actionCreateRoom())
         }
         binding.buttonJoinRoom.setOnClickListener {
+            activityViewModel.isHost = false
             findNavController().navigate(IndexPageFragmentDirections.actionJoinRoom())
         }
     }

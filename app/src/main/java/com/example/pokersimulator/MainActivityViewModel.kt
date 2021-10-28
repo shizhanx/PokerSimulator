@@ -11,6 +11,6 @@ import androidx.lifecycle.ViewModel
  */
 class MainActivityViewModel: ViewModel() {
     val connections: LiveData<MutableMap<Int, String>> = MutableLiveData(mutableMapOf())
-    val isHost = false
+    var isHost = false
     var username = ""
 }
