@@ -18,6 +18,7 @@ import com.example.pokersimulator.listener.MyShakeListener
 import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
 import com.example.pokersimulator.common.MyOverlapDecorator
 import com.example.pokersimulator.common.MyYesNoDialog
+import com.example.pokersimulator.listener.MyCardClickListener
 
 
 class GameBoardFragment : Fragment() {
@@ -38,6 +39,8 @@ class GameBoardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = GameBoardFragmentBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this).get(GameBoardViewModel::class.java)
+        Log.d("TAG", "onCreateView: ${viewModel.drawPileLiveData.value?.size}")
 
         sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mLinearAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
@@ -53,19 +56,19 @@ class GameBoardFragment : Fragment() {
         // Setup the recycler views
         with(binding.opponentPlayedPile) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf())
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
         }
         with(binding.yourHand) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf())
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
         }
         with(binding.yourPlayedPile) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf())
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
         }
         with(binding.drawPile) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf())
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
             addItemDecoration(MyOverlapDecorator(actualCardWidth))
         }
 
@@ -74,7 +77,6 @@ class GameBoardFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(GameBoardViewModel::class.java)
 
         // Setup the drag and drop listeners
         val dragListener = MyDragListener(viewModel)
