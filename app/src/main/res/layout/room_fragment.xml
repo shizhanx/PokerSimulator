@@ -5,8 +5,8 @@
     android:id="@+id/roomConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    android:padding="20sp"
+    android:background="@color/black"
+    android:padding="20dp"
     tools:context=".RoomFragment">
 
     <ImageView

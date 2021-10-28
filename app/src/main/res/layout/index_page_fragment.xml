@@ -5,8 +5,8 @@
     android:id="@+id/indexPageConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    android:padding="20sp"
+    android:background="@color/black"
+    android:padding="20dp"
     tools:context=".IndexPageFragment">
 
     <ImageView
@@ -100,7 +100,7 @@
             android:id="@+id/username_input_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:maxLength="20"/>
+            android:maxLength="20"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
