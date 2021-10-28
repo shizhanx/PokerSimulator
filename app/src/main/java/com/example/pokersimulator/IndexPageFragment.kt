@@ -1,10 +1,12 @@
 package com.example.pokersimulator
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pokersimulator.databinding.IndexPageFragmentBinding
 
@@ -14,6 +16,7 @@ import com.example.pokersimulator.databinding.IndexPageFragmentBinding
 class IndexPageFragment : Fragment() {
 
     private var _binding: IndexPageFragmentBinding? = null
+    private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -31,7 +34,6 @@ class IndexPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.buttonCreateRoom.setOnClickListener {
             findNavController().navigate(IndexPageFragmentDirections.actionCreateRoom(true))
         }

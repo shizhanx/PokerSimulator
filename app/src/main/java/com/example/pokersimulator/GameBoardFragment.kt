@@ -11,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewConfigurationCompat
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
 import com.example.pokersimulator.listener.MyDragListener
@@ -28,7 +30,8 @@ class GameBoardFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: GameBoardViewModel
+    private val viewModel: GameBoardViewModel by viewModels()
+    private val activityViewModel: MainActivityViewModel by activityViewModels()
     private lateinit var sensorManager: SensorManager
     private var mLinearAccelerometer: Sensor? = null
     private val myShakeListener = MyShakeListener()
@@ -74,7 +77,6 @@ class GameBoardFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(GameBoardViewModel::class.java)
 
         // Setup the drag and drop listeners
         val dragListener = MyDragListener(viewModel)

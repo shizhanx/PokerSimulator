@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.pokersimulator.databinding.RoomFragmentBinding
@@ -15,7 +16,7 @@ import com.example.pokersimulator.databinding.RoomFragmentBinding
 class RoomFragment : Fragment() {
 
     private var _binding: RoomFragmentBinding? = null
-
+    private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val args: RoomFragmentArgs by navArgs()
 
     // This property is only valid between onCreateView and
