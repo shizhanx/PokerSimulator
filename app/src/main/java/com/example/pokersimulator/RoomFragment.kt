@@ -17,7 +17,6 @@ class RoomFragment : Fragment() {
 
     private var _binding: RoomFragmentBinding? = null
     private val activityViewModel: MainActivityViewModel by activityViewModels()
-    private val args: RoomFragmentArgs by navArgs()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -37,14 +36,14 @@ class RoomFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Decides the text of the prepare/start button with regard to the user type.
-        if (args.isHost)
+        if (activityViewModel.isHost)
             binding.buttonPrepareStart.setText(R.string.prepare_to_start_game)
         else
             binding.buttonPrepareStart.setText(R.string.start_game)
 
         binding.buttonPrepareStart.setOnClickListener {
             // TODO define client prepare and unprepare events' actions
-            findNavController().navigate(RoomFragmentDirections.actionStartGame(true))
+            findNavController().navigate(RoomFragmentDirections.actionStartGame())
         }
     }
 

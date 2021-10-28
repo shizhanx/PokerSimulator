@@ -20,9 +20,6 @@
         android:name="com.example.pokersimulator.RoomFragment"
         android:label="@string/room_fragment_label"
         tools:layout="@layout/room_fragment" >
-        <argument
-            android:name="isHost"
-            app:argType="boolean" />
         <action
             android:id="@+id/action_start_game"
             app:destination="@id/gameBoardFragment" />
@@ -31,9 +28,5 @@
         android:id="@+id/gameBoardFragment"
         android:name="com.example.pokersimulator.GameBoardFragment"
         android:label="game_board_fragment"
-        tools:layout="@layout/game_board_fragment" >
-        <argument
-            android:name="isHost"
-            app:argType="boolean" />
-    </fragment>
+        tools:layout="@layout/game_board_fragment" />
 </navigation>
