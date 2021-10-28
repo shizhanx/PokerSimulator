@@ -20,8 +20,6 @@ class IndexPageFragment : Fragment() {
 
     private var _binding: IndexPageFragmentBinding? = null
     private val activityViewModel: MainActivityViewModel by activityViewModels()
-    // this is for closing the keyboard after user finishes input
-    private val imm = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -32,6 +30,11 @@ class IndexPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = IndexPageFragmentBinding.inflate(inflater, container, false)
+        if (activityViewModel.username != "") {
+            binding.textViewUsernamePrompt.text = getString(R.string.welcome_username, activityViewModel.username)
+            binding.buttonCreateRoom.visibility = View.VISIBLE
+            binding.buttonJoinRoom.visibility = View.VISIBLE
+        }
         return binding.root
     }
 
@@ -46,6 +49,8 @@ class IndexPageFragment : Fragment() {
                 binding.textViewUsernamePrompt.text = getString(R.string.welcome_username, activityViewModel.username)
                 // Close keyboard and clear focus so that the user can see the buttons appearing below
                 binding.usernameInputLayout.clearFocus()
+                // this is for closing the keyboard after user finishes input
+                val imm = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
                 binding.buttonCreateRoom.visibility = View.VISIBLE
                 binding.buttonJoinRoom.visibility = View.VISIBLE
@@ -55,6 +60,7 @@ class IndexPageFragment : Fragment() {
             findNavController().navigate(IndexPageFragmentDirections.actionCreateRoom())
         }
         binding.buttonJoinRoom.setOnClickListener {
+            findNavController().navigate(IndexPageFragmentDirections.actionJoinRoom())
         }
     }
 
