@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pokersimulator.common.MyUserRecyclerViewAdapter
 import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.databinding.RoomFragmentBinding
 
@@ -28,6 +30,10 @@ class ListRoomFragment : Fragment() {
     ): View {
         _binding = ListRoomFragmentBinding.inflate(inflater, container, false)
         binding.textviewListRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+        with(binding.listOfHosts) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = MyUserRecyclerViewAdapter()
+        }
         return binding.root
     }
 
