@@ -13,7 +13,7 @@ import com.example.pokersimulator.common.MyUserRecyclerViewAdapter
 import com.example.pokersimulator.databinding.RoomFragmentBinding
 
 /**
- * A simple [Fragment] subclass as the second destination in the navigation.
+ * A fragment for users joined the same host to see each other and prepare for the game.
  */
 class RoomFragment : Fragment() {
 

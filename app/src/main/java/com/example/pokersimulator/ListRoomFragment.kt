@@ -13,7 +13,8 @@ import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.databinding.RoomFragmentBinding
 
 /**
- * A simple [Fragment] subclass.
+ * A fragment that shows a list of nearby hosts to the user when he selects join existing room
+ * on the index page.
  */
 class ListRoomFragment : Fragment() {
 

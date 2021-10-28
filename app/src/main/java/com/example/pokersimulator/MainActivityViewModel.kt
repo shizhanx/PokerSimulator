@@ -10,7 +10,11 @@ import androidx.lifecycle.ViewModel
  * The connections may update at any time,
  */
 class MainActivityViewModel: ViewModel() {
-    val connections: LiveData<MutableMap<Int, String>> = MutableLiveData(mutableMapOf())
+    val connections: MutableLiveData<MutableMap<Int, String>> = MutableLiveData(mutableMapOf())
     var isHost = false
     var username = ""
+
+    fun resetConnections() {
+        connections.value = mutableMapOf()
+    }
 }

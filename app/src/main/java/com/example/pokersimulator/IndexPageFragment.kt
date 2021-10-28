@@ -30,6 +30,9 @@ class IndexPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = IndexPageFragmentBinding.inflate(inflater, container, false)
+        // Initialize connections so that the user can see the latest connections for next round of the game
+        activityViewModel.resetConnections()
+        // Determine if the app is opened just now or the user pressed back button
         if (activityViewModel.username != "") {
             binding.textviewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
             binding.buttonCreateRoom.visibility = View.VISIBLE
@@ -56,6 +59,7 @@ class IndexPageFragment : Fragment() {
                 binding.buttonJoinRoom.visibility = View.VISIBLE
             }
         }
+        // The isHost value should only be modified here, where the user chooses for the rest of the game
         binding.buttonCreateRoom.setOnClickListener {
             activityViewModel.isHost = true
             findNavController().navigate(IndexPageFragmentDirections.actionCreateRoom())
