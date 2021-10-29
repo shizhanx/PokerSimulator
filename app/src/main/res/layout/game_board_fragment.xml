@@ -9,36 +9,30 @@
     android:padding="20dp"
     tools:context=".GameBoardFragment">
 
-    <RelativeLayout
-        android:id="@+id/opponent_name_layout"
-        android:layout_width="250sp"
-        android:layout_height="50sp"
+    <TextView
+        android:id="@+id/opponent_name"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:background="@drawable/name_background"
-        app:layout_constraintBottom_toTopOf="@+id/opponent_played_pile"
+        android:gravity="center"
+        android:lines="1"
+        android:text="The last active opponent's"
+        android:textColor="#FCF9AC"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/opponent_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:lines="1"
-            android:text="The last active opponent's"
-            android:textColor="#FCF9AC" />
-    </RelativeLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/opponent_played_pile"
         android:layout_width="0dp"
         android:layout_height="120dp"
         android:background="@drawable/background_light_corner"
-        app:layout_constraintBottom_toTopOf="@id/number_cards_in_draw_pile"
+        app:layout_constraintBottom_toTopOf="@+id/number_cards_in_draw_pile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/opponent_name_layout"
+        app:layout_constraintTop_toBottomOf="@+id/opponent_name"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment">
 
@@ -52,6 +46,15 @@
         app:layout_constraintBottom_toTopOf="@+id/draw_pile"
         app:layout_constraintEnd_toEndOf="@+id/draw_pile"
         app:layout_constraintStart_toStartOf="@+id/draw_pile" />
+
+    <TextView
+        android:id="@+id/textView_current_player"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FCF9AC"
+        app:layout_constraintEnd_toEndOf="@+id/button_turn_action"
+        app:layout_constraintStart_toStartOf="@+id/button_turn_action"
+        app:layout_constraintTop_toBottomOf="@+id/opponent_played_pile" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/draw_pile"
@@ -74,75 +77,60 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39" />
+        app:layout_constraintVertical_bias="0.40" />
 
     <Button
         android:id="@+id/button_turn_actionv"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@drawable/background_drawable_red"
         android:text="Kick out"
         android:textColor="#FCF9AC"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.469" />
+        app:layout_constraintEnd_toEndOf="@+id/button_turn_action"
+        app:layout_constraintStart_toStartOf="@+id/button_turn_action"
+        app:layout_constraintTop_toBottomOf="@+id/button_turn_action" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/your_played_pile"
         android:layout_width="0dp"
         android:layout_height="120dp"
         android:background="@drawable/background_light_corner"
-        app:layout_constraintBottom_toTopOf="@+id/your_name_layout"
+        app:layout_constraintBottom_toTopOf="@+id/your_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/draw_pile"
+        app:layout_constraintTop_toBottomOf="@+id/button_turn_actionv"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
 
-    <RelativeLayout
-        android:id="@+id/your_name_layout"
-        android:layout_width="250sp"
-        android:layout_height="50sp"
+
+    <TextView
+        android:id="@+id/your_name"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/name_background"
+        android:gravity="center"
+        android:text="Your name here"
+        android:textColor="#FCF9AC"
         app:layout_constraintBottom_toTopOf="@+id/your_hand"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/your_played_pile">
-
-        <TextView
-            android:id="@+id/your_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:text="Your name here"
-            android:textColor="#FCF9AC" />
-
-    </RelativeLayout>
-
+        app:layout_constraintTop_toBottomOf="@+id/your_played_pile" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/your_hand"
         android:layout_width="0dp"
         android:layout_height="120dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/background_light_corner"
 
+        android:background="@drawable/background_light_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
-
-    <TextView
-        android:id="@+id/textView_current_player"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="#FCF9AC"
-        app:layout_constraintEnd_toEndOf="@+id/button_turn_action"
-        app:layout_constraintStart_toStartOf="@+id/button_turn_action"
-        app:layout_constraintTop_toBottomOf="@+id/opponent_played_pile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
