@@ -122,11 +122,11 @@
 
     <TextView
         android:id="@+id/textView_current_player"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#FCF9AC"
-        app:layout_constraintBottom_toTopOf="@+id/button_turn_action"
         app:layout_constraintEnd_toEndOf="@+id/button_turn_action"
-        app:layout_constraintStart_toStartOf="@+id/button_turn_action" />
+        app:layout_constraintStart_toStartOf="@+id/button_turn_action"
+        app:layout_constraintTop_toBottomOf="@+id/opponent_played_pile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
