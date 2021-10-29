@@ -42,8 +42,6 @@ class GameBoardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = GameBoardFragmentBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(GameBoardViewModel::class.java)
-        Log.d("TAG", "onCreateView: ${viewModel.drawPileLiveData.value?.size}")
 
         sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mLinearAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
