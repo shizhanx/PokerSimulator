@@ -67,7 +67,7 @@
         android:id="@+id/button_turn_action"
         android:layout_width="120sp"
         android:layout_height="wrap_content"
-        android:src="@drawable/btn_turn"
+        android:src="@drawable/btn_start_turn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -119,5 +119,14 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
+
+    <TextView
+        android:id="@+id/textView_current_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FCF9AC"
+        app:layout_constraintBottom_toTopOf="@+id/button_turn_action"
+        app:layout_constraintEnd_toEndOf="@+id/button_turn_action"
+        app:layout_constraintStart_toStartOf="@+id/button_turn_action" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

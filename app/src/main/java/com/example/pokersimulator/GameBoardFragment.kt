@@ -21,6 +21,7 @@ import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
 import com.example.pokersimulator.common.MyOverlapDecorator
 import com.example.pokersimulator.common.MyYesNoDialog
 import com.example.pokersimulator.listener.MyCardClickListener
+import com.example.pokersimulator.listener.MyLongClickListener
 
 
 class GameBoardFragment : Fragment() {
@@ -103,7 +104,6 @@ class GameBoardFragment : Fragment() {
         sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
 
         // Setup the observers that reacts to changes in the pile data in viewModel
-        // TODO Please use these observers to update the visual effect
         viewModel.yourHandLiveData.observe(viewLifecycleOwner, {
             val adapter = binding.yourHand.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
@@ -121,6 +121,35 @@ class GameBoardFragment : Fragment() {
             adapter.updatePile(it.toList())
             binding.numberCardsInDrawPile.text = getString(R.string.number_cards_in_draw_pile, it.size)
         })
+        // Setup observer to determine whose turn it is now
+        viewModel.currentPlayerLiveData.observe(viewLifecycleOwner) {
+            when(it) {
+                "" -> {
+                    binding.buttonTurnAction.setImageResource(R.drawable.btn_start_turn)
+                    binding.buttonTurnAction.setOnClickListener {
+                        viewModel.currentPlayerLiveData.value = activityViewModel.username
+                    }
+                    MyLongClickListener.isTurn = false
+                    binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "no one")
+                }
+                activityViewModel.username -> {
+                    // TODO use the correct end-turn image resource
+                    binding.buttonTurnAction.setImageResource(R.drawable.btn_create_room)
+                    binding.buttonTurnAction.setOnClickListener {
+                        viewModel.currentPlayerLiveData.value = ""
+                    }
+                    MyLongClickListener.isTurn = true
+                    binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "You")
+                }
+                else -> {
+                    // TODO use the correct disabled-start-turn image resource (gray out maybe)
+                    binding.buttonTurnAction.setImageResource(R.drawable.btn_join_existing_room)
+                    binding.buttonTurnAction.setOnClickListener(null)
+                    binding.textViewCurrentPlayer.text =
+                        getString(R.string.current_player_name, viewModel.currentPlayerLiveData.value)
+                }
+            }
+        }
     }
 
     override fun onResume() {
