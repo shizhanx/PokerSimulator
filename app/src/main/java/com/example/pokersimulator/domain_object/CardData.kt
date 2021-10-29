@@ -1,7 +1,5 @@
 package com.example.pokersimulator.domain_object
 
-import java.util.*
-
 /**
  * Representation of one single poker card
  */
@@ -9,9 +7,9 @@ data class CardData(
     val cardType: CardType,
     val cardNumber: Int,
 ) {
-    override fun toString(): String {
-        //return cardType.name + cardNumber
+    var faceUp = false
 
-        return "${cardType.name.lowercase(Locale.getDefault())}_$cardNumber"
+    override fun toString(): String {
+        return "${cardType.name.lowercase()}_$cardNumber"
     }
 }
