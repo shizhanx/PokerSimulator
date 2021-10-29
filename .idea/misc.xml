@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable-v24/background_drawable_red.xml" value="0.42604166666666665" />
+        <entry key="app/src/main/res/drawable/background_drawable_blue.xml" value="0.42604166666666665" />
+        <entry key="app/src/main/res/drawable/background_drawable_red.xml" value="0.42604166666666665" />
+        <entry key="app/src/main/res/drawable/background_light_corner.xml" value="0.42604166666666665" />
+        <entry key="app/src/main/res/drawable/border.xml" value="0.42604166666666665" />
+        <entry key="app/src/main/res/drawable/club_1.xml" value="0.440625" />
+        <entry key="app/src/main/res/drawable/club_13.xml" value="0.24635416666666668" />
+        <entry key="app/src/main/res/drawable/club_1_svg.xml" value="0.440625" />
+        <entry key="app/src/main/res/drawable/club_2_svg.xml" value="0.440625" />
+        <entry key="app/src/main/res/drawable/club_3_svg.xml" value="0.440625" />
+        <entry key="app/src/main/res/drawable/club_4_svg.xml" value="0.440625" />
+        <entry key="app/src/main/res/drawable/club_6.xml" value="0.2786458333333333" />
+        <entry key="app/src/main/res/drawable/club_66.xml" value="0.2786458333333333" />
+        <entry key="app/src/main/res/drawable/diamond_1.xml" value="0.440625" />
+        <entry key="app/src/main/res/drawable/diamond_11.xml" value="0.4265625" />
+        <entry key="app/src/main/res/drawable/diamond_12.xml" value="0.4265625" />
+        <entry key="app/src/main/res/drawable/diamond_13.xml" value="0.4265625" />
+        <entry key="app/src/main/res/drawable/diamond_2.xml" value="0.440625" />
+        <entry key="app/src/main/res/drawable/diamond_3.xml" value="0.440625" />
+        <entry key="app/src/main/res/drawable/heart_10.xml" value="0.440625" />
+        <entry key="app/src/main/res/drawable/heart_10_svg.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/heart_11.xml" value="0.4265625" />
+        <entry key="app/src/main/res/drawable/heart_12.xml" value="0.4265625" />
+        <entry key="app/src/main/res/drawable/heart_13.xml" value="0.26458333333333334" />
+        <entry key="app/src/main/res/drawable/heart_13_svg.xml" value="0.26458333333333334" />
+        <entry key="app/src/main/res/drawable/heart_1_svg.xml" value="0.2786458333333333" />
+        <entry key="app/src/main/res/drawable/heart_3_svg.xml" value="1.0" />
+        <entry key="app/src/main/res/drawable/heart_4_svg.xml" value="0.2786458333333333" />
+        <entry key="app/src/main/res/drawable/heart_5.xml" value="0.2786458333333333" />
+        <entry key="app/src/main/res/drawable/heart_5_svg.xml" value="0.2786458333333333" />
+        <entry key="app/src/main/res/drawable/joker_1.xml" value="0.5" />
+        <entry key="app/src/main/res/drawable/joker_2.xml" value="0.2786458333333333" />
+        <entry key="app/src/main/res/layout/game_board_fragment.xml" value="0.3545516769336071" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2609375" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

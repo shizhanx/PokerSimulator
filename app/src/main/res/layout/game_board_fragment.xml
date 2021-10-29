@@ -34,7 +34,7 @@
         android:id="@+id/opponent_played_pile"
         android:layout_width="0dp"
         android:layout_height="120dp"
-        android:background="@android:color/darker_gray"
+        android:background="@drawable/background_light_corner"
         app:layout_constraintBottom_toTopOf="@id/number_cards_in_draw_pile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,21 +63,37 @@
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
 
-    <ImageView
+    <Button
         android:id="@+id/button_turn_action"
-        android:layout_width="120sp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/btn_start_turn"
+        android:background="@drawable/background_drawable_blue"
+        android:text="your turn"
+        android:textColor="#FCF9AC"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintVertical_bias="0.39" />
+
+    <Button
+        android:id="@+id/button_turn_actionv"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_drawable_red"
+        android:text="Kick out"
+        android:textColor="#FCF9AC"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.469" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/your_played_pile"
         android:layout_width="0dp"
         android:layout_height="120dp"
-        android:background="@android:color/darker_gray"
+        android:background="@drawable/background_light_corner"
         app:layout_constraintBottom_toTopOf="@+id/your_name_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +128,7 @@
         android:layout_width="0dp"
         android:layout_height="120dp"
         android:layout_marginBottom="10dp"
-        android:background="@android:color/darker_gray"
+        android:background="@drawable/background_light_corner"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
