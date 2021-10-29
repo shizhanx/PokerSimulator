@@ -14,15 +14,15 @@
         <action
             android:id="@+id/action_create_room"
             app:destination="@id/RoomFragment" />
+        <action
+            android:id="@+id/action_join_room"
+            app:destination="@id/listRoomFragment" />
     </fragment>
     <fragment
         android:id="@+id/RoomFragment"
         android:name="com.example.pokersimulator.RoomFragment"
         android:label="@string/room_fragment_label"
         tools:layout="@layout/room_fragment" >
-        <argument
-            android:name="isHost"
-            app:argType="boolean" />
         <action
             android:id="@+id/action_start_game"
             app:destination="@id/gameBoardFragment" />
@@ -31,9 +31,14 @@
         android:id="@+id/gameBoardFragment"
         android:name="com.example.pokersimulator.GameBoardFragment"
         android:label="game_board_fragment"
-        tools:layout="@layout/game_board_fragment" >
-        <argument
-            android:name="isHost"
-            app:argType="boolean" />
+        tools:layout="@layout/game_board_fragment" />
+    <fragment
+        android:id="@+id/listRoomFragment"
+        android:name="com.example.pokersimulator.ListRoomFragment"
+        android:label="list_room_fragment"
+        tools:layout="@layout/list_room_fragment" >
+        <action
+            android:id="@+id/action_join_selected_room"
+            app:destination="@id/RoomFragment" />
     </fragment>
 </navigation>

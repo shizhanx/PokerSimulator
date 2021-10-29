@@ -7,17 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.common.MyUserRecyclerViewAdapter
+import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.databinding.RoomFragmentBinding
 
 /**
- * A fragment for users joined the same host to see each other and prepare for the game.
+ * A fragment that shows a list of nearby hosts to the user when he selects join existing room
+ * on the index page.
  */
-class RoomFragment : Fragment() {
+class ListRoomFragment : Fragment() {
 
-    private var _binding: RoomFragmentBinding? = null
+    private var _binding: ListRoomFragmentBinding? = null
     private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
@@ -28,9 +29,9 @@ class RoomFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = RoomFragmentBinding.inflate(inflater, container, false)
-        binding.textviewRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
-        with(binding.listOfPlayers) {
+        _binding = ListRoomFragmentBinding.inflate(inflater, container, false)
+        binding.textviewListRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+        with(binding.listOfHosts) {
             layoutManager = LinearLayoutManager(context)
             adapter = MyUserRecyclerViewAdapter()
         }
@@ -39,17 +40,7 @@ class RoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Decides the text of the prepare/start button with regard to the user type.
-        if (activityViewModel.isHost)
-            binding.textViewPrepareStart.setText(R.string.prepare_to_start_game)
-        else
-            binding.textViewPrepareStart.setText(R.string.start_game)
-
-        binding.buttonPrepareStartLayout.setOnClickListener {
-            // TODO define client prepare and unprepare events' actions
-            findNavController().navigate(RoomFragmentDirections.actionStartGame())
-        }
+        // TODO define navigation to the room fragment
     }
 
     override fun onDestroyView() {
