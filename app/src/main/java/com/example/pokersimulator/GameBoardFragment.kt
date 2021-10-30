@@ -139,6 +139,7 @@ class GameBoardFragment : Fragment() {
                         viewModel.currentPlayerLiveData.value = activityViewModel.username
                     }
                     MyLongClickListener.isTurn = false
+                    MyCardClickListener.isTurn = false
                     binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "no one")
                 }
                 activityViewModel.username -> {
@@ -149,11 +150,14 @@ class GameBoardFragment : Fragment() {
                         viewModel.currentPlayerLiveData.value = ""
                     }
                     MyLongClickListener.isTurn = true
+                    MyCardClickListener.isTurn = true
                     binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "You")
                 }
                 else -> {
                     // TODO use the correct disabled-start-turn image resource (gray out maybe)
                     binding.buttonTurnAction.visibility = View.INVISIBLE
+                    MyLongClickListener.isTurn = false
+                    MyCardClickListener.isTurn = false
                     binding.textViewCurrentPlayer.text =
                         getString(R.string.current_player_name, viewModel.currentPlayerLiveData.value)
                 }
