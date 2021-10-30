@@ -56,19 +56,19 @@ class GameBoardFragment : Fragment() {
         binding.drawPile.layoutParams.width = actualCardWidth + 50
 
         // Setup the recycler views
-        with(binding.opponentPlayedPile) {
+        binding.opponentPlayedPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
         }
-        with(binding.yourHand) {
+        binding.yourHand.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
         }
-        with(binding.yourPlayedPile) {
+        binding.yourPlayedPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
         }
-        with(binding.drawPile) {
+        binding.drawPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
             addItemDecoration(MyOverlapDecorator(actualCardWidth))
@@ -121,11 +121,20 @@ class GameBoardFragment : Fragment() {
             adapter.updatePile(it.toList())
             binding.numberCardsInDrawPile.text = getString(R.string.number_cards_in_draw_pile, it.size)
         })
+        // Setup the force end turn button
+        binding.buttonForceEndTurn.apply {
+            visibility = if (activityViewModel.isHost) View.VISIBLE else View.INVISIBLE
+            setOnClickListener {
+                if (viewModel.currentPlayerLiveData.value != "")
+                    viewModel.currentPlayerLiveData.value = ""
+            }
+        }
         // Setup observer to determine whose turn it is now
         viewModel.currentPlayerLiveData.observe(viewLifecycleOwner) {
             when(it) {
                 "" -> {
-                    binding.buttonTurnAction.setImageResource(R.drawable.btn_start_turn)
+                    binding.buttonTurnAction.visibility = View.VISIBLE
+                    binding.buttonTurnAction.text = "Start turn"
                     binding.buttonTurnAction.setOnClickListener {
                         viewModel.currentPlayerLiveData.value = activityViewModel.username
                     }
@@ -134,7 +143,8 @@ class GameBoardFragment : Fragment() {
                 }
                 activityViewModel.username -> {
                     // TODO use the correct end-turn image resource
-                    binding.buttonTurnAction.setImageResource(R.drawable.btn_create_room)
+                    binding.buttonTurnAction.visibility = View.VISIBLE
+                    binding.buttonTurnAction.text = "End turn"
                     binding.buttonTurnAction.setOnClickListener {
                         viewModel.currentPlayerLiveData.value = ""
                     }
@@ -143,8 +153,7 @@ class GameBoardFragment : Fragment() {
                 }
                 else -> {
                     // TODO use the correct disabled-start-turn image resource (gray out maybe)
-                    binding.buttonTurnAction.setImageResource(R.drawable.btn_join_existing_room)
-                    binding.buttonTurnAction.setOnClickListener(null)
+                    binding.buttonTurnAction.visibility = View.INVISIBLE
                     binding.textViewCurrentPlayer.text =
                         getString(R.string.current_player_name, viewModel.currentPlayerLiveData.value)
                 }

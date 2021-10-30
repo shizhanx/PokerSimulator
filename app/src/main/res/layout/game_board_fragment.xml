@@ -71,21 +71,24 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:background="@drawable/background_drawable_blue"
-        android:text="your turn"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#FCF9AC"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40" />
+        app:layout_constraintVertical_bias="0.40"
+        tools:text="START TURN" />
 
     <Button
-        android:id="@+id/button_turn_actionv"
+        android:id="@+id/button_force_end_turn"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/background_drawable_red"
-        android:text="Kick out"
+        android:maxLines="1"
+        android:text="Force end"
         android:textColor="#FCF9AC"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="@+id/button_turn_action"
@@ -100,7 +103,7 @@
         app:layout_constraintBottom_toTopOf="@+id/your_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_turn_actionv"
+        app:layout_constraintTop_toBottomOf="@+id/button_force_end_turn"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
 
