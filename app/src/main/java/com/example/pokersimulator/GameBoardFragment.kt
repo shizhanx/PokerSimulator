@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewConfigurationCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -48,12 +49,12 @@ class GameBoardFragment : Fragment() {
         mLinearAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
         // Calculate the actual width of the card images showing on the screen for overlap decorator
-        val cardImageDrawable = resources.getDrawable(R.drawable.club_1, null)
+        val cardImageDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.club_1)!!
         val cardWidthHeightRatio = 1.0 * cardImageDrawable.intrinsicWidth / cardImageDrawable.intrinsicHeight
         // The actual width is rounded to the floor so that cards overflows a little to the right hand side
         val actualCardWidth = Math.floor(binding.drawPile.layoutParams.height * cardWidthHeightRatio).toInt()
         // Set the width of the draw pile to almost exactly covers the deck
-        binding.drawPile.layoutParams.width = actualCardWidth + 50
+        binding.drawPile.layoutParams.width = actualCardWidth
 
         // Setup the recycler views
         binding.opponentPlayedPile.apply {
@@ -121,46 +122,70 @@ class GameBoardFragment : Fragment() {
             adapter.updatePile(it.toList())
             binding.numberCardsInDrawPile.text = getString(R.string.number_cards_in_draw_pile, it.size)
         })
-        // Setup the force end turn button
-        binding.buttonForceEndTurn.apply {
-            visibility = if (activityViewModel.isHost) View.VISIBLE else View.INVISIBLE
-            setOnClickListener {
-                if (viewModel.currentPlayerLiveData.value != "")
-                    viewModel.currentPlayerLiveData.value = ""
-            }
-        }
         // Setup observer to determine whose turn it is now
         viewModel.currentPlayerLiveData.observe(viewLifecycleOwner) {
-            when(it) {
-                "" -> {
-                    binding.buttonTurnAction.visibility = View.VISIBLE
-                    binding.buttonTurnAction.text = "Start turn"
-                    binding.buttonTurnAction.setOnClickListener {
-                        viewModel.currentPlayerLiveData.value = activityViewModel.username
-                    }
-                    MyLongClickListener.isTurn = false
-                    MyCardClickListener.isTurn = false
-                    binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "no one")
+            // Setup the force end turn button
+            binding.buttonHostPrevilegeAction.apply {
+                visibility = if (activityViewModel.isHost && it != "") View.VISIBLE else View.INVISIBLE
+                setOnClickListener {
+                    MyYesNoDialog(
+                        "What do you want to do with the current player?",
+                        "Force end",
+                        "Kick out",
+                        { viewModel.currentPlayerLiveData.value = "" },
+                        { viewModel.currentPlayerLiveData.value = "" },
+                        {}
+                    ).show(parentFragmentManager, null)
                 }
-                activityViewModel.username -> {
-                    // TODO use the correct end-turn image resource
-                    binding.buttonTurnAction.visibility = View.VISIBLE
-                    binding.buttonTurnAction.text = "End turn"
-                    binding.buttonTurnAction.setOnClickListener {
-                        viewModel.currentPlayerLiveData.value = ""
-                    }
-                    MyLongClickListener.isTurn = true
-                    MyCardClickListener.isTurn = true
-                    binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "You")
+            }
+            alterTurnBasedFeatures(it)
+        }
+    }
+
+    private fun alterTurnBasedFeatures(currentPlayer: String) {
+        when(currentPlayer) {
+            "" -> {
+                binding.buttonTurnAction.visibility = View.VISIBLE
+                binding.buttonTurnAction.text = "Start turn"
+                binding.buttonTurnAction.setOnClickListener {
+                    MyYesNoDialog(
+                        "Are you sure to START your turn?",
+                        "Yes",
+                        "No",
+                        { viewModel.currentPlayerLiveData.value = activityViewModel.username },
+                        {},
+                        {}
+                    ).show(parentFragmentManager, null)
                 }
-                else -> {
-                    // TODO use the correct disabled-start-turn image resource (gray out maybe)
-                    binding.buttonTurnAction.visibility = View.INVISIBLE
-                    MyLongClickListener.isTurn = false
-                    MyCardClickListener.isTurn = false
-                    binding.textViewCurrentPlayer.text =
-                        getString(R.string.current_player_name, viewModel.currentPlayerLiveData.value)
+                MyLongClickListener.isTurn = false
+                MyCardClickListener.isTurn = false
+                binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "no one")
+            }
+            activityViewModel.username -> {
+                // TODO use the correct end-turn image resource
+                binding.buttonTurnAction.visibility = View.VISIBLE
+                binding.buttonTurnAction.text = "End turn"
+                binding.buttonTurnAction.setOnClickListener {
+                    MyYesNoDialog(
+                        "Are you sure to END your turn?",
+                        "Yes",
+                        "No",
+                        { viewModel.currentPlayerLiveData.value = "" },
+                        {},
+                        {}
+                    ).show(parentFragmentManager, null)
                 }
+                MyLongClickListener.isTurn = true
+                MyCardClickListener.isTurn = true
+                binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "You")
+            }
+            else -> {
+                // TODO use the correct disabled-start-turn image resource (gray out maybe)
+                binding.buttonTurnAction.visibility = View.INVISIBLE
+                MyLongClickListener.isTurn = false
+                MyCardClickListener.isTurn = false
+                binding.textViewCurrentPlayer.text =
+                    getString(R.string.current_player_name, viewModel.currentPlayerLiveData.value)
             }
         }
     }

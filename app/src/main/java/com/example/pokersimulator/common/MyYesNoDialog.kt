@@ -37,7 +37,6 @@ class MyYesNoDialog(
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        Log.d("TAG", "dismissed")
         dismissAction()
     }
 }
