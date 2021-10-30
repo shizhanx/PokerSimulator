@@ -41,7 +41,6 @@ class MyCardRecyclerViewAdapter(
         val id: Int = if (card.faceUp)
             context.resources.getIdentifier(card.toString(), "drawable", context.packageName)
         else
-            //TODO add a image for the back side of poker cards
             context.resources.getIdentifier("back_side", "drawable", context.packageName)
         holder.cardInfoView.setImageResource(id)
         holder.setListeners(position)
@@ -55,7 +54,6 @@ class MyCardRecyclerViewAdapter(
     }
 
     inner class ViewHolder(binding: CardFragmentBinding) : RecyclerView.ViewHolder(binding.root) {
-        // TODO UI add graphical representation of each card so that moving the card is more enjoyable
         val cardInfoView = binding.cardInfo
 
         fun setListeners(position: Int) {

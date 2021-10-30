@@ -90,6 +90,7 @@ class GameBoardFragment : Fragment() {
         // Setup the shake listener
         myShakeListener.setOnShakeListener(object : MyShakeListener.OnShakeListener {
             override fun onShake() {
+                // TODO add network related stuff
                 sensorManager.unregisterListener(myShakeListener)
                 val myYesNoDialog = MyYesNoDialog(
                     getString(R.string.shuffle_draw_pile_confirm),
@@ -124,6 +125,7 @@ class GameBoardFragment : Fragment() {
         })
         // Setup observer to determine whose turn it is now
         viewModel.currentPlayerLiveData.observe(viewLifecycleOwner) {
+            // TODO add network related stuff
             // Setup the force end turn button
             binding.buttonHostPrevilegeAction.apply {
                 visibility = if (activityViewModel.isHost && it != "") View.VISIBLE else View.INVISIBLE

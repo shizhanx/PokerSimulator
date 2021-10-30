@@ -42,6 +42,7 @@ class MyDragListener(private val viewModel: GameBoardViewModel): View.OnDragList
             }
             DragEvent.ACTION_DROP -> {
                 when (gameActionType) {
+                    // TODO add network related stuff
                     GameActionEnum.DRAW -> {
                         viewModel.drawCard()
                     }

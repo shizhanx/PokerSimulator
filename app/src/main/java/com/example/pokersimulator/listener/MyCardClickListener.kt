@@ -13,6 +13,7 @@ class MyCardClickListener(
     }
 
     override fun onClick(view: View?) {
+        // TODO add network related stuff
         if (isTurn)
             viewModel.flipCard(pileId, position)
     }
