@@ -19,7 +19,9 @@
     <string name="end_turn">End your turn</string>
     <string name="wait_turn">Wait now</string>
     <string name="number_cards_in_draw_pile">Total: %1$d</string>
-    <string name="current_player_name">Current player:\n%1$s</string>
+    <string name="current_player_name">Current player: %1$s</string>
     <!-- Text for user interactions -->
     <string name="shuffle_draw_pile_confirm">Do you want to SHUFFLE the deck?</string>
+    <!-- Game instructions -->
+    <string name="game_instruction">Long click to drag and drop cards\nSingle click to flip cards\nStart your turn to do actions\nEnd your turn after finished\nHave fun!\n</string>
 </resources>

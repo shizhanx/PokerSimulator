@@ -53,6 +53,7 @@ class RoomFragment : Fragment() {
         binding.included.buttonSendMessage.setOnClickListener(
             MySendMessageClickListener(requireContext(), binding.included.editTextChatMessage) {
                 if (binding.included.editTextChatMessage.editableText.toString() != "") {
+                    //TODO Network part: send messages online
                     binding.included.textViewChatLog.append(activityViewModel.username + ": ")
                     binding.included.textViewChatLog.append(binding.included.editTextChatMessage.editableText)
                     binding.included.textViewChatLog.append("\n")

@@ -76,6 +76,9 @@ class GameBoardFragment : Fragment() {
         // Set the text for your name
         binding.yourName.text = activityViewModel.username
 
+        // Set the initial game instructions
+        binding.included.textViewChatLog.append(getString(R.string.game_instruction))
+
         return binding.root
     }
 
@@ -149,6 +152,7 @@ class GameBoardFragment : Fragment() {
         binding.included.buttonSendMessage.setOnClickListener(
             MySendMessageClickListener(requireContext(), binding.included.editTextChatMessage) {
                 if (binding.included.editTextChatMessage.editableText.toString() != "") {
+                    //TODO Network: send messages online
                     binding.included.textViewChatLog.append(activityViewModel.username + ": ")
                     binding.included.textViewChatLog.append(binding.included.editTextChatMessage.editableText)
                     binding.included.textViewChatLog.append("\n")
