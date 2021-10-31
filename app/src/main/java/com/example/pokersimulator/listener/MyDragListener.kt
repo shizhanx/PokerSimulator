@@ -34,6 +34,8 @@ class MyDragListener(
         // TODO Add visual effect to highlight entering and exiting a droppable zone
         return when (dragEvent.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
+                //TODO use the correct image resource for the visual effect of droppable zone.
+                if (gameActionType != null) view.setBackgroundResource(R.drawable.background_drawable_blue)
                 gameActionType != null
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
@@ -65,6 +67,7 @@ class MyDragListener(
                 gameActionType != null
             }
             DragEvent.ACTION_DRAG_ENDED -> {
+                view.setBackgroundResource(R.drawable.background_light_corner)
                 gameActionType != null
             }
             else -> false
