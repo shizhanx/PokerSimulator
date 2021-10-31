@@ -5,18 +5,18 @@
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/textview_username"
+        android:id="@+id/textViewUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/button_request_join"
+        android:layout_alignBottom="@id/buttonRequestJoin"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@id/button_request_join"
+        android:layout_toStartOf="@id/buttonRequestJoin"
         android:background="@drawable/name_background"
         android:gravity="center"
         android:textColor="#FCF9AC" />
 
     <Button
-        android:id="@+id/button_request_join"
+        android:id="@+id/buttonRequestJoin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true" />

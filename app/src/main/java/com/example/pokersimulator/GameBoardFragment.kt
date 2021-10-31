@@ -75,6 +75,9 @@ class GameBoardFragment : Fragment() {
             addItemDecoration(MyOverlapDecorator(actualCardWidth))
         }
 
+        // Set the text for your name
+        binding.yourName.text = activityViewModel.username
+
         return binding.root
     }
 
@@ -161,7 +164,6 @@ class GameBoardFragment : Fragment() {
                 }
                 MyLongClickListener.isTurn = false
                 MyCardClickListener.isTurn = false
-                binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "no one")
             }
             activityViewModel.username -> {
                 // TODO use the correct end-turn image resource
@@ -179,15 +181,12 @@ class GameBoardFragment : Fragment() {
                 }
                 MyLongClickListener.isTurn = true
                 MyCardClickListener.isTurn = true
-                binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "You")
             }
             else -> {
                 // TODO use the correct disabled-start-turn image resource (gray out maybe)
                 binding.buttonTurnAction.visibility = View.INVISIBLE
                 MyLongClickListener.isTurn = false
                 MyCardClickListener.isTurn = false
-                binding.textViewCurrentPlayer.text =
-                    getString(R.string.current_player_name, viewModel.currentPlayerLiveData.value)
             }
         }
     }

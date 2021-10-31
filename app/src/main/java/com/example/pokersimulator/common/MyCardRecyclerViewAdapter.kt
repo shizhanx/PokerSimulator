@@ -54,7 +54,7 @@ class MyCardRecyclerViewAdapter(
     }
 
     inner class ViewHolder(binding: CardFragmentBinding) : RecyclerView.ViewHolder(binding.root) {
-        val cardInfoView = binding.cardInfo
+        val cardInfoView = binding.imageViewCard
 
         fun setListeners(position: Int) {
             itemView.setOnLongClickListener(MyLongClickListener(parentViewId, position.toString()))

@@ -91,17 +91,17 @@ class GameBoardViewModel: ViewModel() {
      */
     fun flipCard(pileId: Int, position: Int) {
         when (pileId) {
-            R.id.draw_pile -> {
+            R.id.drawPile -> {
                 val changePile = drawPileLiveData.value!!
                 changePile.last().faceUp = !changePile.last().faceUp
                 drawPileLiveData.value = changePile
             }
-            R.id.your_played_pile -> {
+            R.id.yourPlayedPile -> {
                 val changePile = yourPlayedPileLiveData.value!!
                 changePile[position].faceUp = !changePile[position].faceUp
                 yourPlayedPileLiveData.value = changePile
             }
-            R.id.your_hand -> {
+            R.id.yourHand -> {
                 val changePile = yourHandLiveData.value!!
                 changePile[position].faceUp = !changePile[position].faceUp
                 yourHandLiveData.value = changePile

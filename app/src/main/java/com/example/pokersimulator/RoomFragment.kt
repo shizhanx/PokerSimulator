@@ -29,7 +29,7 @@ class RoomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = RoomFragmentBinding.inflate(inflater, container, false)
-        binding.textviewRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+        binding.textViewRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
         with(binding.listOfPlayers) {
             layoutManager = LinearLayoutManager(context)
             adapter = MyUserRecyclerViewAdapter()
@@ -46,7 +46,7 @@ class RoomFragment : Fragment() {
         else
             binding.textViewPrepareStart.setText(R.string.start_game)
 
-        binding.buttonPrepareStartLayout.setOnClickListener {
+        binding.textViewPrepareStart.setOnClickListener {
             // TODO define client prepare and unprepare events' actions
             findNavController().navigate(RoomFragmentDirections.actionStartGame())
         }

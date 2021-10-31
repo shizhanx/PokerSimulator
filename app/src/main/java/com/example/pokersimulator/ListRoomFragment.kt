@@ -30,7 +30,7 @@ class ListRoomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = ListRoomFragmentBinding.inflate(inflater, container, false)
-        binding.textviewListRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+        binding.textViewListRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
         with(binding.listOfHosts) {
             layoutManager = LinearLayoutManager(context)
             adapter = MyUserRecyclerViewAdapter()

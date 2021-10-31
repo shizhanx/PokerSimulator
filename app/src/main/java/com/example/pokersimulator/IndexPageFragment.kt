@@ -34,7 +34,7 @@ class IndexPageFragment : Fragment() {
         activityViewModel.resetConnections()
         // Determine if the app is opened just now or the user pressed back button
         if (activityViewModel.username != "") {
-            binding.textviewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+            binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
             binding.buttonCreateRoom.visibility = View.VISIBLE
             binding.buttonJoinRoom.visibility = View.VISIBLE
         }
@@ -45,13 +45,13 @@ class IndexPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.buttonUsernameSubmit.setOnClickListener {
             // Saves the username to the viewModel for other fragments to access
-            val input = binding.usernameInputText.text.toString()
+            val input = binding.editTextUsername.text.toString()
             if (input != "" && input != "null") {
                 activityViewModel.username =
                     input + "#" + Random.nextInt(1000, 9999)
-                binding.textviewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+                binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
                 // Close keyboard and clear focus so that the user can see the buttons appearing below
-                binding.usernameInputLayout.clearFocus()
+                binding.textInputLayoutUsername.clearFocus()
                 // this is for closing the keyboard after user finishes input
                 val imm = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
