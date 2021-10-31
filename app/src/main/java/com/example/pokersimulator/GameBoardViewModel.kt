@@ -12,6 +12,8 @@ class GameBoardViewModel: ViewModel() {
     val yourHandLiveData = MutableLiveData<MutableList<CardData>>(mutableListOf())
     val yourPlayedPileLiveData = MutableLiveData<MutableList<CardData>>(mutableListOf())
     val opponentPlayedPileLiveData = MutableLiveData<MutableList<CardData>>(mutableListOf())
+    // The name of the current turn's owner. Empty string means no one is acting now
+    var currentPlayerLiveData = MutableLiveData("")
 
     private fun initDrawPile(): MutableList<CardData> {
         val drawPile = mutableListOf<CardData>()

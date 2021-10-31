@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewConfigurationCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -21,6 +22,7 @@ import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
 import com.example.pokersimulator.common.MyOverlapDecorator
 import com.example.pokersimulator.common.MyYesNoDialog
 import com.example.pokersimulator.listener.MyCardClickListener
+import com.example.pokersimulator.listener.MyLongClickListener
 
 
 class GameBoardFragment : Fragment() {
@@ -47,27 +49,27 @@ class GameBoardFragment : Fragment() {
         mLinearAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
         // Calculate the actual width of the card images showing on the screen for overlap decorator
-        val cardImageDrawable = resources.getDrawable(R.drawable.club_1, null)
+        val cardImageDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.club_1)!!
         val cardWidthHeightRatio = 1.0 * cardImageDrawable.intrinsicWidth / cardImageDrawable.intrinsicHeight
         // The actual width is rounded to the floor so that cards overflows a little to the right hand side
         val actualCardWidth = Math.floor(binding.drawPile.layoutParams.height * cardWidthHeightRatio).toInt()
         // Set the width of the draw pile to almost exactly covers the deck
-        binding.drawPile.layoutParams.width = actualCardWidth + 50
+        binding.drawPile.layoutParams.width = actualCardWidth
 
         // Setup the recycler views
-        with(binding.opponentPlayedPile) {
+        binding.opponentPlayedPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
         }
-        with(binding.yourHand) {
+        binding.yourHand.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
         }
-        with(binding.yourPlayedPile) {
+        binding.yourPlayedPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
         }
-        with(binding.drawPile) {
+        binding.drawPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
             addItemDecoration(MyOverlapDecorator(actualCardWidth))
@@ -88,6 +90,7 @@ class GameBoardFragment : Fragment() {
         // Setup the shake listener
         myShakeListener.setOnShakeListener(object : MyShakeListener.OnShakeListener {
             override fun onShake() {
+                // TODO add network related stuff
                 sensorManager.unregisterListener(myShakeListener)
                 val myYesNoDialog = MyYesNoDialog(
                     getString(R.string.shuffle_draw_pile_confirm),
@@ -103,7 +106,6 @@ class GameBoardFragment : Fragment() {
         sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
 
         // Setup the observers that reacts to changes in the pile data in viewModel
-        // TODO Please use these observers to update the visual effect
         viewModel.yourHandLiveData.observe(viewLifecycleOwner, {
             val adapter = binding.yourHand.adapter as MyCardRecyclerViewAdapter
             adapter.updatePile(it.toList())
@@ -121,6 +123,73 @@ class GameBoardFragment : Fragment() {
             adapter.updatePile(it.toList())
             binding.numberCardsInDrawPile.text = getString(R.string.number_cards_in_draw_pile, it.size)
         })
+        // Setup observer to determine whose turn it is now
+        viewModel.currentPlayerLiveData.observe(viewLifecycleOwner) {
+            // TODO add network related stuff
+            // Setup the force end turn button
+            binding.buttonHostPrevilegeAction.apply {
+                visibility = if (activityViewModel.isHost && it != "") View.VISIBLE else View.INVISIBLE
+                setOnClickListener {
+                    MyYesNoDialog(
+                        "What do you want to do with the current player?",
+                        "Force end",
+                        "Kick out",
+                        { viewModel.currentPlayerLiveData.value = "" },
+                        { viewModel.currentPlayerLiveData.value = "" },
+                        {}
+                    ).show(parentFragmentManager, null)
+                }
+            }
+            alterTurnBasedFeatures(it)
+        }
+    }
+
+    private fun alterTurnBasedFeatures(currentPlayer: String) {
+        when(currentPlayer) {
+            "" -> {
+                binding.buttonTurnAction.visibility = View.VISIBLE
+                binding.buttonTurnAction.text = "Start turn"
+                binding.buttonTurnAction.setOnClickListener {
+                    MyYesNoDialog(
+                        "Are you sure to START your turn?",
+                        "Yes",
+                        "No",
+                        { viewModel.currentPlayerLiveData.value = activityViewModel.username },
+                        {},
+                        {}
+                    ).show(parentFragmentManager, null)
+                }
+                MyLongClickListener.isTurn = false
+                MyCardClickListener.isTurn = false
+                binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "no one")
+            }
+            activityViewModel.username -> {
+                // TODO use the correct end-turn image resource
+                binding.buttonTurnAction.visibility = View.VISIBLE
+                binding.buttonTurnAction.text = "End turn"
+                binding.buttonTurnAction.setOnClickListener {
+                    MyYesNoDialog(
+                        "Are you sure to END your turn?",
+                        "Yes",
+                        "No",
+                        { viewModel.currentPlayerLiveData.value = "" },
+                        {},
+                        {}
+                    ).show(parentFragmentManager, null)
+                }
+                MyLongClickListener.isTurn = true
+                MyCardClickListener.isTurn = true
+                binding.textViewCurrentPlayer.text = getString(R.string.current_player_name, "You")
+            }
+            else -> {
+                // TODO use the correct disabled-start-turn image resource (gray out maybe)
+                binding.buttonTurnAction.visibility = View.INVISIBLE
+                MyLongClickListener.isTurn = false
+                MyCardClickListener.isTurn = false
+                binding.textViewCurrentPlayer.text =
+                    getString(R.string.current_player_name, viewModel.currentPlayerLiveData.value)
+            }
+        }
     }
 
     override fun onResume() {

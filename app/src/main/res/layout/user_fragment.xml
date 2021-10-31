@@ -8,7 +8,12 @@
         android:id="@+id/textview_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true" />
+        android:layout_alignBottom="@id/button_request_join"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/button_request_join"
+        android:background="@drawable/name_background"
+        android:gravity="center"
+        android:textColor="#FCF9AC" />
 
     <Button
         android:id="@+id/button_request_join"
