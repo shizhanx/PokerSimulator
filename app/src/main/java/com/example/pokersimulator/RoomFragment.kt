@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.common.MyUserRecyclerViewAdapter
 import com.example.pokersimulator.databinding.RoomFragmentBinding
+import com.example.pokersimulator.listener.MySendMessageClickListener
 
 /**
  * A fragment for users joined the same host to see each other and prepare for the game.
@@ -45,6 +46,17 @@ class RoomFragment : Fragment() {
             binding.textViewPrepareStart.setText(R.string.prepare_to_start_game)
         else
             binding.textViewPrepareStart.setText(R.string.start_game)
+
+        binding.included.buttonSendMessage.setOnClickListener(
+            MySendMessageClickListener(requireContext(), binding.included.editTextChatMessage) {
+                if (binding.included.editTextChatMessage.editableText.toString() != "") {
+                    binding.included.textViewChatLog.append(activityViewModel.username + ": ")
+                    binding.included.textViewChatLog.append(binding.included.editTextChatMessage.editableText)
+                    binding.included.textViewChatLog.append("\n")
+                    binding.included.editTextChatMessage.editableText.clear()
+                }
+            }
+        )
 
         binding.textViewPrepareStart.setOnClickListener {
             // TODO define client prepare and unprepare events' actions
