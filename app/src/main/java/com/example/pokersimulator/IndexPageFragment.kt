@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pokersimulator.databinding.IndexPageFragmentBinding
+import com.example.pokersimulator.listener.MySendMessageClickListener
 import kotlin.random.Random
 
 /**
@@ -43,22 +44,21 @@ class IndexPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonUsernameSubmit.setOnClickListener {
-            // Saves the username to the viewModel for other fragments to access
-            val input = binding.editTextUsername.text.toString()
-            if (input != "" && input != "null") {
-                activityViewModel.username =
-                    input + "#" + Random.nextInt(1000, 9999)
-                binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
-                // Close keyboard and clear focus so that the user can see the buttons appearing below
-                binding.textInputLayoutUsername.clearFocus()
-                // this is for closing the keyboard after user finishes input
-                val imm = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
-                binding.buttonCreateRoom.visibility = View.VISIBLE
-                binding.buttonJoinRoom.visibility = View.VISIBLE
+
+        binding.buttonUsernameSubmit.setOnClickListener(
+            MySendMessageClickListener(requireContext(), binding.textInputLayoutUsername) {
+                // Saves the username to the viewModel for other fragments to access
+                val input = binding.editTextUsername.text.toString()
+                if (input != "" && input != "null") {
+                    activityViewModel.username =
+                        input + "#" + Random.nextInt(1000, 9999)
+                    binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+                    binding.buttonCreateRoom.visibility = View.VISIBLE
+                    binding.buttonJoinRoom.visibility = View.VISIBLE
+                }
             }
-        }
+        )
+
         // The isHost value should only be modified here, where the user chooses for the rest of the game
         binding.buttonCreateRoom.setOnClickListener {
             activityViewModel.isHost = true

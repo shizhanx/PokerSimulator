@@ -16,13 +16,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
-import com.example.pokersimulator.listener.MyDragListener
-import com.example.pokersimulator.listener.MyShakeListener
 import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
 import com.example.pokersimulator.common.MyOverlapDecorator
 import com.example.pokersimulator.common.MyYesNoDialog
-import com.example.pokersimulator.listener.MyCardClickListener
-import com.example.pokersimulator.listener.MyLongClickListener
+import com.example.pokersimulator.listener.*
 
 
 class GameBoardFragment : Fragment() {
@@ -145,6 +142,17 @@ class GameBoardFragment : Fragment() {
             }
             alterTurnBasedFeatures(it)
         }
+
+        binding.included.buttonSendMessage.setOnClickListener(
+            MySendMessageClickListener(requireContext(), binding.included.editTextChatMessage) {
+                if (binding.included.editTextChatMessage.editableText.toString() != "") {
+                    binding.included.textViewChatLog.append(activityViewModel.username + ": ")
+                    binding.included.textViewChatLog.append(binding.included.editTextChatMessage.editableText)
+                    binding.included.textViewChatLog.append("\n")
+                    binding.included.editTextChatMessage.editableText.clear()
+                }
+            }
+        )
     }
 
     private fun alterTurnBasedFeatures(currentPlayer: String) {

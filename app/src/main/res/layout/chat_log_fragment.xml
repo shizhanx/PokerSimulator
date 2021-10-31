@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonSendMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Send"
@@ -16,13 +16,13 @@
         android:id="@+id/editTextChatMessage"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@android:color/white"
         android:hint="Max 100 char"
         android:inputType="textShortMessage"
-        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSendMessage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button" />
+        app:layout_constraintTop_toTopOf="@+id/buttonSendMessage" />
 
     <TextView
         android:id="@+id/textViewChatLog"
