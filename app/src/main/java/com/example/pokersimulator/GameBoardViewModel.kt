@@ -31,57 +31,64 @@ class GameBoardViewModel: ViewModel() {
     /**
      * Shuffle the current draw pile regardless of its emptiness
      */
-    fun shuffleDrawPile() {
+    fun shuffleDrawPile(): String {
         drawPileLiveData.value = drawPileLiveData.value!!.shuffled().toMutableList()
+        return " shuffled the draw pile\n"
     }
 
     /**
      * Draw one card from the draw pile to your hand.
      * The caller should be responsible to ensure the draw pile being non-empty
      */
-    fun drawCard() {
+    fun drawCard(): String {
         val drawPile = drawPileLiveData.value!!
         val yourHand = yourHandLiveData.value!!
         val card = drawPile.removeLast()
-        card.faceUp = true
         yourHand.add(card)
         drawPileLiveData.value = drawPile
         yourHandLiveData.value = yourHand
+        return " drew a card\n"
     }
 
     /**
      * Put the selected card back to the top of the draw pile
      */
-    fun undoDraw(position: Int) {
+    fun undoDraw(position: Int): String {
         val drawPile = drawPileLiveData.value!!
         val yourHand = yourHandLiveData.value!!
         val card = yourHand.removeAt(position)
-        card.faceUp = false
         drawPile.add(card)
         drawPileLiveData.value = drawPile
         yourHandLiveData.value = yourHand
+        return " put a card back to the draw pile\n"
     }
 
     /**
      * Play the selected card to your played pile from your hand
      */
-    fun play(position: Int) {
+    fun play(position: Int): String {
         val yourHand = yourHandLiveData.value!!
         val yourPlayedPile = yourPlayedPileLiveData.value!!
-        yourPlayedPile.add(yourHand.removeAt(position))
+        val card = yourHand.removeAt(position)
+        yourPlayedPile.add(card)
         yourHandLiveData.value = yourHand
         yourPlayedPileLiveData.value = yourPlayedPile
+        return if (card.faceUp) " played $card\n"
+        else " played a flipped card\n"
     }
 
     /**
      * Retrieve the selected card from the played pile to your hand
      */
-    fun undoPlay(position: Int) {
+    fun undoPlay(position: Int): String {
         val yourHand = yourHandLiveData.value!!
         val yourPlayedPile = yourPlayedPileLiveData.value!!
-        yourHand.add(yourPlayedPile.removeAt(position))
+        val card = yourPlayedPile.removeAt(position)
+        yourHand.add(card)
         yourHandLiveData.value = yourHand
         yourPlayedPileLiveData.value = yourPlayedPile
+        return if (card.faceUp) " put $card back to his hand\n"
+        else " put a flipped card back to his hand\n"
     }
 
     /**
@@ -89,23 +96,27 @@ class GameBoardViewModel: ViewModel() {
      * If the pile is the draw pile, only flip the top card. Otherwise flip the card at the
      * specified position.
      */
-    fun flipCard(pileId: Int, position: Int) {
+    fun flipCard(pileId: Int, position: Int): String {
         when (pileId) {
             R.id.drawPile -> {
                 val changePile = drawPileLiveData.value!!
                 changePile.last().faceUp = !changePile.last().faceUp
                 drawPileLiveData.value = changePile
+                return " flipped the top most card in the draw pile\n"
             }
             R.id.yourPlayedPile -> {
                 val changePile = yourPlayedPileLiveData.value!!
                 changePile[position].faceUp = !changePile[position].faceUp
                 yourPlayedPileLiveData.value = changePile
+                return " flipped a card in his played pile\n"
             }
             R.id.yourHand -> {
                 val changePile = yourHandLiveData.value!!
                 changePile[position].faceUp = !changePile[position].faceUp
                 yourHandLiveData.value = changePile
+                return ""
             }
         }
+        return ""
     }
 }

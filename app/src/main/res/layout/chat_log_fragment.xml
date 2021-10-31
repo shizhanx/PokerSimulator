@@ -28,6 +28,7 @@
         android:id="@+id/textViewChatLog"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:gravity="bottom"
         android:scrollbars="vertical"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/editTextChatMessage"

@@ -3,14 +3,19 @@ package com.example.pokersimulator.listener
 import android.util.Log
 import android.view.DragEvent
 import android.view.View
+import android.widget.TextView
 import com.example.pokersimulator.GameBoardViewModel
 import com.example.pokersimulator.R
 import com.example.pokersimulator.domain_object.GameActionEnum
+import kotlin.math.log
 
 /**
  * The drag event listener specifically for in game actions to the cards
  */
-class MyDragListener(private val viewModel: GameBoardViewModel): View.OnDragListener {
+class MyDragListener(
+    private val viewModel: GameBoardViewModel,
+    private val logZone: TextView
+): View.OnDragListener {
     override fun onDrag(view: View, dragEvent: DragEvent): Boolean {
         var gameActionType: GameActionEnum? = null
         // Determine the possible game play option of this drag and drop action
@@ -41,19 +46,20 @@ class MyDragListener(private val viewModel: GameBoardViewModel): View.OnDragList
                 gameActionType != null
             }
             DragEvent.ACTION_DROP -> {
+                val player = viewModel.currentPlayerLiveData.value
                 when (gameActionType) {
                     // TODO add network related stuff
                     GameActionEnum.DRAW -> {
-                        viewModel.drawCard()
+                        logZone.append(player + viewModel.drawCard())
                     }
                     GameActionEnum.UNDO_DRAW -> {
-                        viewModel.undoDraw((dragEvent.clipData.getItemAt(0).text as String).toInt())
+                        logZone.append(player + viewModel.undoDraw((dragEvent.clipData.getItemAt(0).text as String).toInt()))
                     }
                     GameActionEnum.PLAY -> {
-                        viewModel.play((dragEvent.clipData.getItemAt(0).text as String).toInt())
+                        logZone.append(player + viewModel.play((dragEvent.clipData.getItemAt(0).text as String).toInt()))
                     }
                     GameActionEnum.UNDO_PLAY -> {
-                        viewModel.undoPlay((dragEvent.clipData.getItemAt(0).text as String).toInt())
+                        logZone.append(player + viewModel.undoPlay((dragEvent.clipData.getItemAt(0).text as String).toInt()))
                     }
                 }
                 gameActionType != null

@@ -57,19 +57,19 @@ class GameBoardFragment : Fragment() {
         // Setup the recycler views
         binding.opponentPlayedPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.included.textViewChatLog)
         }
         binding.yourHand.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.included.textViewChatLog)
         }
         binding.yourPlayedPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.included.textViewChatLog)
         }
         binding.drawPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel)
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.included.textViewChatLog)
             addItemDecoration(MyOverlapDecorator(actualCardWidth))
         }
 
@@ -86,7 +86,7 @@ class GameBoardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Setup the drag and drop listeners
-        val dragListener = MyDragListener(viewModel)
+        val dragListener = MyDragListener(viewModel, binding.included.textViewChatLog)
         binding.yourHand.setOnDragListener(dragListener)
         binding.drawPile.setOnDragListener(dragListener)
         binding.yourPlayedPile.setOnDragListener(dragListener)
@@ -100,7 +100,7 @@ class GameBoardFragment : Fragment() {
                     getString(R.string.shuffle_draw_pile_confirm),
                     "Yes",
                     "No",
-                    { viewModel.shuffleDrawPile() },
+                    { binding.included.textViewChatLog.append(viewModel.currentPlayerLiveData.value + viewModel.shuffleDrawPile()) },
                     {},
                     { sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME) }
                 )
@@ -138,8 +138,14 @@ class GameBoardFragment : Fragment() {
                         "What do you want to do with the current player?",
                         "Force end",
                         "Kick out",
-                        { viewModel.currentPlayerLiveData.value = "" },
-                        { viewModel.currentPlayerLiveData.value = "" },
+                        {
+                            viewModel.currentPlayerLiveData.value = ""
+                            binding.included.textViewChatLog.append("The host force ended this turn\n")
+                        },
+                        {
+                            viewModel.currentPlayerLiveData.value = ""
+                            binding.included.textViewChatLog.append("The host kicked out ${viewModel.currentPlayerLiveData.value}\n")
+                        },
                         {}
                     ).show(parentFragmentManager, null)
                 }
@@ -172,7 +178,10 @@ class GameBoardFragment : Fragment() {
                         "Are you sure to START your turn?",
                         "Yes",
                         "No",
-                        { viewModel.currentPlayerLiveData.value = activityViewModel.username },
+                        {
+                            viewModel.currentPlayerLiveData.value = activityViewModel.username
+                            binding.included.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just started\n")
+                        },
                         {},
                         {}
                     ).show(parentFragmentManager, null)
@@ -181,7 +190,6 @@ class GameBoardFragment : Fragment() {
                 MyCardClickListener.isTurn = false
             }
             activityViewModel.username -> {
-                // TODO use the correct end-turn image resource
                 binding.buttonTurnAction.visibility = View.VISIBLE
                 binding.buttonTurnAction.text = "End turn"
                 binding.buttonTurnAction.setOnClickListener {
@@ -189,7 +197,10 @@ class GameBoardFragment : Fragment() {
                         "Are you sure to END your turn?",
                         "Yes",
                         "No",
-                        { viewModel.currentPlayerLiveData.value = "" },
+                        {
+                            binding.included.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just ended\n")
+                            viewModel.currentPlayerLiveData.value = ""
+                            },
                         {},
                         {}
                     ).show(parentFragmentManager, null)
@@ -198,7 +209,6 @@ class GameBoardFragment : Fragment() {
                 MyCardClickListener.isTurn = true
             }
             else -> {
-                // TODO use the correct disabled-start-turn image resource (gray out maybe)
                 binding.buttonTurnAction.visibility = View.INVISIBLE
                 MyLongClickListener.isTurn = false
                 MyCardClickListener.isTurn = false
