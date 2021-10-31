@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -143,6 +144,8 @@ class GameBoardFragment : Fragment() {
             alterTurnBasedFeatures(it)
         }
 
+        // Make the chat log scrollable when overflows
+        binding.included.textViewChatLog.movementMethod = ScrollingMovementMethod()
         binding.included.buttonSendMessage.setOnClickListener(
             MySendMessageClickListener(requireContext(), binding.included.editTextChatMessage) {
                 if (binding.included.editTextChatMessage.editableText.toString() != "") {

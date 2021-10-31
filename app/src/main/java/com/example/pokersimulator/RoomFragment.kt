@@ -1,6 +1,7 @@
 package com.example.pokersimulator
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,8 @@ class RoomFragment : Fragment() {
         else
             binding.textViewPrepareStart.setText(R.string.start_game)
 
+        // Make the chat log scrollable when overflows
+        binding.included.textViewChatLog.movementMethod = ScrollingMovementMethod()
         binding.included.buttonSendMessage.setOnClickListener(
             MySendMessageClickListener(requireContext(), binding.included.editTextChatMessage) {
                 if (binding.included.editTextChatMessage.editableText.toString() != "") {
