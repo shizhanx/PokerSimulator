@@ -49,15 +49,15 @@ class RoomFragment : Fragment() {
             binding.textViewPrepareStart.setText(R.string.start_game)
 
         // Make the chat log scrollable when overflows
-        binding.included.textViewChatLog.movementMethod = ScrollingMovementMethod()
-        binding.included.buttonSendMessage.setOnClickListener(
-            MySendMessageClickListener(requireContext(), binding.included.editTextChatMessage) {
-                if (binding.included.editTextChatMessage.editableText.toString() != "") {
+        binding.includeChatLogFragment.textViewChatLog.movementMethod = ScrollingMovementMethod()
+        binding.includeChatLogFragment.buttonSendMessage.setOnClickListener(
+            MySendMessageClickListener(requireContext(), binding.includeChatLogFragment.editTextChatMessage) {
+                if (binding.includeChatLogFragment.editTextChatMessage.editableText.toString() != "") {
                     //TODO Network part: send messages online
-                    binding.included.textViewChatLog.append(activityViewModel.username + ": ")
-                    binding.included.textViewChatLog.append(binding.included.editTextChatMessage.editableText)
-                    binding.included.textViewChatLog.append("\n")
-                    binding.included.editTextChatMessage.editableText.clear()
+                    binding.includeChatLogFragment.textViewChatLog.append(activityViewModel.username + ": ")
+                    binding.includeChatLogFragment.textViewChatLog.append(binding.includeChatLogFragment.editTextChatMessage.editableText)
+                    binding.includeChatLogFragment.textViewChatLog.append("\n")
+                    binding.includeChatLogFragment.editTextChatMessage.editableText.clear()
                 }
             }
         )

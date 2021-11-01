@@ -119,4 +119,13 @@ class GameBoardViewModel: ViewModel() {
         }
         return ""
     }
+
+    /**
+     * Sort the cards in your hand with the given comparator
+     */
+    fun sortYourHand(comparator: Comparator<CardData>) {
+        val yourHand = yourHandLiveData.value!!
+        yourHand.sortWith(comparator)
+        yourHandLiveData.value = yourHand
+    }
 }

@@ -3,16 +3,14 @@ package com.example.pokersimulator
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.view.ViewConfigurationCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +18,7 @@ import com.example.pokersimulator.databinding.GameBoardFragmentBinding
 import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
 import com.example.pokersimulator.common.MyOverlapDecorator
 import com.example.pokersimulator.common.MyYesNoDialog
+import com.example.pokersimulator.domain_object.CardData
 import com.example.pokersimulator.listener.*
 
 
@@ -57,27 +56,48 @@ class GameBoardFragment : Fragment() {
         // Setup the recycler views
         binding.opponentPlayedPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.included.textViewChatLog)
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.includeChatLogFragment.textViewChatLog)
         }
         binding.yourHand.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.included.textViewChatLog)
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.includeChatLogFragment.textViewChatLog)
         }
         binding.yourPlayedPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.included.textViewChatLog)
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.includeChatLogFragment.textViewChatLog)
         }
         binding.drawPile.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.included.textViewChatLog)
+            adapter = MyCardRecyclerViewAdapter(listOf(), viewModel, binding.includeChatLogFragment.textViewChatLog)
             addItemDecoration(MyOverlapDecorator(actualCardWidth))
         }
 
         // Set the text for your name
-        binding.yourName.text = activityViewModel.username
+        binding.includeUserFragment.textViewUsername.text = activityViewModel.username
+        // Set up the menu for sorting options next to your name
+        binding.includeUserFragment.buttonUserAction.text = "Sort by"
+        val sortingMenu = PopupMenu(requireContext(), binding.includeUserFragment.buttonUserAction).apply {
+            inflate(R.menu.menu_sorting_options)
+            setOnMenuItemClickListener {
+                when (it.title) {
+                    getString(R.string.sort_by_type) -> {
+                        viewModel.sortYourHand(CardData.comparatorByType)
+                        true
+                    }
+                    getString(R.string.sort_by_number) -> {
+                        viewModel.sortYourHand(CardData.comparatorByNumber)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+        binding.includeUserFragment.buttonUserAction.setOnClickListener {
+            sortingMenu.show()
+        }
 
         // Set the initial game instructions
-        binding.included.textViewChatLog.append(getString(R.string.game_instruction))
+        binding.includeChatLogFragment.textViewChatLog.append(getString(R.string.game_instruction))
 
         return binding.root
     }
@@ -86,7 +106,7 @@ class GameBoardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Setup the drag and drop listeners
-        val dragListener = MyDragListener(viewModel, binding.included.textViewChatLog)
+        val dragListener = MyDragListener(viewModel, binding.includeChatLogFragment.textViewChatLog)
         binding.yourHand.setOnDragListener(dragListener)
         binding.drawPile.setOnDragListener(dragListener)
         binding.yourPlayedPile.setOnDragListener(dragListener)
@@ -100,7 +120,7 @@ class GameBoardFragment : Fragment() {
                     getString(R.string.shuffle_draw_pile_confirm),
                     "Yes",
                     "No",
-                    { binding.included.textViewChatLog.append(viewModel.currentPlayerLiveData.value + viewModel.shuffleDrawPile()) },
+                    { binding.includeChatLogFragment.textViewChatLog.append(viewModel.currentPlayerLiveData.value + viewModel.shuffleDrawPile()) },
                     {},
                     { sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME) }
                 )
@@ -140,11 +160,11 @@ class GameBoardFragment : Fragment() {
                         "Kick out",
                         {
                             viewModel.currentPlayerLiveData.value = ""
-                            binding.included.textViewChatLog.append("The host force ended this turn\n")
+                            binding.includeChatLogFragment.textViewChatLog.append("The host force ended this turn\n")
                         },
                         {
                             viewModel.currentPlayerLiveData.value = ""
-                            binding.included.textViewChatLog.append("The host kicked out ${viewModel.currentPlayerLiveData.value}\n")
+                            binding.includeChatLogFragment.textViewChatLog.append("The host kicked out ${viewModel.currentPlayerLiveData.value}\n")
                         },
                         {}
                     ).show(parentFragmentManager, null)
@@ -154,15 +174,15 @@ class GameBoardFragment : Fragment() {
         }
 
         // Make the chat log scrollable when overflows
-        binding.included.textViewChatLog.movementMethod = ScrollingMovementMethod()
-        binding.included.buttonSendMessage.setOnClickListener(
-            MySendMessageClickListener(requireContext(), binding.included.editTextChatMessage) {
-                if (binding.included.editTextChatMessage.editableText.toString() != "") {
+        binding.includeChatLogFragment.textViewChatLog.movementMethod = ScrollingMovementMethod()
+        binding.includeChatLogFragment.buttonSendMessage.setOnClickListener(
+            MySendMessageClickListener(requireContext(), binding.includeChatLogFragment.editTextChatMessage) {
+                if (binding.includeChatLogFragment.editTextChatMessage.editableText.toString() != "") {
                     //TODO Network: send messages online
-                    binding.included.textViewChatLog.append(activityViewModel.username + ": ")
-                    binding.included.textViewChatLog.append(binding.included.editTextChatMessage.editableText)
-                    binding.included.textViewChatLog.append("\n")
-                    binding.included.editTextChatMessage.editableText.clear()
+                    binding.includeChatLogFragment.textViewChatLog.append(activityViewModel.username + ": ")
+                    binding.includeChatLogFragment.textViewChatLog.append(binding.includeChatLogFragment.editTextChatMessage.editableText)
+                    binding.includeChatLogFragment.textViewChatLog.append("\n")
+                    binding.includeChatLogFragment.editTextChatMessage.editableText.clear()
                 }
             }
         )
@@ -180,7 +200,7 @@ class GameBoardFragment : Fragment() {
                         "No",
                         {
                             viewModel.currentPlayerLiveData.value = activityViewModel.username
-                            binding.included.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just started\n")
+                            binding.includeChatLogFragment.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just started\n")
                         },
                         {},
                         {}
@@ -198,7 +218,7 @@ class GameBoardFragment : Fragment() {
                         "Yes",
                         "No",
                         {
-                            binding.included.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just ended\n")
+                            binding.includeChatLogFragment.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just ended\n")
                             viewModel.currentPlayerLiveData.value = ""
                             },
                         {},
