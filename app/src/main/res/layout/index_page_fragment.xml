@@ -28,10 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/index_fragment_header"
         android:textColor="#FCF9AC"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
         android:id="@+id/buttonCreateRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:adjustViewBounds="true"
         android:contentDescription="button_create_room"
         android:src="@drawable/btn_create_room"
@@ -55,7 +55,6 @@
         android:id="@+id/buttonJoinRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
         android:adjustViewBounds="true"
         android:contentDescription="button_join_room"
         android:src="@drawable/btn_join_existing_room"
@@ -68,7 +67,7 @@
         android:id="@+id/textViewUsernamePrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/require_username"
         android:textColor="#FCF9AC"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,4 +102,27 @@
             android:inputType="text"
             android:maxLength="20" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/buttonSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/select_image"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonUsernameSubmit" />
+
+    <ImageView
+        android:id="@+id/imageViewSelectedImage"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
+        android:adjustViewBounds="true"
+        android:src="@android:drawable/ic_menu_report_image"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCreateRoom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSelectImage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

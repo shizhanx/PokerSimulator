@@ -9,6 +9,7 @@
     <string name="prepare_to_start_game">Ready</string>
     <string name="start_game">Start</string>
     <string name="empty_pile">No card here yet</string>
+    <string name="select_image">Optional: select an image (screenshot of lecture slides maybe!) to show when flip your device</string>
     <!-- Menu options -->
     <string name="sort_by_type">Sort by card type</string>
     <string name="sort_by_number">Sort by card number</string>

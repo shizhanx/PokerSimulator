@@ -1,13 +1,14 @@
 package com.example.pokersimulator
 
-import android.app.Activity
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pokersimulator.databinding.IndexPageFragmentBinding
@@ -25,6 +26,15 @@ class IndexPageFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    // The activity result registries for getting the permission and selecting an image locally
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        activityViewModel.imageURI.value = it
+    }
+    private var canSelectImage = true
+    private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        canSelectImage = it
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +68,19 @@ class IndexPageFragment : Fragment() {
                 }
             }
         )
+
+        activityViewModel.imageURI.observe(viewLifecycleOwner) {
+            if (it != null) binding.imageViewSelectedImage.setImageURI(it)
+        }
+
+        binding.buttonSelectImage.setOnClickListener {
+            if (ActivityCompat.checkSelfPermission(requireActivity(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                canSelectImage = false
+                requestPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+            if (canSelectImage) getContent.launch("image/*")
+        }
 
         // The isHost value should only be modified here, where the user chooses for the rest of the game
         binding.buttonCreateRoom.setOnClickListener {
