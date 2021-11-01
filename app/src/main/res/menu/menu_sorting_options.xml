@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:title="By card type"
+        app:showAsAction="ifRoom" />
+    <item
+        android:title="By card number"
+        app:showAsAction="ifRoom" />
+</menu>
