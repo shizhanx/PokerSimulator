@@ -99,28 +99,13 @@
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/background_light_corner"
-        app:layout_constraintBottom_toTopOf="@+id/yourName"
+        app:layout_constraintBottom_toTopOf="@+id/includeUserFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonHostPrevilege_action"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
 
-
-    <TextView
-        android:id="@+id/yourName"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/name_background"
-        android:gravity="center"
-        android:textColor="#FCF9AC"
-        app:layout_constraintBottom_toTopOf="@+id/yourHand"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yourPlayedPile" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/yourHand"
@@ -132,12 +117,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yourName"
+        app:layout_constraintTop_toBottomOf="@+id/includeUserFragment"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
 
     <include
-        android:id="@+id/included"
+        android:id="@+id/includeChatLogFragment"
         layout="@layout/chat_log_fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -147,5 +132,16 @@
         app:layout_constraintEnd_toStartOf="@+id/buttonTurnAction"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/opponentPlayedPile" />
+
+    <include
+        android:id="@+id/includeUserFragment"
+        layout="@layout/user_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/yourHand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yourPlayedPile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
