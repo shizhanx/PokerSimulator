@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import android.view.Menu
+import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
 import com.example.pokersimulator.common.MyYesNoDialog
@@ -22,14 +23,32 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainActivityViewModel by viewModels()
     private lateinit var sensorManager: SensorManager
     private var flipSensor: Sensor? = null
-    private val myFlipDeviceListener = MyFlipDeviceListener()
+    private lateinit var myFlipDeviceListener: MyFlipDeviceListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        // Set up the sensors and listeners
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         flipSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        myFlipDeviceListener = MyFlipDeviceListener {
+            binding.imageViewCoveringAll.visibility = View.VISIBLE
+            sensorManager.unregisterListener(myFlipDeviceListener)
+        }
+        // Register the fastest delay as this covering image may save the life of a student.
+        sensorManager.registerListener(myFlipDeviceListener, flipSensor, SensorManager.SENSOR_DELAY_FASTEST)
+
+        // Set the covering image to the selected image by observer pattern
+        viewModel.imageURI.observe(this) {
+            if (it != null)
+                binding.imageViewCoveringAll.setImageURI(it)
+        }
+
+        binding.imageViewCoveringAll.setOnClickListener {
+            it.visibility = View.INVISIBLE
+            sensorManager.registerListener(myFlipDeviceListener, flipSensor, SensorManager.SENSOR_DELAY_FASTEST)
+        }
 
         setContentView(binding.root)
         this@MainActivity.window.setFlags(

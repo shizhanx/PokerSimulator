@@ -86,12 +86,10 @@ class MyShakeListener: SensorEventListener {
                 mFirstDirectionChangeTime = now
                 mLastDirectionChangeTime = now
             }
-            Log.d("TAG", "total: $totalChange")
 
             // check if the last movement was not long ago
             val lastChangeWasAgo = now - mLastDirectionChangeTime
             if (lastChangeWasAgo < MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE) {
-                Log.d("TAG", "first: $mFirstDirectionChangeTime, last: $mLastDirectionChangeTime, now: $now, ago: $lastChangeWasAgo")
 
                 // store movement data
                 mLastDirectionChangeTime = now
@@ -104,7 +102,6 @@ class MyShakeListener: SensorEventListener {
 
                 // check how many movements are so far
                 if (mDirectionChangeCount >= MIN_ACCELERATION_CHANGE) {
-                    Log.d("TAG", "onSensorChanged: directionCount: $mDirectionChangeCount")
                     // check total duration
                     val totalDuration = now - mFirstDirectionChangeTime
                     if (totalDuration < MAX_TOTAL_DURATION_OF_SHAKE) {
