@@ -20,7 +20,9 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 -->
-    <include layout="@layout/content_main" />
+    <include
+        android:id="@+id/includeContentMain"
+        layout="@layout/content_main" />
 
     <ImageView
         android:id="@+id/imageViewCoveringAll"
@@ -28,8 +30,6 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:background="@android:color/black"
-        android:clickable="true"
-        android:visibility="invisible"
         tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
