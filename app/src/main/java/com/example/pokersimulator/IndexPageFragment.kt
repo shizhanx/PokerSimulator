@@ -1,16 +1,18 @@
 package com.example.pokersimulator
 
-import android.app.Activity
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pokersimulator.databinding.IndexPageFragmentBinding
+import com.example.pokersimulator.listener.MySendMessageClickListener
 import kotlin.random.Random
 
 /**
@@ -25,6 +27,15 @@ class IndexPageFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    // The activity result registries for getting the permission and selecting an image locally
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        activityViewModel.imageURI.value = it
+    }
+    private var canSelectImage = true
+    private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        canSelectImage = it
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,7 +45,7 @@ class IndexPageFragment : Fragment() {
         activityViewModel.resetConnections()
         // Determine if the app is opened just now or the user pressed back button
         if (activityViewModel.username != "") {
-            binding.textviewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+            binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
             binding.buttonCreateRoom.visibility = View.VISIBLE
             binding.buttonJoinRoom.visibility = View.VISIBLE
         }
@@ -43,22 +54,34 @@ class IndexPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonUsernameSubmit.setOnClickListener {
-            // Saves the username to the viewModel for other fragments to access
-            val input = binding.usernameInputText.text.toString()
-            if (input != "" && input != "null") {
-                activityViewModel.username =
-                    input + "#" + Random.nextInt(1000, 9999)
-                binding.textviewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
-                // Close keyboard and clear focus so that the user can see the buttons appearing below
-                binding.usernameInputLayout.clearFocus()
-                // this is for closing the keyboard after user finishes input
-                val imm = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
-                binding.buttonCreateRoom.visibility = View.VISIBLE
-                binding.buttonJoinRoom.visibility = View.VISIBLE
+
+        binding.buttonUsernameSubmit.setOnClickListener(
+            MySendMessageClickListener(requireContext(), binding.textInputLayoutUsername) {
+                // Saves the username to the viewModel for other fragments to access
+                val input = binding.editTextUsername.text.toString()
+                if (input != "" && input != "null") {
+                    activityViewModel.username =
+                        input + "#" + Random.nextInt(1000, 9999)
+                    binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+                    binding.buttonCreateRoom.visibility = View.VISIBLE
+                    binding.buttonJoinRoom.visibility = View.VISIBLE
+                }
             }
+        )
+
+        activityViewModel.imageURI.observe(viewLifecycleOwner) {
+            if (it != null) binding.imageViewSelectedImage.setImageURI(it)
         }
+
+        binding.buttonSelectImage.setOnClickListener {
+            if (ActivityCompat.checkSelfPermission(requireActivity(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                canSelectImage = false
+                requestPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+            if (canSelectImage) getContent.launch("image/*")
+        }
+
         // The isHost value should only be modified here, where the user chooses for the rest of the game
         binding.buttonCreateRoom.setOnClickListener {
             activityViewModel.isHost = true

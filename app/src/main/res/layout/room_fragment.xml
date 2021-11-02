@@ -22,10 +22,10 @@
 
 
     <TextView
-        android:id="@+id/textview_room_header"
+        android:id="@+id/textViewRoomHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:textColor="#FCF9AC"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,52 +34,61 @@
         app:layout_constraintTop_toBottomOf="@+id/logo_main" />
 
     <TextView
-        android:id="@+id/textView_title_list_players"
+        android:id="@+id/textViewTitleListPlayers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:text="Current players"
         android:textColor="#FCF9AC"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_room_header" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewRoomHeader" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_of_players"
+        android:id="@+id/listOfPlayers"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
         android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/button_prepare_start_layout"
+        app:layout_constraintBottom_toTopOf="@id/includeChatLogFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_title_list_players" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitleListPlayers">
 
-    <RelativeLayout
-        android:id="@+id/button_prepare_start_layout"
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <include
+        android:id="@+id/includeChatLogFragment"
+        layout="@layout/chat_log_fragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewPrepareStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listOfPlayers" />
+
+    <TextView
+        android:id="@+id/textViewPrepareStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:background="@drawable/btn_background"
+        android:gravity="center"
+        android:lines="1"
+        android:padding="20sp"
+        android:textColor="#FCF9AC"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/textView_prepare_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:lines="1"
-            android:padding="20sp"
-            android:textColor="#FCF9AC"
-            android:textSize="24sp" />
-
-    </RelativeLayout>
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

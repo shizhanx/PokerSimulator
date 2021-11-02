@@ -10,7 +10,7 @@
     tools:context=".GameBoardFragment">
 
     <TextView
-        android:id="@+id/opponent_name"
+        android:id="@+id/opponentName"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
@@ -20,73 +20,68 @@
         android:lines="1"
         android:text="The last active opponent's"
         android:textColor="#FCF9AC"
+        app:layout_constraintBottom_toTopOf="@+id/opponentPlayedPile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/opponent_played_pile"
+        android:id="@+id/opponentPlayedPile"
         android:layout_width="0dp"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/background_light_corner"
-        app:layout_constraintBottom_toTopOf="@+id/number_cards_in_draw_pile"
+        app:layout_constraintBottom_toTopOf="@id/numberCardsInDrawPile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/opponent_name"
+        app:layout_constraintTop_toBottomOf="@+id/opponentName"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
-        android:id="@+id/number_cards_in_draw_pile"
+        android:id="@+id/numberCardsInDrawPile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:textColor="#FCF9AC"
-        app:layout_constraintBottom_toTopOf="@+id/draw_pile"
-        app:layout_constraintEnd_toEndOf="@+id/draw_pile"
-        app:layout_constraintStart_toStartOf="@+id/draw_pile" />
-
-    <TextView
-        android:id="@+id/textView_current_player"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="#FCF9AC"
-        app:layout_constraintEnd_toEndOf="@+id/button_turn_action"
-        app:layout_constraintStart_toStartOf="@+id/button_turn_action"
-        app:layout_constraintTop_toBottomOf="@+id/opponent_played_pile" />
+        app:layout_constraintBottom_toTopOf="@id/drawPile"
+        app:layout_constraintEnd_toEndOf="@+id/drawPile"
+        app:layout_constraintStart_toStartOf="@+id/drawPile"
+        app:layout_constraintTop_toBottomOf="@+id/opponentPlayedPile" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/draw_pile"
+        android:id="@+id/drawPile"
         android:layout_width="0dp"
-        android:layout_height="120dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button_turn_action"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button_turn_action"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonTurnAction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/buttonTurnAction"
+        app:layout_constraintTop_toBottomOf="@+id/numberCardsInDrawPile"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
 
     <Button
-        android:id="@+id/button_turn_action"
+        android:id="@+id/buttonTurnAction"
         android:layout_width="120dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/background_drawable_blue"
         android:fontFamily="sans-serif-condensed-medium"
         android:maxLines="1"
         android:textColor="#FCF9AC"
         android:textSize="14sp"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonHostPrevilege_action"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40"
+        app:layout_constraintTop_toBottomOf="@+id/drawPile"
         tools:text="START TURN" />
 
     <Button
-        android:id="@+id/button_host_previlege_action"
+        android:id="@+id/buttonHostPrevilege_action"
         android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_height="40dp"
         android:background="@drawable/background_drawable_red"
         android:fontFamily="sans-serif-condensed-medium"
         android:maxLines="1"
@@ -94,50 +89,59 @@
         android:textColor="#FCF9AC"
         android:textSize="12sp"
         app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="@+id/button_turn_action"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/button_turn_action"
-        app:layout_constraintTop_toBottomOf="@+id/button_turn_action" />
+        app:layout_constraintBottom_toTopOf="@+id/yourPlayedPile"
+        app:layout_constraintEnd_toEndOf="@+id/buttonTurnAction"
+        app:layout_constraintTop_toBottomOf="@+id/buttonTurnAction" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/your_played_pile"
+        android:id="@+id/yourPlayedPile"
         android:layout_width="0dp"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/background_light_corner"
-        app:layout_constraintBottom_toTopOf="@+id/your_name"
+        app:layout_constraintBottom_toTopOf="@+id/includeUserFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_host_previlege_action"
+        app:layout_constraintTop_toBottomOf="@+id/buttonHostPrevilege_action"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
 
 
-    <TextView
-        android:id="@+id/your_name"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/name_background"
-        android:gravity="center"
-        android:text="Your name here"
-        android:textColor="#FCF9AC"
-        app:layout_constraintBottom_toTopOf="@+id/your_hand"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/your_played_pile" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/your_hand"
+        android:id="@+id/yourHand"
         android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="100dp"
 
+        android:layout_marginTop="8dp"
         android:background="@drawable/background_light_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeUserFragment"
         tools:itemCount="1"
         tools:listitem="@layout/card_fragment" />
+
+    <include
+        android:id="@+id/includeChatLogFragment"
+        layout="@layout/chat_log_fragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonHostPrevilege_action"
+        app:layout_constraintEnd_toStartOf="@+id/buttonTurnAction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/opponentPlayedPile" />
+
+    <include
+        android:id="@+id/includeUserFragment"
+        layout="@layout/user_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/yourHand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yourPlayedPile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

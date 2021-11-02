@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokersimulator.GameBoardViewModel
 import com.example.pokersimulator.R
@@ -18,7 +19,8 @@ import kotlin.properties.Delegates
  */
 class MyCardRecyclerViewAdapter(
     var pile: List<CardData>,
-    val viewModel: GameBoardViewModel
+    val viewModel: GameBoardViewModel,
+    val logZone: TextView
 )
     : RecyclerView.Adapter<MyCardRecyclerViewAdapter.ViewHolder>() {
 
@@ -54,11 +56,11 @@ class MyCardRecyclerViewAdapter(
     }
 
     inner class ViewHolder(binding: CardFragmentBinding) : RecyclerView.ViewHolder(binding.root) {
-        val cardInfoView = binding.cardInfo
+        val cardInfoView = binding.imageViewCard
 
         fun setListeners(position: Int) {
             itemView.setOnLongClickListener(MyLongClickListener(parentViewId, position.toString()))
-            itemView.setOnClickListener(MyCardClickListener(viewModel, parentViewId, position))
+            itemView.setOnClickListener(MyCardClickListener(viewModel, parentViewId, position, logZone))
         }
     }
 
