@@ -67,12 +67,12 @@ To install the application, Android studio is required to build the apk and inst
 ### Run on a real device
 1. Connect your device to your development machine with a USB cable.
 2. Enable USB debugging if the device does not have it enabled. To enable USB debugging:
-   a. Open the Settings app. 
-   b. If your device uses Android v8.0 or higher, select System. Otherwise, proceed to the next step.
-   c. Scroll to the bottom and select About phone.
-   d. Scroll to the bottom and tap Build number seven times.
-   e. Return to the previous screen, scroll to the bottom, and tap Developer options.
-   f. In the Developer options window, scroll down to find and enable USB debugging.
+   1. Open the Settings app. 
+   2. If your device uses Android v8.0 or higher, select System. Otherwise, proceed to the next step.
+   3. Scroll to the bottom and select About phone.
+   4. Scroll to the bottom and tap Build number seven times.
+   5. Return to the previous screen, scroll to the bottom, and tap Developer options.
+   6. In the Developer options window, scroll down to find and enable USB debugging.
    
 3. In Android Studio, select 'app' and the device connected.
    []
