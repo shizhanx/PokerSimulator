@@ -22,6 +22,11 @@ import com.example.pokersimulator.common.MyOverlapDecorator
 import com.example.pokersimulator.common.MyYesNoDialog
 import com.example.pokersimulator.domain_object.CardData
 import com.example.pokersimulator.listener.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 
 class GameBoardFragment : Fragment() {
@@ -37,6 +42,8 @@ class GameBoardFragment : Fragment() {
     private lateinit var sensorManager: SensorManager
     private var mLinearAccelerometer: Sensor? = null
     private val myShakeListener = MyShakeListener()
+
+    private val database = Firebase.database("https://mystical-binder-330900-default-rtdb.asia-southeast1.firebasedatabase.app/")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -170,6 +177,7 @@ class GameBoardFragment : Fragment() {
         // Setup observer to determine whose turn it is now
         viewModel.currentPlayerLiveData.observe(viewLifecycleOwner) {
             // TODO add network related stuff
+
             // Setup the force end turn button
             binding.buttonHostPrevilegeAction.apply {
                 visibility = if (activityViewModel.isHost && it != "") View.VISIBLE else View.INVISIBLE
@@ -180,6 +188,8 @@ class GameBoardFragment : Fragment() {
                         "Kick out",
                         {
                             viewModel.currentPlayerLiveData.value = ""
+                            val currentPlayerRef = database.getReference("rooms/Testing Room/currentPlayer")
+                            currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
                             binding.includeChatLogFragment.textViewChatLog.append("The host force ended this turn\n")
                         },
                         {
@@ -220,6 +230,8 @@ class GameBoardFragment : Fragment() {
                         "No",
                         {
                             viewModel.currentPlayerLiveData.value = activityViewModel.username
+                            val currentPlayerRef = database.getReference("rooms/Testing Room/currentPlayer")
+                            currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
                             binding.includeChatLogFragment.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just started\n")
                         },
                         {},
@@ -240,6 +252,14 @@ class GameBoardFragment : Fragment() {
                         {
                             binding.includeChatLogFragment.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just ended\n")
                             viewModel.currentPlayerLiveData.value = ""
+                            val currentPlayerRef = database.getReference("rooms/Testing Room/currentPlayer")
+                            currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
+                            val playerHandDataRef = database.getReference("rooms/Testing Room/players/" + activityViewModel.username + "/HandData")
+                            playerHandDataRef.setValue(viewModel.yourHandLiveData)
+                            val playerPlayedPileDataRef = database.getReference("rooms/Testing Room/players/" + activityViewModel.username + "/PlayedPileData")
+                            playerPlayedPileDataRef.setValue(viewModel.yourPlayedPileLiveData)
+                            val drawPileDataRef = database.getReference("rooms/Testing Room/drawPileData")
+                            drawPileDataRef.setValue(viewModel.drawPileLiveData)
                             },
                         {},
                         {}
@@ -255,6 +275,8 @@ class GameBoardFragment : Fragment() {
             }
         }
     }
+
+
 
     override fun onResume() {
         super.onResume()
