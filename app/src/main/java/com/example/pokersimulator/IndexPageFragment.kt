@@ -3,6 +3,7 @@ package com.example.pokersimulator
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,19 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlin.random.Random
+import com.google.firebase.database.DatabaseError
+
+import com.google.firebase.database.DataSnapshot
+
+import com.google.firebase.database.ValueEventListener
+import kotlin.collections.MutableIterable as MutableIterable
+import com.google.firebase.database.DatabaseReference
+
+import android.R.string.no
+
+
+
+
 
 
 /**
@@ -27,7 +41,7 @@ class IndexPageFragment : Fragment() {
     private var _binding: IndexPageFragmentBinding? = null
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     val database = Firebase.database("https://mystical-binder-330900-default-rtdb.asia-southeast1.firebasedatabase.app/")
-    val roomRef = database.getReference("rooms")
+
 
 
 
@@ -94,14 +108,39 @@ class IndexPageFragment : Fragment() {
         binding.buttonCreateRoom.setOnClickListener {
             activityViewModel.isHost = true
             findNavController().navigate(IndexPageFragmentDirections.actionCreateRoom())
-            roomRef.setValue("Testing room")
-            val playerRef = database.getReference("rooms/Testing Room/players")
-            playerRef.setValue(activityViewModel.username)
+
+            activityViewModel.roomPath = "rooms/" + activityViewModel.username
+            val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
+            playerRef.child(activityViewModel.username).setValue("")
+
+
         }
         binding.buttonJoinRoom.setOnClickListener {
             activityViewModel.isHost = false
             findNavController().navigate(IndexPageFragmentDirections.actionJoinRoom())
-            val playerRef = database.getReference("rooms/Testing Room/players")
+            val roomRef = database.reference.child("rooms")
+
+            val roomListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    // TODO Get List of rooms and use the values to update the UI
+                    for (roomSnapshot in dataSnapshot.getChildren()) {
+                        val roomsList = roomSnapshot.getKey().toString()
+                        Log.w("Rooms: ", roomsList)
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.w("loadPost:onCancelled", databaseError.toException())
+                }
+            }
+            roomRef.addValueEventListener(roomListener)
+
+            //TODO Change this from activityViewModel.username to the username of the host of the selected room
+            activityViewModel.roomPath = "rooms/" + activityViewModel.username
+
+
+
+            val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
             playerRef.child(activityViewModel.username).setValue("")
         }
     }
