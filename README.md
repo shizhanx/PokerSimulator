@@ -17,23 +17,21 @@ Online multi player poker simulator
 Ever played those online Majong or Poker games? 
 This one is similar, but without any pre-defined rules, since it's a simulator.
 
+Any number of users can join an open room (online information)
+and see a deck of poker cards in the middle, a total number of users in the room,
+on his side his cards in hand, on the opposite side the last active opponent (if any), etc.
+
 ### Rules
 
 ### Host
+The host of a room can kick out players, if the host deemed their actions inappropriate .
 
 ### Players
-
-Any number of users can join an open room (online information) 
-and see a deck of poker cards in the middle, a total number of users in the room, 
-on his side his cards in hand, on the opposite side the last active opponent (if any), etc.
-
 Players take turns to act, like draw cards and stuff, and can undo what's been done. 
 Of course, as a simulator, we must assume people being disciplined.
 
-The initiator of a room can kick out people. That's the only way to get rid of improper player actions.
-To make use of sensors, we may locate the user to show a list of nearby users to invite (GPS), shake the phone to shuffle the deck (movement sensor), put the phone upsidedown on the table to show a photo of lecture slides or open a dictionary (light sensor), or whatever you guys can think of.
- 
-# During a round:
+
+### During a round:
 The host of a room decides when to start and end a round. Once a round starts, no one can join in the middle. 
 Once started, people can click on take turn to act, shake the phone to re-shuffle, slide to draw cards or to put cards onto the deck or the table with side up or down, take back cards from the table to hand, and redo actions.
 After a player finishes his actions, he will click on end turn to let another take turn.
@@ -50,6 +48,7 @@ People can chat during playing, maybe even send voice messages (extentsion featu
 We can use a P2P architecture without a centralised server for all the game actions.
 We can have a server if we want to store user data like friends, or to have a global chat channel. But all core features we need to make this app running can be done without one.
 
+To make use of sensors, we may locate the user to show a list of nearby users to invite (GPS), shake the phone to shuffle the deck (movement sensor), put the phone upsidedown on the table to show a photo of lecture slides or open a dictionary (light sensor), or whatever you guys can think of.
 
 ## Requirement
 | Requirement | |
@@ -76,10 +75,16 @@ To install the application, Android studio is required to build the apk and inst
    
 3. In Android Studio, select 'app' and the device connected.
    
-![install]()
+![install](https://github.com/shizhanx/PokerSimulator/blob/readme/img/install_app.png)
 4. Click Run ![run](https://developer.android.com/studio/images/buttons/toolbar-run.png)
+5. Once the application has been installed, it'll be on the phone with 'PokerSimulator' app.
 
 ### Run on a virtual emulator
+1. In Android Studio, create an [Android Virtual Device (AVD)](https://developer.android.com/studio/run/managing-avds#createavd)
+   that the emulator can use to install and run your app.
+2. In the toolbar, select your app from the run/debug configurations drop-down menu.
+3. From the target device drop-down menu, select the AVD that you want to run your app on.
+4. Click Run ![run](https://developer.android.com/studio/images/buttons/toolbar-run.png)
 
 ## Solution components
 
@@ -88,8 +93,6 @@ The solution consists in the following containers:
 1. `firebase`
 2. `UI`
 3. `GameLogic`
-4. `sentiment_analysis`
-5. `twitter_harvester`
 
 To bring up the database:
 TODO: Tariq
