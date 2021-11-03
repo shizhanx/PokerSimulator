@@ -4,6 +4,7 @@ import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,6 +13,8 @@ import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.findFragment
 import com.example.pokersimulator.common.MyYesNoDialog
 import com.example.pokersimulator.databinding.ActivityMainBinding
 import com.example.pokersimulator.listener.MyFlipDeviceListener
@@ -32,12 +35,7 @@ class MainActivity : AppCompatActivity() {
         // Set up the sensors and listeners
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         flipSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
-        myFlipDeviceListener = MyFlipDeviceListener {
-            binding.imageViewCoveringAll.visibility = View.VISIBLE
-            sensorManager.unregisterListener(myFlipDeviceListener)
-        }
-        // Register the fastest delay as this covering image may save the life of a student.
-        sensorManager.registerListener(myFlipDeviceListener, flipSensor, SensorManager.SENSOR_DELAY_FASTEST)
+        myFlipDeviceListener = MyFlipDeviceListener { viewModel.isCoverImageShowing.value = true }
 
         // Set the covering image to the selected image by observer pattern
         viewModel.imageURI.observe(this) {
@@ -45,10 +43,22 @@ class MainActivity : AppCompatActivity() {
                 binding.imageViewCoveringAll.setImageURI(it)
         }
 
-        binding.imageViewCoveringAll.setOnClickListener {
-            it.visibility = View.INVISIBLE
-            sensorManager.registerListener(myFlipDeviceListener, flipSensor, SensorManager.SENSOR_DELAY_FASTEST)
+        viewModel.isCoverImageShowing.observe(this) {
+            if (it) {
+                // Hides any active dialog
+                for (fragment in supportFragmentManager.fragments) {
+                    if (fragment is DialogFragment) fragment.dismiss()
+                }
+                binding.imageViewCoveringAll.visibility = View.VISIBLE
+                sensorManager.unregisterListener(myFlipDeviceListener)
+            } else {
+                binding.imageViewCoveringAll.visibility = View.GONE
+                // Register the fastest delay as this covering image may save the life of a student.
+                sensorManager.registerListener(myFlipDeviceListener, flipSensor, SensorManager.SENSOR_DELAY_FASTEST)
+            }
         }
+
+        binding.imageViewCoveringAll.setOnClickListener { viewModel.isCoverImageShowing.value = false }
 
         setContentView(binding.root)
         this@MainActivity.window.setFlags(
@@ -72,14 +82,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        MyYesNoDialog(
-            "Are you sure you want to go back or quit?",
-            "Yes",
-            "No",
-            { super.onBackPressed() },
-            {},
-            {}
-        ).show(supportFragmentManager, null)
+        if (viewModel.isCoverImageShowing.value != true) {
+            MyYesNoDialog(
+                "Are you sure you want to go back or quit?",
+                "Yes",
+                "No",
+                { super.onBackPressed() },
+                {},
+                {}
+            ).show(supportFragmentManager, null)
+        }
     }
 
     override fun onResume() {

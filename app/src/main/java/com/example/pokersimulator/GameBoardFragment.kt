@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.ActivityChooserView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -122,20 +124,38 @@ class GameBoardFragment : Fragment() {
         // Setup the shake listener
         myShakeListener.setOnShakeListener(object : MyShakeListener.OnShakeListener {
             override fun onShake() {
-                // TODO add network related stuff
-                sensorManager.unregisterListener(myShakeListener)
-                val myYesNoDialog = MyYesNoDialog(
-                    getString(R.string.shuffle_draw_pile_confirm),
-                    "Yes",
-                    "No",
-                    { binding.includeChatLogFragment.textViewChatLog.append(viewModel.currentPlayerLiveData.value + viewModel.shuffleDrawPile()) },
-                    {},
-                    { sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME) }
-                )
-                myYesNoDialog.show(parentFragmentManager, null)
+                // Only allow dialog when cover image is not showing.
+                // This check is theoretically redundant as sensor listeners are removed when cover image shows
+                if (activityViewModel.isCoverImageShowing.value != true) {
+                    // TODO add network related stuff
+                    sensorManager.unregisterListener(myShakeListener)
+                    MyYesNoDialog(
+                        getString(R.string.shuffle_draw_pile_confirm),
+                        "Yes",
+                        "No",
+                        { binding.includeChatLogFragment.textViewChatLog.append(viewModel.currentPlayerLiveData.value + viewModel.shuffleDrawPile()) },
+                        {},
+                        {
+                            sensorManager.registerListener(
+                                myShakeListener,
+                                mLinearAccelerometer,
+                                SensorManager.SENSOR_DELAY_GAME
+                            )
+                        }
+                    ).show(childFragmentManager, null)
+                }
             }
         })
-        sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
+
+        // Hide any active dialog and remove sensor listener when the covering image shows up
+        activityViewModel.isCoverImageShowing.observe(viewLifecycleOwner) {
+            if (it) {
+                for (fragment in childFragmentManager.fragments) {
+                    if (fragment is DialogFragment) fragment.dismiss()
+                }
+                sensorManager.unregisterListener(myShakeListener)
+            } else sensorManager.registerListener(myShakeListener, mLinearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
+        }
 
         // Setup the observers that reacts to changes in the pile data in viewModel
         viewModel.yourHandLiveData.observe(viewLifecycleOwner, {
@@ -178,7 +198,7 @@ class GameBoardFragment : Fragment() {
                             binding.includeChatLogFragment.textViewChatLog.append("The host kicked out ${viewModel.currentPlayerLiveData.value}\n")
                         },
                         {}
-                    ).show(parentFragmentManager, null)
+                    ).show(childFragmentManager, null)
                 }
             }
             alterTurnBasedFeatures(it)
@@ -221,7 +241,7 @@ class GameBoardFragment : Fragment() {
                         },
                         {},
                         {}
-                    ).show(parentFragmentManager, null)
+                    ).show(childFragmentManager, null)
                 }
                 MyLongClickListener.isTurn = false
                 MyCardClickListener.isTurn = false
@@ -248,7 +268,7 @@ class GameBoardFragment : Fragment() {
                             },
                         {},
                         {}
-                    ).show(parentFragmentManager, null)
+                    ).show(childFragmentManager, null)
                 }
                 MyLongClickListener.isTurn = true
                 MyCardClickListener.isTurn = true
@@ -269,8 +289,8 @@ class GameBoardFragment : Fragment() {
     }
 
     override fun onPause() {
-        sensorManager.unregisterListener(myShakeListener)
         super.onPause()
+        sensorManager.unregisterListener(myShakeListener)
     }
 
     override fun onDestroyView() {
