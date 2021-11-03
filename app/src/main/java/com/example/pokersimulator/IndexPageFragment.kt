@@ -13,7 +13,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pokersimulator.databinding.IndexPageFragmentBinding
 import com.example.pokersimulator.listener.MySendMessageClickListener
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlin.random.Random
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -22,6 +26,10 @@ class IndexPageFragment : Fragment() {
 
     private var _binding: IndexPageFragmentBinding? = null
     private val activityViewModel: MainActivityViewModel by activityViewModels()
+    val database = Firebase.database("https://mystical-binder-330900-default-rtdb.asia-southeast1.firebasedatabase.app/")
+    val roomRef = database.getReference("rooms")
+
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -61,7 +69,7 @@ class IndexPageFragment : Fragment() {
                 val input = binding.editTextUsername.text.toString()
                 if (input != "" && input != "null") {
                     activityViewModel.username =
-                        input + "#" + Random.nextInt(1000, 9999)
+                        input + " " + Random.nextInt(1000, 9999)
                     binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
                     binding.buttonCreateRoom.visibility = View.VISIBLE
                     binding.buttonJoinRoom.visibility = View.VISIBLE
@@ -86,10 +94,15 @@ class IndexPageFragment : Fragment() {
         binding.buttonCreateRoom.setOnClickListener {
             activityViewModel.isHost = true
             findNavController().navigate(IndexPageFragmentDirections.actionCreateRoom())
+            roomRef.setValue("Testing room")
+            val playerRef = database.getReference("rooms/Testing Room/players")
+            playerRef.setValue(activityViewModel.username)
         }
         binding.buttonJoinRoom.setOnClickListener {
             activityViewModel.isHost = false
             findNavController().navigate(IndexPageFragmentDirections.actionJoinRoom())
+            val playerRef = database.getReference("rooms/Testing Room/players")
+            playerRef.child(activityViewModel.username).setValue("")
         }
     }
 

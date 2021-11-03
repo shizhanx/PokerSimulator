@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "653714465076",
+    "project_id": "mystical-binder-330900",
+    "storage_bucket": "mystical-binder-330900.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653714465076:android:23cf3d06ba2a90e448c561",
+        "android_client_info": {
+          "package_name": "com.example.pokersimulator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "653714465076-m6tco21atts98dd9l38vhs9a80eb57ql.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJQWmBld5gVYSZ23P6VhQcaB1daICT7R4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "653714465076-m6tco21atts98dd9l38vhs9a80eb57ql.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
