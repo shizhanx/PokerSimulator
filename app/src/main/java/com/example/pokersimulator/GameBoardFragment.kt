@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.ActivityChooserView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -230,8 +231,12 @@ class GameBoardFragment : Fragment() {
                         "No",
                         {
                             viewModel.currentPlayerLiveData.value = activityViewModel.username
-                            val currentPlayerRef = database.getReference("rooms/Testing Room/currentPlayer")
+
+                            val currentPlayerRef = database.getReference(activityViewModel.roomPath + "/currentPlayer")
+                            val lastTurnRef = database.getReference(activityViewModel.roomPath + "/lastTurn")
+
                             currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
+                            lastTurnRef.setValue(viewModel.currentPlayerLiveData.value)
                             binding.includeChatLogFragment.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just started\n")
                         },
                         {},
@@ -252,13 +257,13 @@ class GameBoardFragment : Fragment() {
                         {
                             binding.includeChatLogFragment.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just ended\n")
                             viewModel.currentPlayerLiveData.value = ""
-                            val currentPlayerRef = database.getReference("rooms/Testing Room/currentPlayer")
+                            val currentPlayerRef = database.getReference(activityViewModel.roomPath + "/currentPlayer")
                             currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
-                            val playerHandDataRef = database.getReference("rooms/Testing Room/players/" + activityViewModel.username + "/HandData")
+                            val playerHandDataRef = database.getReference(activityViewModel.roomPath + "/players/" + activityViewModel.username + "/HandData")
                             playerHandDataRef.setValue(viewModel.yourHandLiveData)
-                            val playerPlayedPileDataRef = database.getReference("rooms/Testing Room/players/" + activityViewModel.username + "/PlayedPileData")
+                            val playerPlayedPileDataRef = database.getReference(activityViewModel.roomPath + "/players/" + activityViewModel.username + "/PlayedPileData")
                             playerPlayedPileDataRef.setValue(viewModel.yourPlayedPileLiveData)
-                            val drawPileDataRef = database.getReference("rooms/Testing Room/drawPileData")
+                            val drawPileDataRef = database.getReference(activityViewModel.roomPath + "/drawPileData")
                             drawPileDataRef.setValue(viewModel.drawPileLiveData)
                             },
                         {},
