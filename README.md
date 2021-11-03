@@ -107,10 +107,12 @@ TODO: Ki Sian I
 Code should adhere to the [Android Style Guide](https://developer.android.com/kotlin/style-guide)
 wherever possible. All code should have docstrings.
 
-The `java` folder is the location for all substantive code. Runnable
+The `app` folder is where the raw code of project stored in.
+
+The `app/java` folder is the location for all substantive code. Runnable
 code should have a debug configuration for easy use and debugging.
 
-The `res` folder is the location for all UI resource. 
+The `app/res` folder is the location for all UI resource. 
 All newly added resources should not violate any copyright infringement laws.
 
 ### Gitflow workflow
