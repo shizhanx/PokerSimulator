@@ -75,7 +75,7 @@ To install the application, Android studio is required to build the apk and inst
    f. In the Developer options window, scroll down to find and enable USB debugging.
    
 3. In Android Studio, select 'app' and the device connected.
-4. Click Run [![run]https://developer.android.com/studio/images/buttons/toolbar-run.png]
+4. Click Run [![run](https://developer.android.com/studio/images/buttons/toolbar-run.png)]
 
 ### Run on a virtual emulator
 
