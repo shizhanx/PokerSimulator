@@ -12,11 +12,16 @@ import com.example.pokersimulator.databinding.UserFragmentBinding
  */
 class MyUserRecyclerViewAdapter:  RecyclerView.Adapter<MyUserRecyclerViewAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyUserRecyclerViewAdapter.ViewHolder {
-        return ViewHolder(UserFragmentBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        // Create a new view, which defines the UI of the list item
+        val view = UserFragmentBinding.inflate(LayoutInflater.from(parent.context),
+                    parent, false)
+
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MyUserRecyclerViewAdapter.ViewHolder, position: Int) {
         // TODO Not yet implemented
+//        holder.itemView = "hello"
     }
 
     override fun getItemCount(): Int {
