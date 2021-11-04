@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.ActivityChooserView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
 import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
@@ -169,7 +171,7 @@ class GameBoardFragment : Fragment() {
                         "Kick out",
                         {
                             viewModel.currentPlayerLiveData.value = ""
-                            val currentPlayerRef = database.getReference("rooms/Testing Room/currentPlayer")
+                            val currentPlayerRef = database.getReference(activityViewModel.roomPath + "/players")
                             currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
                             binding.includeChatLogFragment.textViewChatLog.append("The host force ended this turn\n")
                         },
@@ -259,6 +261,42 @@ class GameBoardFragment : Fragment() {
                 MyCardClickListener.isTurn = false
             }
         }
+
+        val currentPlayerRef = database.getReference(activityViewModel.roomPath)
+        val currentPlayerListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val currentTurn = dataSnapshot.child("currentPlayer").getValue().toString()
+                    if (currentTurn.isNullOrEmpty()){
+                        val lastTurnPlayer = dataSnapshot.child("lastTurn").getValue().toString()
+                        if (lastTurnPlayer != activityViewModel.username){
+                            val opponentPlayedlist : MutableList<CardData> = mutableListOf()
+                            val opponentPlayedChildren = dataSnapshot.child("players").child(lastTurnPlayer).child("PlayedPileData").child("value")!!.children
+                            opponentPlayedChildren.forEach {
+                                it.getValue(CardData::class.java)?.let { it1 -> opponentPlayedlist.add(it1) }
+                                viewModel.opponentPlayedPileLiveData.value = opponentPlayedlist
+                            }
+
+                            val drawPilelist : MutableList<CardData> = mutableListOf()
+                            val drawPileChildren = dataSnapshot.child("drawPileData").child("value")!!.children
+                            drawPileChildren.forEach {
+                                it.getValue(CardData::class.java)?.let { it1 -> drawPilelist.add(it1) }
+                                viewModel.drawPileLiveData.value = drawPilelist
+                                Log.w("Cards: ", drawPilelist.toString())
+                            }
+                        }
+                    }
+                } else {
+                    currentPlayerRef.removeEventListener(this)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w("loadPost:onCancelled", databaseError.toException())
+            }
+        }
+        currentPlayerRef.addValueEventListener(currentPlayerListener)
+
     }
 
 
@@ -276,5 +314,9 @@ class GameBoardFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        if (activityViewModel.isHost) {
+            val roomRef = database.getReference(activityViewModel.roomPath)
+            roomRef.removeValue()
+        }
     }
 }
