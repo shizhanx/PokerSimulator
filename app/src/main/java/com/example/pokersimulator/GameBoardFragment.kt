@@ -87,6 +87,9 @@ class GameBoardFragment : Fragment() {
         binding.includeUserFragment.textViewUsername.text = activityViewModel.username
         // Set up the menu for sorting options next to your name
         binding.includeUserFragment.buttonUserAction.text = ""//""Sort by"
+        binding.includeUserFragment.buttonUserAction.setBackgroundResource(R.drawable.sort_cards_icon)
+        binding.includeUserFragment.buttonUserAction.layoutParams.width = 80
+        binding.includeUserFragment.buttonUserAction.layoutParams.height = 90
         val sortingMenu = PopupMenu(requireContext(), binding.includeUserFragment.buttonUserAction).apply {
             inflate(R.menu.menu_sorting_options)
             setOnMenuItemClickListener {
