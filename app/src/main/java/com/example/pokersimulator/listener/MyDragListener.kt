@@ -51,7 +51,7 @@ class MyDragListener(
                 println(gameActionType.toString())
                 if (gameActionType != null){
                     when(gameActionType.toString()) {
-                        "PLAY" -> view.setBackgroundResource(R.drawable.table33)
+                        "PLAY" -> view.setBackgroundResource(R.drawable.table_hover_border)
                         "DRAW","UNDO_PLAY" -> view.setBackgroundResource(R.drawable.cards_in_hands_hover)
                     }
                 }
@@ -60,7 +60,7 @@ class MyDragListener(
             DragEvent.ACTION_DRAG_ENTERED -> {
                 if (gameActionType != null){
                     when(gameActionType.toString()) {
-                        "PLAY" -> view.setBackgroundResource(R.drawable.table44)
+                        "PLAY" -> view.setBackgroundResource(R.drawable.table_gold_border)
                         "DRAW","UNDO_PLAY" -> view.setBackgroundResource(R.drawable.cards_in_hands)
                     }
                 }
