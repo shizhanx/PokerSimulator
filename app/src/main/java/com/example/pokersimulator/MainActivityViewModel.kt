@@ -16,6 +16,7 @@ class MainActivityViewModel: ViewModel() {
     var username = ""
     var roomPath = ""
     var imageURI = MutableLiveData<Uri?>(null)
+    val isCoverImageShowing = MutableLiveData<Boolean>(false)
 
     fun resetConnections() {
         connections.value = mutableMapOf()

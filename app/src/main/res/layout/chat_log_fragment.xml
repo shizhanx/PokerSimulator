@@ -19,6 +19,7 @@
         android:background="@android:color/white"
         android:hint="Max 100 char"
         android:inputType="textShortMessage"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonSendMessage"
         app:layout_constraintStart_toStartOf="parent"
