@@ -34,5 +34,7 @@
         android:insetRight="1dp"
         android:insetBottom="1dp"
         android:textSize="11dp"
+        android:textColor="@color/white"
+
         />
 </RelativeLayout>
