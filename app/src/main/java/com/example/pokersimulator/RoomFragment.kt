@@ -8,9 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pokersimulator.common.MyUserRecyclerViewAdapter
+import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.example.pokersimulator.databinding.RoomFragmentBinding
 import com.example.pokersimulator.listener.MySendMessageClickListener
 
@@ -30,11 +29,12 @@ class RoomFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val mockdata = arrayOf("hello")
         _binding = RoomFragmentBinding.inflate(inflater, container, false)
         binding.textViewRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
         with(binding.listOfPlayers) {
             layoutManager = LinearLayoutManager(context)
-            adapter = MyUserRecyclerViewAdapter()
+            adapter = MyUsernameRecyclerViewAdapter(mockdata)
         }
         return binding.root
     }
