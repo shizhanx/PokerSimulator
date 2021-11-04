@@ -71,6 +71,7 @@ class IndexPageFragment : Fragment() {
             MySendMessageClickListener(requireContext(), binding.textInputLayoutUsername) {
                 // Saves the username to the viewModel for other fragments to access
                 val input = binding.editTextUsername.text.toString()
+
                 if (input != "" && input != "null") {
                     activityViewModel.username =
                         input + " " + Random.nextInt(1000, 9999)

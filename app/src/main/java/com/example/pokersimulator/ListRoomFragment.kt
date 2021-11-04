@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.MainActivity.Companion.database
+import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,7 +30,6 @@ class ListRoomFragment : Fragment() {
     private val binding get() = _binding!!
 
     // list of users
-//    private lateinit var usernames : MutableList<String>
     private lateinit var usernames : ArrayList<String>
 
     override fun onCreateView(
@@ -60,10 +60,12 @@ class ListRoomFragment : Fragment() {
         val roomListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // TODO Get List of rooms and use the values to update the UI
-                for (roomSnapshot in dataSnapshot.getChildren()) {
-                    val roomsList = roomSnapshot.getKey().toString()
-                    usernames.add(roomSnapshot.getKey().toString())
-                        Log.w("Rooms: ", roomsList)
+                val adapter = binding.listOfRooms.adapter as MyUsernameRecyclerViewAdapter
+
+                for (roomSnapshot in dataSnapshot.children) {
+                    val roomsList = roomSnapshot.key.toString()
+//                    adapter.addUser(roomsList)
+                    Log.w("Rooms ", roomsList)
                 }
                 println(dataSnapshot.childrenCount)
             }
