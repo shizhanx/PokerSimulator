@@ -15,7 +15,7 @@ import com.example.pokersimulator.domain_object.PlayerData
  * and a button next to it. The click event of the buttons will be passed in as a parameter
  */
 class MyUsernameRecyclerViewAdapter(
-    private val userList:Array<String>,
+    private val userList:MutableList<String>,
 //    userList:MutableList<PlayerData>,
 //    data:MutableList<PlayerData>,
 //    onClickListener: View.OnClickListener

@@ -25,16 +25,19 @@ class RoomFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var usernames : ArrayList<String>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val mockdata = arrayOf("hello")
+        usernames = ArrayList()
+        usernames.add("hello")
         _binding = RoomFragmentBinding.inflate(inflater, container, false)
         binding.textViewRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
         with(binding.listOfPlayers) {
             layoutManager = LinearLayoutManager(context)
-            adapter = MyUsernameRecyclerViewAdapter(mockdata)
+            adapter = MyUsernameRecyclerViewAdapter(usernames)
         }
         return binding.root
     }
