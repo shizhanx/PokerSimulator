@@ -5,7 +5,8 @@
     android:viewportWidth="143"
     android:viewportHeight="35">
     <path
-        android:strokeWidth="0.5"
+        android:strokeWidth="1"
+        android:fillColor="@color/black"
         android:pathData="M0.5 17.5c0-9.39 7.61-17 17-17h108c9.39 0 17 7.61 17 17s-7.61 17-17 17h-108c-9.39 0-17-7.61-17-17z">
         <aapt:attr name="android:strokeColor">
             <gradient
