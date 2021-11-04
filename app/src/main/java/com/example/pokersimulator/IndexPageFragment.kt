@@ -71,10 +71,10 @@ class IndexPageFragment : Fragment() {
             MySendMessageClickListener(requireContext(), binding.textInputLayoutUsername) {
                 // Saves the username to the viewModel for other fragments to access
                 val input = binding.editTextUsername.text.toString()
-
-                if (input != "" && input != "null") {
+                val Sanitizedinput = input.trimStart().trimEnd()
+                if (Sanitizedinput != "" && Sanitizedinput != "null") {
                     activityViewModel.username =
-                        input + " " + Random.nextInt(1000, 9999)
+                        Sanitizedinput + " " + Random.nextInt(1000, 9999)
                     binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
                     binding.buttonCreateRoom.visibility = View.VISIBLE
                     binding.buttonJoinRoom.visibility = View.VISIBLE
