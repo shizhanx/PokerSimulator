@@ -2,24 +2,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:background="@drawable/background_gray_corner"
+    >
 
     <Button
         android:id="@+id/buttonSendMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send"
+        android:layout_width="40dp"
+        android:layout_height="35dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/ic_baseline_send_24"
+        app:backgroundTint="@null"
+        />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editTextChatMessage"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@android:color/white"
+        android:textColor="@color/black"
         android:hint="Max 100 char"
         android:inputType="textShortMessage"
-        android:textColor="@color/black"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonSendMessage"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,10 +38,13 @@
         android:layout_height="0dp"
         android:gravity="bottom"
         android:scrollbars="vertical"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
+        android:background="#D6D6D6"
         app:layout_constraintBottom_toTopOf="@+id/editTextChatMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="4dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
