@@ -134,7 +134,9 @@ class GameBoardFragment : Fragment() {
                         getString(R.string.shuffle_draw_pile_confirm),
                         "Yes",
                         "No",
-                        { binding.includeChatLogFragment.textViewChatLog.append(viewModel.currentPlayerLiveData.value + viewModel.shuffleDrawPile()) },
+                        { binding.includeChatLogFragment.textViewChatLog.append(viewModel.currentPlayerLiveData.value + viewModel.shuffleDrawPile())
+                            val drawPileDataRef = database.getReference(activityViewModel.roomPath + "/drawPileData")
+                            drawPileDataRef.setValue(viewModel.drawPileLiveData)},
                         {},
                         {
                             sensorManager.registerListener(
@@ -190,13 +192,52 @@ class GameBoardFragment : Fragment() {
                         "Kick out",
                         {
                             viewModel.currentPlayerLiveData.value = ""
-                            val currentPlayerRef = database.getReference(activityViewModel.roomPath + "/players")
+                            val currentPlayerRef = database.getReference(activityViewModel.roomPath + "/currentPlayer")
                             currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
                             binding.includeChatLogFragment.textViewChatLog.append("The host force ended this turn\n")
                         },
                         {
+                            val playerRef = database.getReference(activityViewModel.roomPath + "/players/" + viewModel.currentPlayerLiveData)
+
+                            val playerListener = object : ValueEventListener {
+                                override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                                    val playerPlayedChildren = dataSnapshot.child("PlayedPileData").child("value")!!.children
+                                    playerPlayedChildren.forEach {
+                                        val drawPile = viewModel.drawPileLiveData.value!!
+                                        val card = it.getValue(CardData::class.java)
+                                        if (card != null) {
+                                            card.faceUp = false
+                                            drawPile.add(card)
+                                        }
+                                        viewModel.drawPileLiveData.value = drawPile
+                                    }
+                                    val playerHandChildren = dataSnapshot.child("HandData").child("value")!!.children
+                                    playerHandChildren.forEach {
+                                        val drawPile = viewModel.drawPileLiveData.value!!
+                                        val card = it.getValue(CardData::class.java)
+                                        if (card != null) {
+                                            card.faceUp = false
+                                            drawPile.add(card)
+                                        }
+                                        viewModel.drawPileLiveData.value = drawPile
+                                    }
+                                    playerRef.removeValue()
+
+                                    val drawPileDataRef = database.getReference(activityViewModel.roomPath + "/drawPileData")
+                                    drawPileDataRef.setValue(viewModel.drawPileLiveData)
+                                }
+
+                                override fun onCancelled(databaseError: DatabaseError) {
+                                    Log.w("loadPost:onCancelled", databaseError.toException())
+                                }
+                            }
+                            playerRef.addListenerForSingleValueEvent(playerListener)
+
                             viewModel.currentPlayerLiveData.value = ""
                             binding.includeChatLogFragment.textViewChatLog.append("The host kicked out ${viewModel.currentPlayerLiveData.value}\n")
+                            val currentPlayerRef = database.getReference(activityViewModel.roomPath + "/currentPlayer")
+                            currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
                         },
                         {}
                     ).show(childFragmentManager, null)
@@ -285,24 +326,24 @@ class GameBoardFragment : Fragment() {
         val currentPlayerListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    val currentTurn = dataSnapshot.child("currentPlayer").getValue().toString()
-                    if (currentTurn.isNullOrEmpty()){
-                        val lastTurnPlayer = dataSnapshot.child("lastTurn").getValue().toString()
-                        if (lastTurnPlayer != activityViewModel.username){
-                            val opponentPlayedlist : MutableList<CardData> = mutableListOf()
-                            val opponentPlayedChildren = dataSnapshot.child("players").child(lastTurnPlayer).child("PlayedPileData").child("value")!!.children
-                            opponentPlayedChildren.forEach {
-                                it.getValue(CardData::class.java)?.let { it1 -> opponentPlayedlist.add(it1) }
-                                viewModel.opponentPlayedPileLiveData.value = opponentPlayedlist
+                    if(dataSnapshot.child("currentPlayer").exists()){
+                        val currentTurn = dataSnapshot.child("currentPlayer").getValue().toString()
+                        if (currentTurn.isNullOrEmpty()){
+                            val lastTurnPlayer = dataSnapshot.child("lastTurn").getValue().toString()
+                            if (lastTurnPlayer != activityViewModel.username){
+                                val opponentPlayedlist : MutableList<CardData> = mutableListOf()
+                                val opponentPlayedChildren = dataSnapshot.child("players").child(lastTurnPlayer).child("PlayedPileData").child("value")!!.children
+                                opponentPlayedChildren.forEach {
+                                    it.getValue(CardData::class.java)?.let { it1 -> opponentPlayedlist.add(it1) }
+                                    viewModel.opponentPlayedPileLiveData.value = opponentPlayedlist
+                                }
                             }
-
-                            val drawPilelist : MutableList<CardData> = mutableListOf()
-                            val drawPileChildren = dataSnapshot.child("drawPileData").child("value")!!.children
-                            drawPileChildren.forEach {
-                                it.getValue(CardData::class.java)?.let { it1 -> drawPilelist.add(it1) }
-                                viewModel.drawPileLiveData.value = drawPilelist
-                                Log.w("Cards: ", drawPilelist.toString())
-                            }
+                        }
+                        val drawPilelist : MutableList<CardData> = mutableListOf()
+                        val drawPileChildren = dataSnapshot.child("drawPileData").child("value")!!.children
+                        drawPileChildren.forEach {
+                            it.getValue(CardData::class.java)?.let { it1 -> drawPilelist.add(it1) }
+                            viewModel.drawPileLiveData.value = drawPilelist
                         }
                     }
                 } else {
@@ -336,6 +377,22 @@ class GameBoardFragment : Fragment() {
         if (activityViewModel.isHost) {
             val roomRef = database.getReference(activityViewModel.roomPath)
             roomRef.removeValue()
+        } else{
+            val roomRef = database.getReference(activityViewModel.roomPath)
+            val drawPileDataRef = database.getReference(activityViewModel.roomPath + "/drawPileData")
+
+            val playedPile = viewModel.yourPlayedPileLiveData.value!!
+            val yourHand = viewModel.yourHandLiveData.value!!
+            playedPile.forEach() {
+                it.faceUp = false
+                viewModel.drawPileLiveData.value?.add(it)
+            }
+            yourHand.forEach {
+                it.faceUp = false
+                viewModel.drawPileLiveData.value?.add(it)
+            }
+            drawPileDataRef.setValue(viewModel.drawPileLiveData)
+            roomRef.child("players").child(activityViewModel.username).removeValue()
         }
     }
 }
