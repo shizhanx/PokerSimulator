@@ -86,10 +86,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
-
+        android:textColor="@color/white"
         android:background="@drawable/background_drawable_blue"
         app:backgroundTint="@null"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -104,13 +103,9 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewUsernamePrompt"
-
         android:padding="4dp"
         app:boxStrokeColor="@color/teal_700"
-        app:hintTextColor="#4C4C4C"
-
-
-        >
+        app:hintTextColor="#4C4C4C">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextUsername"
