@@ -7,6 +7,7 @@ data class CardData(
     val cardType: CardType,
     val cardNumber: Int,
 ) {
+    constructor() : this(CardType.JOKER, -1)
     var faceUp = false
 
     override fun toString(): String {
