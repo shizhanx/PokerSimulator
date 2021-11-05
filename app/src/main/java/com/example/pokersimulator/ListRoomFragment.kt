@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.ListRoomFragmentBinding
-import com.example.pokersimulator.MainActivity.Companion.database
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -54,7 +53,7 @@ class ListRoomFragment : Fragment() {
 //        val playerRef = MainActivity.Companion.database.getReference(activityViewModel.roomPath + "/players/")
 //        val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
 //        Log.
-        val roomRef = database.reference.child("rooms")
+        val roomRef = activityViewModel.database.reference.child("rooms")
 
         val roomListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

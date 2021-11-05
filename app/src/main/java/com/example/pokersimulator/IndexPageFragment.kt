@@ -14,7 +14,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pokersimulator.databinding.IndexPageFragmentBinding
 import com.example.pokersimulator.listener.MySendMessageClickListener
-import com.example.pokersimulator.MainActivity.Companion.database
 
 import kotlin.random.Random
 import com.google.firebase.database.DatabaseError
@@ -97,14 +96,14 @@ class IndexPageFragment : Fragment() {
             findNavController().navigate(IndexPageFragmentDirections.actionCreateRoom())
 
             activityViewModel.roomPath = "rooms/" + activityViewModel.username
-            val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
+            val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/players/")
             playerRef.child(activityViewModel.username).setValue("")
         }
 
         binding.buttonJoinRoom.setOnClickListener {
             activityViewModel.isHost = false
             findNavController().navigate(IndexPageFragmentDirections.actionJoinRoom())
-            val roomRef = database.reference.child("rooms")
+            val roomRef = activityViewModel.database.reference.child("rooms")
 
             val roomListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -139,7 +138,7 @@ class IndexPageFragment : Fragment() {
             //TODO Change this from activityViewModel.username to the username of the host of the selected room
             activityViewModel.roomPath = "rooms/" + activityViewModel.username
 
-            val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
+            val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/players/")
             playerRef.child(activityViewModel.username).setValue("")
         }
     }
