@@ -70,7 +70,6 @@ class RoomFragment : Fragment() {
         binding.includeChatLogFragment.buttonSendMessage.setOnClickListener(
             MySendMessageClickListener(requireContext(), binding.includeChatLogFragment.editTextChatMessage) {
                 if (binding.includeChatLogFragment.editTextChatMessage.editableText.toString() != "") {
-                    //TODO Network part: send messages online
                     binding.includeChatLogFragment.textViewChatLog.append(activityViewModel.username + ": ")
                     binding.includeChatLogFragment.textViewChatLog.append(binding.includeChatLogFragment.editTextChatMessage.editableText)
                     binding.includeChatLogFragment.textViewChatLog.append("\n")
@@ -80,16 +79,6 @@ class RoomFragment : Fragment() {
                 }
             }
         )
-
-        binding.textViewPrepareStart.setOnClickListener {
-            // TODO define client prepare and unprepare events' actions
-            findNavController().navigate(RoomFragmentDirections.actionStartGame())
-        }
-
-        println(activityViewModel.roomPath)
-//        = "rooms/" + activityViewModel.username
-
-//        val playerRef = MainActivity.database.getReference(activityViewModel.roomPath + "/players/")
 
         // display new users requesting to join lobby
         val roomPath = activityViewModel.roomPath + "/players/"
@@ -112,6 +101,14 @@ class RoomFragment : Fragment() {
             }
         }
         roomRef.addValueEventListener(roomListener)
+
+
+        binding.textViewPrepareStart.setOnClickListener {
+            // TODO define client prepare and unprepare events' actions
+            findNavController().navigate(RoomFragmentDirections.actionStartGame())
+            roomRef.removeEventListener(roomListener)
+        }
+
 
         activityViewModel.roomPath = "rooms/" + activityViewModel.username
 

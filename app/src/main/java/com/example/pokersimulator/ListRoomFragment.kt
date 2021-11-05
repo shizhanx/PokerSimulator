@@ -81,13 +81,11 @@ class ListRoomFragment : Fragment() {
 
         val roomListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // TODO Get List of rooms and use the values to update the UI
                 val adapter = binding.listOfRooms.adapter as MyUsernameRecyclerViewAdapter
 
                 for (roomSnapshot in dataSnapshot.children) {
                     val roomsList = roomSnapshot.key.toString()
                     adapter.addUser(roomsList)
-                    Log.w("Rooms ", roomsList)
                 }
                 println(dataSnapshot.childrenCount)
             }
@@ -95,9 +93,7 @@ class ListRoomFragment : Fragment() {
                 Log.w("loadPost:onCancelled", databaseError.toException())
             }
         }
-        roomRef.addValueEventListener(roomListener)
-
-        // TODO define navigation to the room fragment
+        roomRef.addListenerForSingleValueEvent(roomListener)
     }
 
     override fun onDestroyView() {
