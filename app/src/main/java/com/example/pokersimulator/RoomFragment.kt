@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pokersimulator.MainActivity.Companion.database
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.example.pokersimulator.databinding.RoomFragmentBinding
 import com.example.pokersimulator.listener.MySendMessageClickListener
@@ -79,17 +80,24 @@ class RoomFragment : Fragment() {
             findNavController().navigate(RoomFragmentDirections.actionStartGame())
         }
 
+        println(activityViewModel.roomPath)
+//        = "rooms/" + activityViewModel.username
+
+//        val playerRef = MainActivity.database.getReference(activityViewModel.roomPath + "/players/")
+
         // display new users requesting to join lobby
-        val roomRef = MainActivity.database.reference.child("rooms")
+        val roomPath = activityViewModel.roomPath + "/players/"
+        val roomRef = database.reference.child(roomPath)
 
         val roomListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // TODO Get List of rooms and use the values to update the UI
+
                 val adapter = binding.listOfPlayers.adapter as MyUsernameRecyclerViewAdapter
+
                 for (roomSnapshot in dataSnapshot.children) {
-                    val roomsList = roomSnapshot.key.toString()
-                    adapter.addUser(roomsList)
-                    Log.w("Rooms ", roomsList)
+                    val players = roomSnapshot.key.toString()
+                    adapter.addUser(players)
+                    Log.w("Players ", players)
                 }
                 println(dataSnapshot.childrenCount)
             }

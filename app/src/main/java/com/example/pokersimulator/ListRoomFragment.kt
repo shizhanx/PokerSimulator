@@ -60,6 +60,7 @@ class ListRoomFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // TODO Get List of rooms and use the values to update the UI
                 val adapter = binding.listOfRooms.adapter as MyUsernameRecyclerViewAdapter
+
                 for (roomSnapshot in dataSnapshot.children) {
                     val roomsList = roomSnapshot.key.toString()
                     adapter.addUser(roomsList)
