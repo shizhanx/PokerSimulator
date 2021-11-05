@@ -46,16 +46,22 @@ class IndexPageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        val username = activityViewModel.username
+
+        println(activityViewModel.username)
+
         _binding = IndexPageFragmentBinding.inflate(inflater, container, false)
         // Initialize connections so that the user can see the latest connections for next round of the game
         activityViewModel.resetConnections()
         // Determine if the app is opened just now or the user pressed back button
         if (activityViewModel.username != "") {
-            binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+            binding.textViewIndexHeader.text = getString(R.string.welcome_username, username)
             binding.buttonCreateRoom.visibility = View.VISIBLE
             binding.buttonJoinRoom.visibility = View.VISIBLE
         }
-        println("This is host view selection")
+        activityViewModel
+
         return binding.root
     }
 
@@ -66,10 +72,12 @@ class IndexPageFragment : Fragment() {
             MySendMessageClickListener(requireContext(), binding.textInputLayoutUsername) {
                 // Saves the username to the viewModel for other fragments to access
                 val input = binding.editTextUsername.text.toString()
-                val sanitizedinput = input.trimStart().trimEnd()
-                if (sanitizedinput != "" && sanitizedinput != "null") {
+
+                val sanitizedInput = input.trimStart().trimEnd()
+                if (sanitizedInput != "" && sanitizedInput != "null") {
                     activityViewModel.username =
-                        sanitizedinput + " " + Random.nextInt(1000, 9999)
+                        sanitizedInput + Random.nextInt(1000, 9999)
+
                     binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
                     binding.buttonCreateRoom.visibility = View.VISIBLE
                     binding.buttonJoinRoom.visibility = View.VISIBLE
@@ -146,5 +154,11 @@ class IndexPageFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        val roomRef = database.getReference(activityViewModel.roomPath)
+        if (activityViewModel.isHost) {
+            roomRef.removeValue()
+        } else{
+            roomRef.child("players").child(activityViewModel.username).removeValue()
+        }
     }
 }

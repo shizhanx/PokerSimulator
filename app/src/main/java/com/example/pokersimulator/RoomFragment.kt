@@ -2,6 +2,7 @@ package com.example.pokersimulator
 
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pokersimulator.MainActivity.Companion.database
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.example.pokersimulator.databinding.RoomFragmentBinding
 import com.example.pokersimulator.listener.MySendMessageClickListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 /**
  * A fragment for users joined the same host to see each other and prepare for the game.
@@ -21,24 +26,29 @@ class RoomFragment : Fragment() {
     private var _binding: RoomFragmentBinding? = null
     private val activityViewModel: MainActivityViewModel by activityViewModels()
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
+    // list of users
     private lateinit var usernames : ArrayList<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val username = activityViewModel.username
+        val isHost = activityViewModel.isHost
+
         usernames = ArrayList()
-        usernames.add("hello")
+
         _binding = RoomFragmentBinding.inflate(inflater, container, false)
         binding.textViewRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+
         with(binding.listOfPlayers) {
             layoutManager = LinearLayoutManager(context)
-            adapter = MyUsernameRecyclerViewAdapter(usernames)
+            adapter = MyUsernameRecyclerViewAdapter(usernames, username, isHost)
         }
+
         return binding.root
     }
 
@@ -69,6 +79,38 @@ class RoomFragment : Fragment() {
             // TODO define client prepare and unprepare events' actions
             findNavController().navigate(RoomFragmentDirections.actionStartGame())
         }
+
+        println(activityViewModel.roomPath)
+//        = "rooms/" + activityViewModel.username
+
+//        val playerRef = MainActivity.database.getReference(activityViewModel.roomPath + "/players/")
+
+        // display new users requesting to join lobby
+        val roomPath = activityViewModel.roomPath + "/players/"
+        val roomRef = database.reference.child(roomPath)
+
+        val roomListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                val adapter = binding.listOfPlayers.adapter as MyUsernameRecyclerViewAdapter
+
+                for (roomSnapshot in dataSnapshot.children) {
+                    val players = roomSnapshot.key.toString()
+                    adapter.addUser(players)
+                    Log.w("Players ", players)
+                }
+                println(dataSnapshot.childrenCount)
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w("loadPost:onCancelled", databaseError.toException())
+            }
+        }
+        roomRef.addValueEventListener(roomListener)
+
+        activityViewModel.roomPath = "rooms/" + activityViewModel.username
+
+        val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
+        playerRef.child(activityViewModel.username).setValue("")
     }
 
     override fun onDestroyView() {

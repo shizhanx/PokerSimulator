@@ -1,12 +1,18 @@
 package com.example.pokersimulator.common
 
 import android.content.DialogInterface
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.example.pokersimulator.databinding.UserFragmentBinding
 import com.example.pokersimulator.domain_object.PlayerData
+import android.widget.Toast
+
+
+
 
 /**
  * The adapter for recycler views that want to show a list of users, this includes the list of hosts.
@@ -16,6 +22,8 @@ import com.example.pokersimulator.domain_object.PlayerData
  */
 class MyUsernameRecyclerViewAdapter(
     private val userList:MutableList<String>,
+    private val username:String,
+    private val isHost: Boolean,
 //    userList:MutableList<PlayerData>,
 //    data:MutableList<PlayerData>,
 //    onClickListener: View.OnClickListener
@@ -30,9 +38,26 @@ class MyUsernameRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: MyUsernameRecyclerViewAdapter.ViewHolder, position: Int) {
-//        val currentItem = userList[position]
-        holder.usernameView.text = userList[position]
-        holder.buttonAction.text = "Join"
+        val currentUser = userList[position]
+
+        if(currentUser == username){
+            holder.itemView.visibility = View.GONE
+            holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
+//            holder.usernameView.setinv .text = userList[position]
+        }
+
+        if(isHost)
+            holder.buttonAction.text = "Accept"
+        else
+            holder.buttonAction.text = "Join"
+
+//        holder.buttonAction.setOnClickListener(View.OnClickListener {
+//            Toast.makeText(
+//                parent.context,
+//                "Recycle Click$position",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        })
     }
 
     override fun getItemCount(): Int = userList.size
