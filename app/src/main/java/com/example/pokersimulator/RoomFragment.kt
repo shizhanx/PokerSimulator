@@ -90,7 +90,7 @@ class RoomFragment : Fragment() {
                 }
             }
         )
-        
+
         binding.textViewPrepareStart.setOnClickListener {
 // TODO define client prepare and unprepare events' actions
             findNavController().navigate(RoomFragmentDirections.actionStartGame())
@@ -107,7 +107,6 @@ class RoomFragment : Fragment() {
                 for (roomSnapshot in dataSnapshot.children) {
                     val players = roomSnapshot.key.toString()
                     adapter.addUser(players)
-                    Log.w("Players ", players)
                 }
                 println(dataSnapshot.childrenCount)
             }
@@ -124,9 +123,6 @@ class RoomFragment : Fragment() {
             findNavController().navigate(RoomFragmentDirections.actionStartGame())
             roomRef.removeEventListener(roomListener)
         }
-
-
-        activityViewModel.roomPath = "rooms/" + activityViewModel.username
 
         val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
         playerRef.child(activityViewModel.username).setValue("")
