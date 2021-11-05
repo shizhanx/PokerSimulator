@@ -37,18 +37,12 @@ Once started, people can click on take turn to act, shake the phone to re-shuffl
 After a player finishes his actions, he will click on end turn to let another take turn.
 People can chat during playing, maybe even send voice messages (extentsion feature), emojis (extension feature).
  
-# Outside of a room:
+### Outside of a room:
 * People can see nearby active players and their status (in game, in room, idle)
 * See a list of rooms (dont have to be nearby, but may have the choice of filter out nearby ones)
 * Add friends (extension)
 * Set themselves online/offline/invisible (extension)
 * Send global messages to all players (extension)
- 
-# Architecture:
-We can use a P2P architecture without a centralised server for all the game actions.
-We can have a server if we want to store user data like friends, or to have a global chat channel. But all core features we need to make this app running can be done without one.
-
-To make use of sensors, we may locate the user to show a list of nearby users to invite (GPS), shake the phone to shuffle the deck (movement sensor), put the phone upsidedown on the table to show a photo of lecture slides or open a dictionary (light sensor), or whatever you guys can think of.
 
 ## Requirement
 | Requirement | |
@@ -95,12 +89,12 @@ The solution consists in the following containers:
 2. `UI`
 3. `GameLogic`
 
-To bring up the database:
-TODO: Tariq
+### Architecture:
+We used a client architecture where by there is no centralised server computing any game
+logic, and it is all done within the client side while reading an firebase database
 
-Debug configurations are included for the following tasks:
+To make use of sensors, we may locate the user to show a list of nearby users to invite (GPS), shake the phone to shuffle the deck (movement sensor), put the phone upsidedown on the table to show a photo of lecture slides or open a dictionary (light sensor), or whatever you guys can think of.
 
-TODO: Ki Sian I
 
 ## Contributing
 
