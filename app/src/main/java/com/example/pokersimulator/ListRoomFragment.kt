@@ -48,18 +48,12 @@ class ListRoomFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = MyUsernameRecyclerViewAdapter(lobbynames, username, isHost)
         }
+
 //        binding.listOfRooms.buttonAction.setOnClickListener()
-        binding.listOfRooms.buttonAction.setOnClickListener(
-            MySendMessageClickListener(requireContext(), binding.includeChatLogFragment.editTextChatMessage) {
-                if (binding.includeChatLogFragment.editTextChatMessage.editableText.toString() != "") {
-                    //TODO Network part: send messages online
-                    binding.includeChatLogFragment.textViewChatLog.append(activityViewModel.username + ": ")
-                    binding.includeChatLogFragment.textViewChatLog.append(binding.includeChatLogFragment.editTextChatMessage.editableText)
-                    binding.includeChatLogFragment.textViewChatLog.append("\n")
-                    binding.includeChatLogFragment.editTextChatMessage.editableText.clear()
-                }
-            }
-        )
+//        binding.listOfRooms.buttonAction.setOnClickListener(
+//            MySendMessageClickListener(requireContext()) {
+//            }
+//        )
         return binding.root
     }
 
@@ -72,13 +66,11 @@ class ListRoomFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // TODO Get List of rooms and use the values to update the UI
                 val adapter = binding.listOfRooms.adapter as MyUsernameRecyclerViewAdapter
-
                 for (roomSnapshot in dataSnapshot.children) {
                     val roomsList = roomSnapshot.key.toString()
                     adapter.addUser(roomsList)
                     Log.w("Rooms ", roomsList)
                 }
-                println(dataSnapshot.childrenCount)
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("loadPost:onCancelled", databaseError.toException())

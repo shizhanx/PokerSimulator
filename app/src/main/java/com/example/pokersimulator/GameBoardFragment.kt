@@ -45,8 +45,6 @@ class GameBoardFragment : Fragment() {
     private var mLinearAccelerometer: Sensor? = null
     private val myShakeListener = MyShakeListener()
 
-    private val database = Firebase.database("https://mystical-binder-330900-default-rtdb.asia-southeast1.firebasedatabase.app/")
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

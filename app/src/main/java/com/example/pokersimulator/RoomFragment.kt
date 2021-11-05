@@ -80,11 +80,6 @@ class RoomFragment : Fragment() {
             findNavController().navigate(RoomFragmentDirections.actionStartGame())
         }
 
-        println(activityViewModel.roomPath)
-//        = "rooms/" + activityViewModel.username
-
-//        val playerRef = MainActivity.database.getReference(activityViewModel.roomPath + "/players/")
-
         // display new users requesting to join lobby
         val roomPath = activityViewModel.roomPath + "/players/"
         val roomRef = database.reference.child(roomPath)

@@ -39,12 +39,12 @@ class MyUsernameRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: MyUsernameRecyclerViewAdapter.ViewHolder, position: Int) {
         val currentUser = userList[position]
+        holder.usernameView.text = userList[position]
 
-        if(currentUser == username){
-            holder.itemView.visibility = View.GONE
-            holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
-//            holder.usernameView.setinv .text = userList[position]
-        }
+//        if(currentUser == username){
+//            holder.itemView.visibility = View.GONE
+//            holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
+//        }
 
         if(isHost)
             holder.buttonAction.text = "Accept"
