@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
-import com.example.pokersimulator.listener.MySendMessageClickListener
 
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,7 +30,7 @@ class ListRoomFragment : Fragment() {
     private val binding get() = _binding!!
 
     // list of lobby
-    private lateinit var lobbynames : ArrayList<String>
+    private lateinit var lobbyNames : ArrayList<String>
 
     private val joinRoom: (String) -> Unit = { roomId ->
         Log.v("userName", activityViewModel.username + " is in " + roomId)
@@ -50,7 +49,7 @@ class ListRoomFragment : Fragment() {
         val isHost = activityViewModel.isHost
         val inRoom = false
 
-        lobbynames = ArrayList()
+        lobbyNames = ArrayList()
 
         _binding = ListRoomFragmentBinding.inflate(inflater, container, false)
         binding.textViewListRoomHeader.text = username
@@ -58,7 +57,7 @@ class ListRoomFragment : Fragment() {
         with(binding.listOfRooms) {
             layoutManager = LinearLayoutManager(context)
 
-            adapter = MyUsernameRecyclerViewAdapter(lobbynames, username, isHost,inRoom, joinRoom,getString(R.string.join))
+            adapter = MyUsernameRecyclerViewAdapter(lobbyNames, username, isHost,inRoom, joinRoom,getString(R.string.join))
         }
         return binding.root
     }
