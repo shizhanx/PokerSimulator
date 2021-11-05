@@ -126,8 +126,6 @@ class RoomFragment : Fragment() {
         }
 
 
-        activityViewModel.roomPath = "rooms/" + activityViewModel.username
-
         val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/players/")
         playerRef.child(activityViewModel.username).setValue("")
     }
