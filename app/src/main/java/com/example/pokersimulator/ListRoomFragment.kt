@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.MainActivity.Companion.database
-import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -60,7 +59,7 @@ class ListRoomFragment : Fragment() {
         val roomListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // TODO Get List of rooms and use the values to update the UI
-                val adapter = binding.listOfRooms.adapter as MyUsernameRecyclerViewAdapter
+      //          val adapter = binding.listOfRooms.adapter as MyUsernameRecyclerViewAdapter
 
                 for (roomSnapshot in dataSnapshot.children) {
                     val roomsList = roomSnapshot.key.toString()

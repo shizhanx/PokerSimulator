@@ -15,16 +15,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.pokersimulator.databinding.IndexPageFragmentBinding
 import com.example.pokersimulator.listener.MySendMessageClickListener
 import com.example.pokersimulator.MainActivity.Companion.database
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+
 import kotlin.random.Random
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
-import kotlin.collections.MutableIterable as MutableIterable
-import com.google.firebase.database.DatabaseReference
-import android.R.string.no
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -71,10 +67,10 @@ class IndexPageFragment : Fragment() {
             MySendMessageClickListener(requireContext(), binding.textInputLayoutUsername) {
                 // Saves the username to the viewModel for other fragments to access
                 val input = binding.editTextUsername.text.toString()
-                val Sanitizedinput = input.trimStart().trimEnd()
-                if (Sanitizedinput != "" && Sanitizedinput != "null") {
+                val sanitizedinput = input.trimStart().trimEnd()
+                if (sanitizedinput != "" && sanitizedinput != "null") {
                     activityViewModel.username =
-                        Sanitizedinput + " " + Random.nextInt(1000, 9999)
+                        sanitizedinput + " " + Random.nextInt(1000, 9999)
                     binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
                     binding.buttonCreateRoom.visibility = View.VISIBLE
                     binding.buttonJoinRoom.visibility = View.VISIBLE
@@ -113,10 +109,10 @@ class IndexPageFragment : Fragment() {
             val roomListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     // TODO Get List of rooms and use the values to update the UI
-                    for (roomSnapshot in dataSnapshot.getChildren()) {
-                        val roomsList = roomSnapshot.getKey().toString()
+                   // for (roomSnapshot in dataSnapshot.children) {
+                      //  val roomsList = roomSnapshot.key.toString()
 //                        Log.w("Rooms: ", roomsList)
-                    }
+                    //}
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {

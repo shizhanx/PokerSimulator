@@ -4,7 +4,7 @@ import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.util.Log
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -13,8 +13,11 @@ import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.findFragment
+
 import com.example.pokersimulator.common.MyYesNoDialog
 import com.example.pokersimulator.databinding.ActivityMainBinding
 import com.example.pokersimulator.listener.MyFlipDeviceListener
@@ -71,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         this@MainActivity.window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
+
         )
     }
 
