@@ -29,20 +29,24 @@ class ListRoomFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    // list of users
-    private lateinit var usernames : ArrayList<String>
+    // list of lobby
+    private lateinit var lobbynames : ArrayList<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        usernames = ArrayList()
-        usernames.addAll(listOf("Room 1", "Room 2"))
+        val username = activityViewModel.username
+        val isHost = activityViewModel.isHost
+
+        lobbynames = ArrayList()
+
         _binding = ListRoomFragmentBinding.inflate(inflater, container, false)
-        binding.textViewListRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+        binding.textViewListRoomHeader.text = username
+
         with(binding.listOfRooms) {
             layoutManager = LinearLayoutManager(context)
-            adapter = MyUsernameRecyclerViewAdapter(usernames)
+            adapter = MyUsernameRecyclerViewAdapter(lobbynames, username, isHost)
         }
 
         return binding.root
@@ -50,21 +54,16 @@ class ListRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // TODO define navigation to the room fragment
-//        Log.w(database.getReference(activityViewModel))
-//        val playerRef = MainActivity.Companion.database.getReference(activityViewModel.roomPath + "/players/")
-//        val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
-//        Log.
+
         val roomRef = database.reference.child("rooms")
 
         val roomListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // TODO Get List of rooms and use the values to update the UI
                 val adapter = binding.listOfRooms.adapter as MyUsernameRecyclerViewAdapter
-
                 for (roomSnapshot in dataSnapshot.children) {
                     val roomsList = roomSnapshot.key.toString()
-//                    adapter.addUser(roomsList)
+                    adapter.addUser(roomsList)
                     Log.w("Rooms ", roomsList)
                 }
                 println(dataSnapshot.childrenCount)
@@ -75,6 +74,7 @@ class ListRoomFragment : Fragment() {
         }
         roomRef.addValueEventListener(roomListener)
 
+        // TODO define navigation to the room fragment
     }
 
     override fun onDestroyView() {

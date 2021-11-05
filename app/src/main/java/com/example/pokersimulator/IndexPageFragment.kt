@@ -51,16 +51,22 @@ class IndexPageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        val username = activityViewModel.username
+
+        println(activityViewModel.username)
+
         _binding = IndexPageFragmentBinding.inflate(inflater, container, false)
         // Initialize connections so that the user can see the latest connections for next round of the game
         activityViewModel.resetConnections()
         // Determine if the app is opened just now or the user pressed back button
         if (activityViewModel.username != "") {
-            binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+            binding.textViewIndexHeader.text = getString(R.string.welcome_username, username)
             binding.buttonCreateRoom.visibility = View.VISIBLE
             binding.buttonJoinRoom.visibility = View.VISIBLE
         }
-        println("This is host view selection")
+        activityViewModel
+
         return binding.root
     }
 
@@ -108,42 +114,11 @@ class IndexPageFragment : Fragment() {
         binding.buttonJoinRoom.setOnClickListener {
             activityViewModel.isHost = false
             findNavController().navigate(IndexPageFragmentDirections.actionJoinRoom())
-            val roomRef = database.reference.child("rooms")
-
-            val roomListener = object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    // TODO Get List of rooms and use the values to update the UI
-                    for (roomSnapshot in dataSnapshot.getChildren()) {
-                        val roomsList = roomSnapshot.getKey().toString()
-//                        Log.w("Rooms: ", roomsList)
-                    }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.w("loadPost:onCancelled", databaseError.toException())
-                }
-            }
-            roomRef.addValueEventListener(roomListener)
-//            val playerListener = object : ValueEventListener {
-//                override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                    println("This is room")
-//                    // Get List of players and use the values to update the UI
-//                    for (PlayerSnapshot in dataSnapshot.getChildren()) {
-//                        val playersList = PlayerSnapshot.getKey().toString()
-////                    Log.w("Players: ", playersList)
-//                    }
-//                }
-//
-//                override fun onCancelled(databaseError: DatabaseError) {
-//                    Log.w("loadPost:onCancelled", databaseError.toException())
-//                }
-//            }
-//            playerRef.addValueEventListener(playerListener)
 
             //TODO Change this from activityViewModel.username to the username of the host of the selected room
             activityViewModel.roomPath = "rooms/" + activityViewModel.username
 
-            val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
+            val playerRef = MainActivity.database.getReference(activityViewModel.roomPath + "/players/")
             playerRef.child(activityViewModel.username).setValue("")
         }
     }

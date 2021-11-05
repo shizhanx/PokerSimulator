@@ -17,6 +17,8 @@ import com.example.pokersimulator.domain_object.PlayerData
  */
 class MyUsernameRecyclerViewAdapter(
     private val userList:MutableList<String>,
+    private val username:String,
+    private val isHost: Boolean,
 //    userList:MutableList<PlayerData>,
 //    data:MutableList<PlayerData>,
 //    onClickListener: View.OnClickListener
@@ -31,11 +33,11 @@ class MyUsernameRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: MyUsernameRecyclerViewAdapter.ViewHolder, position: Int) {
-//        val currentItem = userList[position]
         holder.usernameView.text = userList[position]
-        val str1: String = holder.usernameView.getText().toString()
-        Log.d("++++++", str1)
-        holder.buttonAction.text = "Join"
+        if(isHost)
+            holder.buttonAction.text = "Accept"
+        else
+            holder.buttonAction.text = "Join"
     }
 
     override fun getItemCount(): Int = userList.size
