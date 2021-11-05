@@ -1,6 +1,7 @@
 package com.example.pokersimulator.common
 
 import android.content.DialogInterface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,8 @@ class MyUsernameRecyclerViewAdapter(
     override fun onBindViewHolder(holder: MyUsernameRecyclerViewAdapter.ViewHolder, position: Int) {
 //        val currentItem = userList[position]
         holder.usernameView.text = userList[position]
+        val str1: String = holder.usernameView.getText().toString()
+        Log.d("++++++", str1)
         holder.buttonAction.text = "Join"
     }
 
