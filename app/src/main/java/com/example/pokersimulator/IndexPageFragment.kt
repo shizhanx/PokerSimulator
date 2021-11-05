@@ -77,7 +77,7 @@ class IndexPageFragment : Fragment() {
                 val sanitizedInput = input.trimStart().trimEnd()
                 if (sanitizedInput != "" && sanitizedInput != "null") {
                     activityViewModel.username =
-                        sanitizedInput + " " + Random.nextInt(1000, 9999)
+                        sanitizedInput + Random.nextInt(1000, 9999)
 
                     binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
                     binding.buttonCreateRoom.visibility = View.VISIBLE
@@ -118,5 +118,11 @@ class IndexPageFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        val roomRef = database.getReference(activityViewModel.roomPath)
+        if (activityViewModel.isHost) {
+            roomRef.removeValue()
+        } else{
+            roomRef.child("players").child(activityViewModel.username).removeValue()
+        }
     }
 }
