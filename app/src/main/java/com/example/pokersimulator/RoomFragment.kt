@@ -77,7 +77,7 @@ class RoomFragment : Fragment() {
         if (activityViewModel.isHost)
             binding.textViewPrepareStart.setText(R.string.start_game)
         else
-            binding.textViewPrepareStart.setText(R.string.prepare_to_start_game)
+            binding.textViewPrepareStart.visibility = View.GONE
 
 // Make the chat log scrollable when overflows
         binding.includeChatLogFragment.textViewChatLog.movementMethod =
