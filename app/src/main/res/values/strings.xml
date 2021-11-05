@@ -28,4 +28,7 @@
     <string name="shuffle_draw_pile_confirm">Do you want to SHUFFLE the deck?</string>
     <!-- Game instructions -->
     <string name="game_instruction">Long click to drag and drop cards\nSingle click to flip cards\nStart your turn to do actions\nEnd your turn after finished\nHave fun!\n</string>
+    <string name='join'>Join</string>
+    <string name='kick'>Kick</string>
+
 </resources>
