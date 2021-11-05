@@ -119,6 +119,11 @@ class GameBoardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //Delete room from database if host disconnects
+        if (activityViewModel.isHost){
+            val roomRef = database.getReference(activityViewModel.roomPath)
+            roomRef.onDisconnect().removeValue()
+        }
         // Setup the drag and drop listeners
         val dragListener = MyDragListener(viewModel, binding.includeChatLogFragment.textViewChatLog)
         binding.yourHand.setOnDragListener(dragListener)
