@@ -39,7 +39,7 @@ class ListRoomFragment : Fragment() {
         activityViewModel.roomPath = "rooms/$roomId"
         val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
         playerRef.child(activityViewModel.username).setValue("")
-        findNavController().navigate(RoomFragmentDirections.actionStartGame())
+        findNavController().navigate(ListRoomFragmentDirections.actionJoinSelectedRoom())
 
     }
 
@@ -57,7 +57,7 @@ class ListRoomFragment : Fragment() {
 
         with(binding.listOfRooms) {
             layoutManager = LinearLayoutManager(context)
-            adapter = MyUsernameRecyclerViewAdapter(lobbynames, username, isHost, joinRoom, "Join")
+            adapter = MyUsernameRecyclerViewAdapter(lobbynames, username, isHost, joinRoom,getString(R.string.join))
         }
 //        binding.listOfRooms.buttonAction.setOnClickListener()
         /*binding.listOfRooms.buttonAction.setOnClickListener(

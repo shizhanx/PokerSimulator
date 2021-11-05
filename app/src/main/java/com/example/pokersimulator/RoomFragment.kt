@@ -30,12 +30,16 @@ class RoomFragment : Fragment() {
     private val binding get() = _binding!!
 
     // list of users
-    private lateinit var usernames : ArrayList<String>
+    private lateinit var usernames: ArrayList<String>
     private val joinRoom: (String) -> Unit = { roomId ->
         Log.v("userName", activityViewModel.username + " is in " + roomId)
 
-
+        val roomRef = database.getReference(activityViewModel.roomPath)
+        if (activityViewModel.isHost) {
+            roomRef.child("players").child(roomId).removeValue()
+        }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,11 +50,14 @@ class RoomFragment : Fragment() {
         usernames = ArrayList()
 
         _binding = RoomFragmentBinding.inflate(inflater, container, false)
-        binding.textViewRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+        binding.textViewRoomHeader.text =
+            getString(R.string.welcome_username, activityViewModel.username)
 
         with(binding.listOfPlayers) {
             layoutManager = LinearLayoutManager(context)
-            adapter = MyUsernameRecyclerViewAdapter(usernames, username, isHost, joinRoom, "Kick")
+            adapter =
+                MyUsernameRecyclerViewAdapter(usernames, username, isHost, joinRoom, getString(R.string.kick))
+
         }
 
         return binding.root
@@ -59,16 +66,20 @@ class RoomFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Decides the text of the prepare/start button with regard to the user type.
+// Decides the text of the prepare/start button with regard to the user type.
         if (activityViewModel.isHost)
             binding.textViewPrepareStart.setText(R.string.prepare_to_start_game)
         else
             binding.textViewPrepareStart.setText(R.string.start_game)
 
-        // Make the chat log scrollable when overflows
-        binding.includeChatLogFragment.textViewChatLog.movementMethod = ScrollingMovementMethod()
+// Make the chat log scrollable when overflows
+        binding.includeChatLogFragment.textViewChatLog.movementMethod =
+            ScrollingMovementMethod()
         binding.includeChatLogFragment.buttonSendMessage.setOnClickListener(
-            MySendMessageClickListener(requireContext(), binding.includeChatLogFragment.editTextChatMessage) {
+            MySendMessageClickListener(
+                requireContext(),
+                binding.includeChatLogFragment.editTextChatMessage
+            ) {
                 if (binding.includeChatLogFragment.editTextChatMessage.editableText.toString() != "") {
                     //TODO Network part: send messages online
                     binding.includeChatLogFragment.textViewChatLog.append(activityViewModel.username + ": ")
@@ -82,7 +93,7 @@ class RoomFragment : Fragment() {
         )
 
         binding.textViewPrepareStart.setOnClickListener {
-            // TODO define client prepare and unprepare events' actions
+// TODO define client prepare and unprepare events' actions
             findNavController().navigate(RoomFragmentDirections.actionStartGame())
         }
 
@@ -91,7 +102,7 @@ class RoomFragment : Fragment() {
 
 //        val playerRef = MainActivity.database.getReference(activityViewModel.roomPath + "/players/")
 
-        // display new users requesting to join lobby
+// display new users requesting to join lobby
         val roomPath = activityViewModel.roomPath + "/players/"
         val roomRef = database.reference.child(roomPath)
 
@@ -107,6 +118,7 @@ class RoomFragment : Fragment() {
                 }
                 println(dataSnapshot.childrenCount)
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("loadPost:onCancelled", databaseError.toException())
             }
