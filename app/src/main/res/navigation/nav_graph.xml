@@ -33,6 +33,7 @@
         android:label="game_board_fragment"
         tools:layout="@layout/game_board_fragment" />
     <fragment
+
         android:id="@+id/listRoomFragment"
         android:name="com.example.pokersimulator.ListRoomFragment"
         android:label="list_room_fragment"
@@ -40,5 +41,7 @@
         <action
             android:id="@+id/action_join_selected_room"
             app:destination="@id/RoomFragment" />
+
+
     </fragment>
 </navigation>

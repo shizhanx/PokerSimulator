@@ -1,17 +1,10 @@
 package com.example.pokersimulator.common
 
-import android.content.DialogInterface
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.example.pokersimulator.databinding.UserFragmentBinding
-import com.example.pokersimulator.domain_object.PlayerData
-import android.widget.Toast
-
-
 
 
 /**
@@ -24,15 +17,21 @@ class MyUsernameRecyclerViewAdapter(
     private val userList:MutableList<String>,
     private val username:String,
     private val isHost: Boolean,
+    private val clickListener: (String) -> Unit,
+    private val buttonName: String
 //    userList:MutableList<PlayerData>,
 //    data:MutableList<PlayerData>,
 //    onClickListener: View.OnClickListener
-): RecyclerView.Adapter<MyUsernameRecyclerViewAdapter.ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyUsernameRecyclerViewAdapter.ViewHolder {
+) : RecyclerView.Adapter<MyUsernameRecyclerViewAdapter.ViewHolder>() {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): MyUsernameRecyclerViewAdapter.ViewHolder {
         // Create a new view, which defines the UI of the list item
-        val view = UserFragmentBinding.inflate(LayoutInflater.from(parent.context),
-                    parent, false)
+        val view = UserFragmentBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent, false
+        )
 
         return ViewHolder(view)
     }
@@ -45,11 +44,12 @@ class MyUsernameRecyclerViewAdapter(
             holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
 //            holder.usernameView.setinv .text = userList[position]
         }
-
-        if(isHost)
+        holder.usernameView.text = userList[position]
+        holder.bind(getItem(position), clickListener)
+/*        if(isHost)
             holder.buttonAction.text = "Accept"
         else
-            holder.buttonAction.text = "Join"
+            holder.buttonAction.text = "Join"*/
 
 //        holder.buttonAction.setOnClickListener(View.OnClickListener {
 //            Toast.makeText(
@@ -62,13 +62,24 @@ class MyUsernameRecyclerViewAdapter(
 
     override fun getItemCount(): Int = userList.size
 
-    fun addUser(username: String){
+    private fun getItem(position: Int) = userList[position]
+
+    fun addUser(username: String) {
         userList.add(username)
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(binding: UserFragmentBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: UserFragmentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         val usernameView = binding.textViewUsername
         val buttonAction = binding.buttonUserAction
+
+        fun bind(
+            item: String,
+            clickListener: (String) -> Unit
+        ) {
+            buttonAction.text = buttonName
+            buttonAction.setOnClickListener { clickListener(item) }
+        }
     }
 }

@@ -101,11 +101,11 @@ class IndexPageFragment : Fragment() {
         // The isHost value should only be modified here, where the user chooses for the rest of the game
         binding.buttonCreateRoom.setOnClickListener {
             activityViewModel.isHost = true
-            findNavController().navigate(IndexPageFragmentDirections.actionCreateRoom())
 
             activityViewModel.roomPath = "rooms/" + activityViewModel.username
             val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/players/")
             playerRef.child(activityViewModel.username).setValue("")
+            findNavController().navigate(IndexPageFragmentDirections.actionCreateRoom())
         }
 
         binding.buttonJoinRoom.setOnClickListener {
@@ -154,11 +154,11 @@ class IndexPageFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        val roomRef = database.getReference(activityViewModel.roomPath)
+       /* val roomRef = database.getReference(activityViewModel.roomPath)
         if (activityViewModel.isHost) {
             roomRef.removeValue()
         } else{
             roomRef.child("players").child(activityViewModel.username).removeValue()
-        }
+        }*/
     }
 }
