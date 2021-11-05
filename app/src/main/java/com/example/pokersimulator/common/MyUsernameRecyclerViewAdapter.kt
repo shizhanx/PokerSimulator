@@ -59,12 +59,12 @@ class MyUsernameRecyclerViewAdapter(
             else -> holder.buttonAction.text = "Join"
         }
 
-        holder.usernameView.text = userList[position]
+//        holder.usernameView.text = userList[position]
         holder.bind(getItem(position), clickListener)
-        if(isHost)
-            holder.buttonAction.text = "Accept"
-        else
-            holder.buttonAction.text = "Join"
+//        if(isHost)
+//            holder.buttonAction.text = "Accept"
+//        else
+//            holder.buttonAction.text = "Join"
 
 
     }

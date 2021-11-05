@@ -33,8 +33,6 @@ class RoomFragment : Fragment() {
     private lateinit var usernames : ArrayList<String>
     private val joinRoom: (String) -> Unit = { roomId ->
         Log.v("userName", activityViewModel.username + " is in " + roomId)
-
-
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +53,11 @@ class RoomFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
 
             adapter = MyUsernameRecyclerViewAdapter(usernames, username, isHost, inRoom, joinRoom, "Kick")
+        }
 
+        if(isHost){
+            val playerRef = database.getReference(activityViewModel.roomPath)
+            playerRef.child("gameStart").setValue(false)
         }
 
         return binding.root
@@ -66,9 +68,9 @@ class RoomFragment : Fragment() {
 
         // Decides the text of the prepare/start button with regard to the user type.
         if (activityViewModel.isHost)
-            binding.textViewPrepareStart.setText(R.string.prepare_to_start_game)
-        else
             binding.textViewPrepareStart.setText(R.string.start_game)
+        else
+            binding.textViewPrepareStart.setText(R.string.prepare_to_start_game)
 
         // Make the chat log scrollable when overflows
         binding.includeChatLogFragment.textViewChatLog.movementMethod = ScrollingMovementMethod()
@@ -80,14 +82,14 @@ class RoomFragment : Fragment() {
                     binding.includeChatLogFragment.textViewChatLog.append(binding.includeChatLogFragment.editTextChatMessage.editableText)
                     binding.includeChatLogFragment.textViewChatLog.append("\n")
                     binding.includeChatLogFragment.editTextChatMessage.editableText.clear()
-
-
                 }
             }
         )
 
         binding.textViewPrepareStart.setOnClickListener {
             // TODO define client prepare and unprepare events' actions
+            val playerRef = database.getReference(activityViewModel.roomPath)
+            playerRef.child("gameStart").setValue(true)
             findNavController().navigate(RoomFragmentDirections.actionStartGame())
         }
 
@@ -105,7 +107,6 @@ class RoomFragment : Fragment() {
                     adapter.addUser(players)
                     Log.w("Players ", players)
                 }
-                println(dataSnapshot.childrenCount)
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("loadPost:onCancelled", databaseError.toException())
@@ -113,10 +114,26 @@ class RoomFragment : Fragment() {
         }
         roomRef.addValueEventListener(roomListener)
 
-        activityViewModel.roomPath = "rooms/" + activityViewModel.username
+//         Start game for non-host players
+        val gameInfoPath = activityViewModel.roomPath
+        val gameInfoRef = database.reference.child(gameInfoPath)
 
-        val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
-        playerRef.child(activityViewModel.username).setValue("")
+        val gameListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                println(dataSnapshot.child("gameStart").value)
+//
+                if(dataSnapshot.child("gameStart").value == true)
+                    findNavController().navigate(RoomFragmentDirections.actionStartGame())
+//                  for (postSnapshot in dataSnapshot.children) {
+//                    println("hello")
+//                    Log.e("TAG", "=======" + postSnapshot.child("gameStart").value)
+//                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w("loadPost:onCancelled", databaseError.toException())
+            }
+        }
+        gameInfoRef.addValueEventListener(gameListener)
     }
 
     override fun onDestroyView() {

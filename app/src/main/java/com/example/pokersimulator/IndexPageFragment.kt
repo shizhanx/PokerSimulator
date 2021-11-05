@@ -118,11 +118,12 @@ class IndexPageFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        val roomRef = database.getReference(activityViewModel.roomPath)
-        if (activityViewModel.isHost) {
-            roomRef.removeValue()
-        } else{
-            roomRef.child("players").child(activityViewModel.username).removeValue()
-        }
+//        val roomRef = database.getReference(activityViewModel.roomPath)
+//        if (activityViewModel.isHost) {
+//            println("420 blaze it")
+//            roomRef.removeValue()
+//        } else{
+//            roomRef.child("players").child(activityViewModel.username).removeValue()
+//        }
     }
 }
