@@ -22,7 +22,7 @@
         android:shadowRadius="10"
         android:text="The last active opponent's"
         android:textColor="#FFEB3B"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/opponentPlayedPile"
         app:layout_constraintEnd_toEndOf="parent"

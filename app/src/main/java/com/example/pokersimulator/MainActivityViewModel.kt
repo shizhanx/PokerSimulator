@@ -1,7 +1,7 @@
 package com.example.pokersimulator
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -11,12 +11,12 @@ import androidx.lifecycle.ViewModel
  * The connections may update at any time,
  */
 class MainActivityViewModel: ViewModel() {
-    val connections: MutableLiveData<MutableMap<Int, String>> = MutableLiveData(mutableMapOf())
+    private val connections: MutableLiveData<MutableMap<Int, String>> = MutableLiveData(mutableMapOf())
     var isHost = false
     var username = ""
     var roomPath = ""
     var imageURI = MutableLiveData<Uri?>(null)
-    val isCoverImageShowing = MutableLiveData<Boolean>(false)
+    val isCoverImageShowing = MutableLiveData(false)
 
     fun resetConnections() {
         connections.value = mutableMapOf()

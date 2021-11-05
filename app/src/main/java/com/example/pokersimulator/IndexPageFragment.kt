@@ -15,16 +15,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.pokersimulator.databinding.IndexPageFragmentBinding
 import com.example.pokersimulator.listener.MySendMessageClickListener
 import com.example.pokersimulator.MainActivity.Companion.database
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+
 import kotlin.random.Random
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
-import kotlin.collections.MutableIterable as MutableIterable
-import com.google.firebase.database.DatabaseReference
-import android.R.string.no
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -77,10 +73,12 @@ class IndexPageFragment : Fragment() {
             MySendMessageClickListener(requireContext(), binding.textInputLayoutUsername) {
                 // Saves the username to the viewModel for other fragments to access
                 val input = binding.editTextUsername.text.toString()
+
                 val sanitizedInput = input.trimStart().trimEnd()
                 if (sanitizedInput != "" && sanitizedInput != "null") {
                     activityViewModel.username =
                         sanitizedInput + " " + Random.nextInt(1000, 9999)
+
                     binding.textViewIndexHeader.text = getString(R.string.welcome_username, activityViewModel.username)
                     binding.buttonCreateRoom.visibility = View.VISIBLE
                     binding.buttonJoinRoom.visibility = View.VISIBLE
@@ -114,6 +112,38 @@ class IndexPageFragment : Fragment() {
         binding.buttonJoinRoom.setOnClickListener {
             activityViewModel.isHost = false
             findNavController().navigate(IndexPageFragmentDirections.actionJoinRoom())
+
+            val roomRef = database.reference.child("rooms")
+
+            val roomListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    // TODO Get List of rooms and use the values to update the UI
+                   // for (roomSnapshot in dataSnapshot.children) {
+                      //  val roomsList = roomSnapshot.key.toString()
+//                        Log.w("Rooms: ", roomsList)
+                    //}
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.w("loadPost:onCancelled", databaseError.toException())
+                }
+            }
+            roomRef.addValueEventListener(roomListener)
+//            val playerListener = object : ValueEventListener {
+//                override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                    println("This is room")
+//                    // Get List of players and use the values to update the UI
+//                    for (PlayerSnapshot in dataSnapshot.getChildren()) {
+//                        val playersList = PlayerSnapshot.getKey().toString()
+////                    Log.w("Players: ", playersList)
+//                    }
+//                }
+//
+//                override fun onCancelled(databaseError: DatabaseError) {
+//                    Log.w("loadPost:onCancelled", databaseError.toException())
+//                }
+//            }
+//            playerRef.addValueEventListener(playerListener)
 
             //TODO Change this from activityViewModel.username to the username of the host of the selected room
             activityViewModel.roomPath = "rooms/" + activityViewModel.username

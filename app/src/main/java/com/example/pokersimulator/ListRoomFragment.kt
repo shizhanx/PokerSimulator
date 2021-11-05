@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.MainActivity.Companion.database
-import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
