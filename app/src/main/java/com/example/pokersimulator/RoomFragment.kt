@@ -107,37 +107,6 @@ class RoomFragment : Fragment() {
         }
         roomRef.addValueEventListener(roomListener)
 
-//            val roomRef = MainActivity.database.reference.child("rooms")
-//
-//            val roomListener = object : ValueEventListener {
-//                override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                    // TODO Get List of rooms and use the values to update the UI
-//                    for (roomSnapshot in dataSnapshot.getChildren()) {
-//                        val roomsList = roomSnapshot.getKey().toString()
-////                        Log.w("Rooms: ", roomsList)
-//                    }
-//                }
-//
-//                override fun onCancelled(databaseError: DatabaseError) {
-//                    Log.w("loadPost:onCancelled", databaseError.toException())
-//                }
-//            }
-//            roomRef.addValueEventListener(roomListener)
-//            val playerListener = object : ValueEventListener {
-//                override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                    println("This is room")
-//                    // Get List of players and use the values to update the UI
-//                    for (PlayerSnapshot in dataSnapshot.getChildren()) {
-//                        val playersList = PlayerSnapshot.getKey().toString()
-////                    Log.w("Players: ", playersList)
-//                    }
-//                }
-//
-//                override fun onCancelled(databaseError: DatabaseError) {
-//                    Log.w("loadPost:onCancelled", databaseError.toException())
-//                }
-//            }
-//            playerRef.addValueEventListener(playerListener)
         activityViewModel.roomPath = "rooms/" + activityViewModel.username
 
         val playerRef = database.getReference(activityViewModel.roomPath + "/players/")

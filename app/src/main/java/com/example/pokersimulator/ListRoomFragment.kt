@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.MainActivity.Companion.database
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
+import com.example.pokersimulator.listener.MySendMessageClickListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -48,6 +49,17 @@ class ListRoomFragment : Fragment() {
             adapter = MyUsernameRecyclerViewAdapter(lobbynames, username, isHost)
         }
 //        binding.listOfRooms.buttonAction.setOnClickListener()
+        binding.listOfRooms.buttonAction.setOnClickListener(
+            MySendMessageClickListener(requireContext(), binding.includeChatLogFragment.editTextChatMessage) {
+                if (binding.includeChatLogFragment.editTextChatMessage.editableText.toString() != "") {
+                    //TODO Network part: send messages online
+                    binding.includeChatLogFragment.textViewChatLog.append(activityViewModel.username + ": ")
+                    binding.includeChatLogFragment.textViewChatLog.append(binding.includeChatLogFragment.editTextChatMessage.editableText)
+                    binding.includeChatLogFragment.textViewChatLog.append("\n")
+                    binding.includeChatLogFragment.editTextChatMessage.editableText.clear()
+                }
+            }
+        )
         return binding.root
     }
 
