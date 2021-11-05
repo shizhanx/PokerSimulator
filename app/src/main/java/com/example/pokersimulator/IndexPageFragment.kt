@@ -144,7 +144,6 @@ class IndexPageFragment : Fragment() {
 //            playerRef.addValueEventListener(playerListener)
 
             //TODO Change this from activityViewModel.username to the username of the host of the selected room
-            activityViewModel.roomPath = "rooms/" + activityViewModel.username
 
             val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/players/")
             playerRef.child(activityViewModel.username).setValue("")

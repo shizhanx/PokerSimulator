@@ -79,31 +79,6 @@ class RoomFragment : Fragment() {
         else
             binding.textViewPrepareStart.visibility = View.GONE
 
-// Make the chat log scrollable when overflows
-        binding.includeChatLogFragment.textViewChatLog.movementMethod =
-            ScrollingMovementMethod()
-        binding.includeChatLogFragment.buttonSendMessage.setOnClickListener(
-            MySendMessageClickListener(
-                requireContext(),
-                binding.includeChatLogFragment.editTextChatMessage
-            ) {
-                if (binding.includeChatLogFragment.editTextChatMessage.editableText.toString() != "") {
-                    binding.includeChatLogFragment.textViewChatLog.append(activityViewModel.username + ": ")
-                    binding.includeChatLogFragment.textViewChatLog.append(binding.includeChatLogFragment.editTextChatMessage.editableText)
-                    binding.includeChatLogFragment.textViewChatLog.append("\n")
-                    binding.includeChatLogFragment.editTextChatMessage.editableText.clear()
-                }
-            }
-        )
-
-        binding.textViewPrepareStart.setOnClickListener {
-
-            // TODO define client prepare and unprepare events' actions
-            val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath)
-            playerRef.child("gameStart").setValue(true)
-            findNavController().navigate(RoomFragmentDirections.actionStartGame())
-        }
-
         // display new users requesting to join lobby
         val roomPath = activityViewModel.roomPath + "/players/"
         val roomRef = activityViewModel.database.reference.child(roomPath)
@@ -126,22 +101,55 @@ class RoomFragment : Fragment() {
         }
         roomRef.addValueEventListener(roomListener)
 
+// Make the chat log scrollable when overflows
+        binding.includeChatLogFragment.textViewChatLog.movementMethod =
+            ScrollingMovementMethod()
+        binding.includeChatLogFragment.buttonSendMessage.setOnClickListener(
+            MySendMessageClickListener(
+                requireContext(),
+                binding.includeChatLogFragment.editTextChatMessage
+            ) {
+                if (binding.includeChatLogFragment.editTextChatMessage.editableText.toString() != "") {
+                    binding.includeChatLogFragment.textViewChatLog.append(activityViewModel.username + ": ")
+                    binding.includeChatLogFragment.textViewChatLog.append(binding.includeChatLogFragment.editTextChatMessage.editableText)
+                    binding.includeChatLogFragment.textViewChatLog.append("\n")
+                    binding.includeChatLogFragment.editTextChatMessage.editableText.clear()
+                }
+            }
+        )
+
+        binding.textViewPrepareStart.setOnClickListener {
+            // TODO define client prepare and unprepare events' actions
+            val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath)
+            playerRef.child("gameStart").setValue(true)
+            findNavController().navigate(RoomFragmentDirections.actionStartGame())
+            roomRef.removeEventListener(roomListener)
+        }
+
+
+
 //         Start game for non-host players
         val gameInfoPath = activityViewModel.roomPath
         val gameInfoRef = activityViewModel.database.reference.child(gameInfoPath)
 
-        val gameListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
+        if(!activityViewModel.isHost){
+            val gameListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                // if the game has started, move all players to game view
-                if(dataSnapshot.child("gameStart").value == true && !activityViewModel.isHost)
-                    findNavController().navigate(RoomFragmentDirections.actionStartGame())
+                    // if the game has started, move all players to game view
+                    if(dataSnapshot.child("gameStart").value == true) {
+                        println("game started")
+                        roomRef.removeEventListener(roomListener)
+                        gameInfoRef.removeEventListener(this)
+                        findNavController().navigate(RoomFragmentDirections.actionStartGame())
+                    }
+                }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.w("loadPost:onCancelled", databaseError.toException())
+                }
             }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("loadPost:onCancelled", databaseError.toException())
-            }
+            gameInfoRef.addValueEventListener(gameListener)
         }
-        gameInfoRef.addValueEventListener(gameListener)
     }
 
     override fun onDestroyView() {
