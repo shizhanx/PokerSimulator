@@ -31,7 +31,11 @@ class RoomFragment : Fragment() {
 
     // list of users
     private lateinit var usernames : ArrayList<String>
+    private val joinRoom: (String) -> Unit = { roomId ->
+        Log.v("userName", activityViewModel.username + " is in " + roomId)
 
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,7 +53,9 @@ class RoomFragment : Fragment() {
 
         with(binding.listOfPlayers) {
             layoutManager = LinearLayoutManager(context)
-            adapter = MyUsernameRecyclerViewAdapter(usernames, username, isHost, inRoom)
+
+            adapter = MyUsernameRecyclerViewAdapter(usernames, username, isHost, inRoom, joinRoom, "Kick")
+
         }
 
         return binding.root
@@ -74,6 +80,8 @@ class RoomFragment : Fragment() {
                     binding.includeChatLogFragment.textViewChatLog.append(binding.includeChatLogFragment.editTextChatMessage.editableText)
                     binding.includeChatLogFragment.textViewChatLog.append("\n")
                     binding.includeChatLogFragment.editTextChatMessage.editableText.clear()
+
+
                 }
             }
         )

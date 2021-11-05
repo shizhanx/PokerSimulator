@@ -12,11 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.widget.ActivityChooserView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.MainActivity.Companion.database
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
@@ -30,6 +28,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlin.math.floor
 
 
 class GameBoardFragment : Fragment() {
@@ -59,7 +58,7 @@ class GameBoardFragment : Fragment() {
         val cardImageDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.club_1)!!
         val cardWidthHeightRatio = 1.0 * cardImageDrawable.intrinsicWidth / cardImageDrawable.intrinsicHeight
         // The actual width is rounded to the floor so that cards overflows a little to the right hand side
-        val actualCardWidth = Math.floor(binding.drawPile.layoutParams.height * cardWidthHeightRatio).toInt()
+        val actualCardWidth = floor(binding.drawPile.layoutParams.height * cardWidthHeightRatio).toInt()
         // Set the width of the draw pile to almost exactly covers the deck
         binding.drawPile.layoutParams.width = actualCardWidth
 
@@ -209,20 +208,22 @@ class GameBoardFragment : Fragment() {
                             val playerListener = object : ValueEventListener {
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                                    val playerPlayedChildren = dataSnapshot.child("PlayedPileData").child("value")!!.children
-                                    playerPlayedChildren.forEach {
+                                    val playerPlayedChildren = dataSnapshot.child("PlayedPileData")
+                                        .child("value").children
+                                    playerPlayedChildren.forEach { dataSnapshot1 ->
                                         val drawPile = viewModel.drawPileLiveData.value!!
-                                        val card = it.getValue(CardData::class.java)
+                                        val card = dataSnapshot1.getValue(CardData::class.java)
                                         if (card != null) {
                                             card.faceUp = false
                                             drawPile.add(card)
                                         }
                                         viewModel.drawPileLiveData.value = drawPile
                                     }
-                                    val playerHandChildren = dataSnapshot.child("HandData").child("value")!!.children
-                                    playerHandChildren.forEach {
+                                    val playerHandChildren = dataSnapshot.child("HandData")
+                                        .child("value").children
+                                    playerHandChildren.forEach { dataSnapshot1 ->
                                         val drawPile = viewModel.drawPileLiveData.value!!
-                                        val card = it.getValue(CardData::class.java)
+                                        val card = dataSnapshot1.getValue(CardData::class.java)
                                         if (card != null) {
                                             card.faceUp = false
                                             drawPile.add(card)
@@ -272,7 +273,7 @@ class GameBoardFragment : Fragment() {
         when(currentPlayer) {
             "" -> {
                 binding.buttonTurnAction.visibility = View.VISIBLE
-                binding.buttonTurnAction.text = "Start turn"
+                "Start turn".also { binding.buttonTurnAction.text = it }
                 binding.buttonTurnAction.setOnClickListener {
                     MyYesNoDialog(
                         "Are you sure to START your turn?",
@@ -297,7 +298,7 @@ class GameBoardFragment : Fragment() {
             }
             activityViewModel.username -> {
                 binding.buttonTurnAction.visibility = View.VISIBLE
-                binding.buttonTurnAction.text = "End turn"
+                "End turn".also { binding.buttonTurnAction.text = it }
                 binding.buttonTurnAction.setOnClickListener {
                     MyYesNoDialog(
                         "Are you sure to END your turn?",
@@ -334,12 +335,13 @@ class GameBoardFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     if(dataSnapshot.child("currentPlayer").exists()){
-                        val currentTurn = dataSnapshot.child("currentPlayer").getValue().toString()
-                        if (currentTurn.isNullOrEmpty()){
-                            val lastTurnPlayer = dataSnapshot.child("lastTurn").getValue().toString()
+                        val currentTurn = dataSnapshot.child("currentPlayer").value.toString()
+                        if (currentTurn.isEmpty()){
+                            val lastTurnPlayer = dataSnapshot.child("lastTurn").value.toString()
                             if (lastTurnPlayer != activityViewModel.username){
                                 val opponentPlayedlist : MutableList<CardData> = mutableListOf()
-                                val opponentPlayedChildren = dataSnapshot.child("players").child(lastTurnPlayer).child("PlayedPileData").child("value")!!.children
+                                val opponentPlayedChildren = dataSnapshot.child("players")
+                                    .child(lastTurnPlayer).child("PlayedPileData").child("value").children
                                 opponentPlayedChildren.forEach {
                                     it.getValue(CardData::class.java)?.let { it1 -> opponentPlayedlist.add(it1) }
                                     viewModel.opponentPlayedPileLiveData.value = opponentPlayedlist
@@ -347,7 +349,7 @@ class GameBoardFragment : Fragment() {
                             }
                         }
                         val drawPilelist : MutableList<CardData> = mutableListOf()
-                        val drawPileChildren = dataSnapshot.child("drawPileData").child("value")!!.children
+                        val drawPileChildren = dataSnapshot.child("drawPileData").child("value").children
                         drawPileChildren.forEach {
                             it.getValue(CardData::class.java)?.let { it1 -> drawPilelist.add(it1) }
                             viewModel.drawPileLiveData.value = drawPilelist
@@ -390,7 +392,7 @@ class GameBoardFragment : Fragment() {
 
             val playedPile = viewModel.yourPlayedPileLiveData.value!!
             val yourHand = viewModel.yourHandLiveData.value!!
-            playedPile.forEach() {
+            playedPile.forEach {
                 it.faceUp = false
                 viewModel.drawPileLiveData.value?.add(it)
             }
