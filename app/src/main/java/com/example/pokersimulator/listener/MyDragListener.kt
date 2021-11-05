@@ -28,7 +28,6 @@ class MyDragListener(
     private val viewModel: GameBoardViewModel,
     private val logZone: TextView
 ): View.OnDragListener {
-    @SuppressLint("ResourceAsColor")
     override fun onDrag(view: View, dragEvent: DragEvent): Boolean {
         var gameActionType: GameActionEnum? = null
         // Determine the possible game play option of this drag and drop action
@@ -44,26 +43,17 @@ class MyDragListener(
             }
         } else Log.d("TAG", ": null clipDescription, drag event has ended")
 
-        // TODO Add visual effect to highlight entering and exiting a droppable zone
         return when (dragEvent.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
-                //TODO use the correct image resource for the visual effect of droppable zone.
-                println(gameActionType.toString())
                 if (gameActionType != null){
-                    when(gameActionType.toString()) {
-                        "PLAY" -> view.setBackgroundResource(R.drawable.table_hover_border)
-                        "DRAW","UNDO_PLAY" -> view.setBackgroundResource(R.drawable.cards_in_hands_hover)
+                    when (view.id) {
+                        R.id.yourHand -> view.setBackgroundResource(R.drawable.cards_in_hands_hover)
+                        R.id.yourPlayedPile -> view.setBackgroundResource(R.drawable.table_hover_border)
                     }
                 }
                 gameActionType != null
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
-                if (gameActionType != null){
-                    when(gameActionType.toString()) {
-                        "PLAY" -> view.setBackgroundResource(R.drawable.table_gold_border)
-                        "DRAW","UNDO_PLAY" -> view.setBackgroundResource(R.drawable.cards_in_hands)
-                    }
-                }
                 gameActionType != null
             }
             DragEvent.ACTION_DRAG_LOCATION -> {
@@ -92,6 +82,10 @@ class MyDragListener(
                 gameActionType != null
             }
             DragEvent.ACTION_DRAG_ENDED -> {
+                when (view.id) {
+                    R.id.yourHand -> view.setBackgroundResource(R.drawable.cards_in_hands)
+                    R.id.yourPlayedPile -> view.setBackgroundResource(R.drawable.table_gold_border)
+                }
                 gameActionType != null
             }
             else -> false

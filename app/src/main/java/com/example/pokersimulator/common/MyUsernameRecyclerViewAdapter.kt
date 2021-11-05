@@ -61,11 +61,19 @@ class MyUsernameRecyclerViewAdapter(
 
 //        holder.usernameView.text = userList[position]
         holder.bind(getItem(position), clickListener)
-//        if(isHost)
-//            holder.buttonAction.text = "Accept"
-//        else
-//            holder.buttonAction.text = "Join"
 
+/*        if(isHost)
+            holder.buttonAction.text = "Accept"
+        else
+            holder.buttonAction.text = "Join"*/
+
+//        holder.buttonAction.setOnClickListener(View.OnClickListener {
+//            Toast.makeText(
+//                parent.context,
+//                "Recycle Click$position",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        })
 
     }
 

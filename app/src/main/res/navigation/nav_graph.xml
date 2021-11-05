@@ -42,8 +42,6 @@
             android:id="@+id/action_join_selected_room"
             app:destination="@id/RoomFragment" />
 
-        <action
-            android:id="@+id/action_start_game"
-            app:destination="@id/gameBoardFragment" />
+
     </fragment>
 </navigation>

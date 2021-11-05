@@ -155,8 +155,8 @@ right back to where you started:
 
 ## Authors
 
-* **Shizhan Xu** - [University of Melbourne](https://www.unimelb.edu.au/)
-* **Tariq Amjad** - [University of Melbourne](https://www.unimelb.edu.au/)
-* **Ki Sian I** - [University of Melbourne](https://www.unimelb.edu.au/)
-* **Ibrahim Alamri** - [University of Melbourne](https://www.unimelb.edu.au/)
-* **Takemitsu Yamanaka** - [University of Melbourne](https://www.unimelb.edu.au/)
+* **Shizhan Xu 771900** - [University of Melbourne](https://www.unimelb.edu.au/)
+* **Tariq Amjad 1111132** - [University of Melbourne](https://www.unimelb.edu.au/)
+* **Ki Sian I 866412** - [University of Melbourne](https://www.unimelb.edu.au/)
+* **Ibrahim Alamri 990164** - [University of Melbourne](https://www.unimelb.edu.au/)
+* **Takemitsu Yamanaka 757038** - [University of Melbourne](https://www.unimelb.edu.au/)

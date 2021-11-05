@@ -16,7 +16,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pokersimulator.MainActivity.Companion.database
 import com.example.pokersimulator.databinding.GameBoardFragmentBinding
 import com.example.pokersimulator.common.MyCardRecyclerViewAdapter
 import com.example.pokersimulator.common.MyOverlapDecorator
@@ -84,10 +83,7 @@ class GameBoardFragment : Fragment() {
         // Set the text for your name
         binding.includeUserFragment.textViewUsername.text = activityViewModel.username
         // Set up the menu for sorting options next to your name
-        binding.includeUserFragment.buttonUserAction.text = ""//""Sort by"
-        binding.includeUserFragment.buttonUserAction.setBackgroundResource(R.drawable.sort_cards_icon)
-        binding.includeUserFragment.buttonUserAction.layoutParams.width = 80
-        binding.includeUserFragment.buttonUserAction.layoutParams.height = 90
+        binding.includeUserFragment.buttonUserAction.text = "Sort by"
         val sortingMenu = PopupMenu(requireContext(), binding.includeUserFragment.buttonUserAction).apply {
             inflate(R.menu.menu_sorting_options)
             setOnMenuItemClickListener {
@@ -119,7 +115,7 @@ class GameBoardFragment : Fragment() {
 
         //Delete room from database if host disconnects
         if (activityViewModel.isHost){
-            val roomRef = database.getReference(activityViewModel.roomPath)
+            val roomRef = activityViewModel.database.getReference(activityViewModel.roomPath)
             roomRef.onDisconnect().removeValue()
         }
         // Setup the drag and drop listeners
@@ -141,7 +137,7 @@ class GameBoardFragment : Fragment() {
                         "Yes",
                         "No",
                         { binding.includeChatLogFragment.textViewChatLog.append(viewModel.currentPlayerLiveData.value + viewModel.shuffleDrawPile())
-                            val drawPileDataRef = database.getReference(activityViewModel.roomPath + "/drawPileData")
+                            val drawPileDataRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/drawPileData")
                             drawPileDataRef.setValue(viewModel.drawPileLiveData)},
                         {},
                         {
@@ -186,8 +182,6 @@ class GameBoardFragment : Fragment() {
         })
         // Setup observer to determine whose turn it is now
         viewModel.currentPlayerLiveData.observe(viewLifecycleOwner) {
-            // TODO add network related stuff
-
             // Setup the force end turn button
             binding.buttonHostPrevilegeAction.apply {
                 visibility = if (activityViewModel.isHost && it != "") View.VISIBLE else View.INVISIBLE
@@ -198,12 +192,12 @@ class GameBoardFragment : Fragment() {
                         "Kick out",
                         {
                             viewModel.currentPlayerLiveData.value = ""
-                            val currentPlayerRef = database.getReference(activityViewModel.roomPath + "/currentPlayer")
+                            val currentPlayerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/currentPlayer")
                             currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
                             binding.includeChatLogFragment.textViewChatLog.append("The host force ended this turn\n")
                         },
                         {
-                            val playerRef = database.getReference(activityViewModel.roomPath + "/players/" + viewModel.currentPlayerLiveData)
+                            val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/players/" + viewModel.currentPlayerLiveData)
 
                             val playerListener = object : ValueEventListener {
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -232,7 +226,7 @@ class GameBoardFragment : Fragment() {
                                     }
                                     playerRef.removeValue()
 
-                                    val drawPileDataRef = database.getReference(activityViewModel.roomPath + "/drawPileData")
+                                    val drawPileDataRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/drawPileData")
                                     drawPileDataRef.setValue(viewModel.drawPileLiveData)
                                 }
 
@@ -244,7 +238,7 @@ class GameBoardFragment : Fragment() {
 
                             viewModel.currentPlayerLiveData.value = ""
                             binding.includeChatLogFragment.textViewChatLog.append("The host kicked out ${viewModel.currentPlayerLiveData.value}\n")
-                            val currentPlayerRef = database.getReference(activityViewModel.roomPath + "/currentPlayer")
+                            val currentPlayerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/currentPlayer")
                             currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
                         },
                         {}
@@ -282,8 +276,8 @@ class GameBoardFragment : Fragment() {
                         {
                             viewModel.currentPlayerLiveData.value = activityViewModel.username
 
-                            val currentPlayerRef = database.getReference(activityViewModel.roomPath + "/currentPlayer")
-                            val lastTurnRef = database.getReference(activityViewModel.roomPath + "/lastTurn")
+                            val currentPlayerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/currentPlayer")
+                            val lastTurnRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/lastTurn")
 
                             currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
                             lastTurnRef.setValue(viewModel.currentPlayerLiveData.value)
@@ -307,13 +301,13 @@ class GameBoardFragment : Fragment() {
                         {
                             binding.includeChatLogFragment.textViewChatLog.append("${viewModel.currentPlayerLiveData.value}'s turn just ended\n")
                             viewModel.currentPlayerLiveData.value = ""
-                            val currentPlayerRef = database.getReference(activityViewModel.roomPath + "/currentPlayer")
+                            val currentPlayerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/currentPlayer")
                             currentPlayerRef.setValue(viewModel.currentPlayerLiveData.value)
-                            val playerHandDataRef = database.getReference(activityViewModel.roomPath + "/players/" + activityViewModel.username + "/HandData")
+                            val playerHandDataRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/players/" + activityViewModel.username + "/HandData")
                             playerHandDataRef.setValue(viewModel.yourHandLiveData)
-                            val playerPlayedPileDataRef = database.getReference(activityViewModel.roomPath + "/players/" + activityViewModel.username + "/PlayedPileData")
+                            val playerPlayedPileDataRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/players/" + activityViewModel.username + "/PlayedPileData")
                             playerPlayedPileDataRef.setValue(viewModel.yourPlayedPileLiveData)
-                            val drawPileDataRef = database.getReference(activityViewModel.roomPath + "/drawPileData")
+                            val drawPileDataRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/drawPileData")
                             drawPileDataRef.setValue(viewModel.drawPileLiveData)
                         },
                         {},
@@ -330,7 +324,7 @@ class GameBoardFragment : Fragment() {
             }
         }
 
-        val currentPlayerRef = database.getReference(activityViewModel.roomPath)
+        val currentPlayerRef = activityViewModel.database.getReference(activityViewModel.roomPath)
         val currentPlayerListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -384,11 +378,11 @@ class GameBoardFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         if (activityViewModel.isHost) {
-            val roomRef = database.getReference(activityViewModel.roomPath)
+            val roomRef = activityViewModel.database.getReference(activityViewModel.roomPath)
             roomRef.removeValue()
         } else{
-            val roomRef = database.getReference(activityViewModel.roomPath)
-            val drawPileDataRef = database.getReference(activityViewModel.roomPath + "/drawPileData")
+            val roomRef = activityViewModel.database.getReference(activityViewModel.roomPath)
+            val drawPileDataRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/drawPileData")
 
             val playedPile = viewModel.yourPlayedPileLiveData.value!!
             val yourHand = viewModel.yourHandLiveData.value!!

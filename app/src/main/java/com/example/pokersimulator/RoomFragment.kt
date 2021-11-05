@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pokersimulator.MainActivity.Companion.database
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.example.pokersimulator.databinding.RoomFragmentBinding
 import com.example.pokersimulator.listener.MySendMessageClickListener
@@ -30,10 +29,16 @@ class RoomFragment : Fragment() {
     private val binding get() = _binding!!
 
     // list of users
-    private lateinit var usernames : ArrayList<String>
+    private lateinit var usernames: ArrayList<String>
     private val joinRoom: (String) -> Unit = { roomId ->
         Log.v("userName", activityViewModel.username + " is in " + roomId)
+
+        val roomRef = activityViewModel.database.getReference(activityViewModel.roomPath)
+        if (activityViewModel.isHost) {
+            roomRef.child("players").child(roomId).removeValue()
+        }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,7 +52,8 @@ class RoomFragment : Fragment() {
         usernames = ArrayList()
 
         _binding = RoomFragmentBinding.inflate(inflater, container, false)
-        binding.textViewRoomHeader.text = getString(R.string.welcome_username, activityViewModel.username)
+        binding.textViewRoomHeader.text =
+            getString(R.string.welcome_username, activityViewModel.username)
 
         with(binding.listOfPlayers) {
             layoutManager = LinearLayoutManager(context)
@@ -56,7 +62,7 @@ class RoomFragment : Fragment() {
         }
 
         if(isHost){
-            val playerRef = database.getReference(activityViewModel.roomPath)
+            val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath)
             playerRef.child("gameStart").setValue(false)
         }
 
@@ -66,18 +72,22 @@ class RoomFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Decides the text of the prepare/start button with regard to the user type.
+// Decides the text of the prepare/start button with regard to the user type.
+        println(activityViewModel.isHost)
         if (activityViewModel.isHost)
             binding.textViewPrepareStart.setText(R.string.start_game)
         else
             binding.textViewPrepareStart.setText(R.string.prepare_to_start_game)
 
-        // Make the chat log scrollable when overflows
-        binding.includeChatLogFragment.textViewChatLog.movementMethod = ScrollingMovementMethod()
+// Make the chat log scrollable when overflows
+        binding.includeChatLogFragment.textViewChatLog.movementMethod =
+            ScrollingMovementMethod()
         binding.includeChatLogFragment.buttonSendMessage.setOnClickListener(
-            MySendMessageClickListener(requireContext(), binding.includeChatLogFragment.editTextChatMessage) {
+            MySendMessageClickListener(
+                requireContext(),
+                binding.includeChatLogFragment.editTextChatMessage
+            ) {
                 if (binding.includeChatLogFragment.editTextChatMessage.editableText.toString() != "") {
-                    //TODO Network part: send messages online
                     binding.includeChatLogFragment.textViewChatLog.append(activityViewModel.username + ": ")
                     binding.includeChatLogFragment.textViewChatLog.append(binding.includeChatLogFragment.editTextChatMessage.editableText)
                     binding.includeChatLogFragment.textViewChatLog.append("\n")
@@ -87,15 +97,16 @@ class RoomFragment : Fragment() {
         )
 
         binding.textViewPrepareStart.setOnClickListener {
+
             // TODO define client prepare and unprepare events' actions
-            val playerRef = database.getReference(activityViewModel.roomPath)
+            val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath)
             playerRef.child("gameStart").setValue(true)
             findNavController().navigate(RoomFragmentDirections.actionStartGame())
         }
 
         // display new users requesting to join lobby
         val roomPath = activityViewModel.roomPath + "/players/"
-        val roomRef = database.reference.child(roomPath)
+        val roomRef = activityViewModel.database.reference.child(roomPath)
 
         val roomListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -108,6 +119,7 @@ class RoomFragment : Fragment() {
                     Log.w("Players ", players)
                 }
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("loadPost:onCancelled", databaseError.toException())
             }
@@ -116,18 +128,14 @@ class RoomFragment : Fragment() {
 
 //         Start game for non-host players
         val gameInfoPath = activityViewModel.roomPath
-        val gameInfoRef = database.reference.child(gameInfoPath)
+        val gameInfoRef = activityViewModel.database.reference.child(gameInfoPath)
 
         val gameListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                println(dataSnapshot.child("gameStart").value)
-//
-                if(dataSnapshot.child("gameStart").value == true)
+
+                // if the game has started, move all players to game view
+                if(dataSnapshot.child("gameStart").value == true && !activityViewModel.isHost)
                     findNavController().navigate(RoomFragmentDirections.actionStartGame())
-//                  for (postSnapshot in dataSnapshot.children) {
-//                    println("hello")
-//                    Log.e("TAG", "=======" + postSnapshot.child("gameStart").value)
-//                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("loadPost:onCancelled", databaseError.toException())
