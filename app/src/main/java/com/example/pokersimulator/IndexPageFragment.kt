@@ -112,44 +112,6 @@ class IndexPageFragment : Fragment() {
         binding.buttonJoinRoom.setOnClickListener {
             activityViewModel.isHost = false
             findNavController().navigate(IndexPageFragmentDirections.actionJoinRoom())
-
-            val roomRef = database.reference.child("rooms")
-
-            val roomListener = object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    // TODO Get List of rooms and use the values to update the UI
-                   // for (roomSnapshot in dataSnapshot.children) {
-                      //  val roomsList = roomSnapshot.key.toString()
-//                        Log.w("Rooms: ", roomsList)
-                    //}
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.w("loadPost:onCancelled", databaseError.toException())
-                }
-            }
-            roomRef.addValueEventListener(roomListener)
-//            val playerListener = object : ValueEventListener {
-//                override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                    println("This is room")
-//                    // Get List of players and use the values to update the UI
-//                    for (PlayerSnapshot in dataSnapshot.getChildren()) {
-//                        val playersList = PlayerSnapshot.getKey().toString()
-////                    Log.w("Players: ", playersList)
-//                    }
-//                }
-//
-//                override fun onCancelled(databaseError: DatabaseError) {
-//                    Log.w("loadPost:onCancelled", databaseError.toException())
-//                }
-//            }
-//            playerRef.addValueEventListener(playerListener)
-
-            //TODO Change this from activityViewModel.username to the username of the host of the selected room
-            activityViewModel.roomPath = "rooms/" + activityViewModel.username
-
-            val playerRef = MainActivity.database.getReference(activityViewModel.roomPath + "/players/")
-            playerRef.child(activityViewModel.username).setValue("")
         }
     }
 

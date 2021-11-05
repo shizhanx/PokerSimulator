@@ -138,7 +138,10 @@ class RoomFragment : Fragment() {
 //                }
 //            }
 //            playerRef.addValueEventListener(playerListener)
+        activityViewModel.roomPath = "rooms/" + activityViewModel.username
 
+        val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
+        playerRef.child(activityViewModel.username).setValue("")
     }
 
     override fun onDestroyView() {

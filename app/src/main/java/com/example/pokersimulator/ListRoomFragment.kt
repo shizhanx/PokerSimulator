@@ -24,8 +24,8 @@ class ListRoomFragment : Fragment() {
 
     private var _binding: ListRoomFragmentBinding? = null
     private val activityViewModel: MainActivityViewModel by activityViewModels()
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+
+    // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
     // list of lobby
@@ -47,7 +47,7 @@ class ListRoomFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = MyUsernameRecyclerViewAdapter(lobbynames, username, isHost)
         }
-
+//        binding.listOfRooms.buttonAction.setOnClickListener()
         return binding.root
     }
 
