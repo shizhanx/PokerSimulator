@@ -13,9 +13,6 @@ import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.DialogFragment
 
 import com.example.pokersimulator.common.MyYesNoDialog
