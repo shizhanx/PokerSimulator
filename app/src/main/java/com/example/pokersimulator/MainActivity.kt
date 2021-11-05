@@ -30,11 +30,6 @@ class MainActivity : AppCompatActivity() {
     private var flipSensor: Sensor? = null
     private lateinit var myFlipDeviceListener: MyFlipDeviceListener
 
-    companion object{
-        // set database url as global variable
-        val database = Firebase.database("https://mystical-binder-330900-default-rtdb.asia-southeast1.firebasedatabase.app/")
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
