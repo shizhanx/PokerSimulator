@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.example.pokersimulator.listener.MySendMessageClickListener
-import com.example.pokersimulator.databinding.ListRoomFragmentBinding
+
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -37,7 +37,7 @@ class ListRoomFragment : Fragment() {
         Log.v("userName", activityViewModel.username + " is in " + roomId)
 
         activityViewModel.roomPath = "rooms/$roomId"
-        val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
+        val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/players/")
         playerRef.child(activityViewModel.username).setValue("")
         findNavController().navigate(ListRoomFragmentDirections.actionJoinSelectedRoom())
 

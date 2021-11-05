@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pokersimulator.MainActivity.Companion.database
+
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.example.pokersimulator.databinding.RoomFragmentBinding
 import com.example.pokersimulator.listener.MySendMessageClickListener
@@ -34,7 +34,7 @@ class RoomFragment : Fragment() {
     private val joinRoom: (String) -> Unit = { roomId ->
         Log.v("userName", activityViewModel.username + " is in " + roomId)
 
-        val roomRef = database.getReference(activityViewModel.roomPath)
+        val roomRef = activityViewModel.database.getReference(activityViewModel.roomPath)
         if (activityViewModel.isHost) {
             roomRef.child("players").child(roomId).removeValue()
         }
@@ -97,7 +97,7 @@ class RoomFragment : Fragment() {
         }
 
         val roomPath = activityViewModel.roomPath + "/players/"
-        val roomRef = database.reference.child(roomPath)
+        val roomRef = activityViewModel.database.reference.child(roomPath)
 
         val roomListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -107,6 +107,7 @@ class RoomFragment : Fragment() {
                 for (roomSnapshot in dataSnapshot.children) {
                     val players = roomSnapshot.key.toString()
                     adapter.addUser(players)
+                    Log.w("Players ", players)
                 }
                 println(dataSnapshot.childrenCount)
             }
@@ -124,7 +125,10 @@ class RoomFragment : Fragment() {
             roomRef.removeEventListener(roomListener)
         }
 
-        val playerRef = database.getReference(activityViewModel.roomPath + "/players/")
+
+        activityViewModel.roomPath = "rooms/" + activityViewModel.username
+
+        val playerRef = activityViewModel.database.getReference(activityViewModel.roomPath + "/players/")
         playerRef.child(activityViewModel.username).setValue("")
     }
 
