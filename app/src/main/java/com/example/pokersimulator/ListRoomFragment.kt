@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pokersimulator.MainActivity.Companion.database
+import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.common.MyUsernameRecyclerViewAdapter
 import com.example.pokersimulator.listener.MySendMessageClickListener
 import com.example.pokersimulator.databinding.ListRoomFragmentBinding
@@ -76,8 +76,7 @@ class ListRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val roomRef = database.reference.child("rooms")
+        val roomRef = activityViewModel.database.reference.child("rooms")
 
         val roomListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
