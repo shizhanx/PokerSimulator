@@ -15,11 +15,12 @@ import com.example.pokersimulator.domain_object.PlayerData
  * and a button next to it. The click event of the buttons will be passed in as a parameter
  */
 class MyUsernameRecyclerViewAdapter(
-    private val userList:Array<String>,
+    private val userList:MutableList<String>,
 //    userList:MutableList<PlayerData>,
 //    data:MutableList<PlayerData>,
 //    onClickListener: View.OnClickListener
 ): RecyclerView.Adapter<MyUsernameRecyclerViewAdapter.ViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyUsernameRecyclerViewAdapter.ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = UserFragmentBinding.inflate(LayoutInflater.from(parent.context),
@@ -29,15 +30,16 @@ class MyUsernameRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: MyUsernameRecyclerViewAdapter.ViewHolder, position: Int) {
-        // TODO Not yet implemented
-//        holder.itemView = "hello"
-        val currentItem = userList[position]
-        holder.usernameView.text = currentItem
+//        val currentItem = userList[position]
+        holder.usernameView.text = userList[position]
         holder.buttonAction.text = "Join"
     }
 
-    override fun getItemCount(): Int {
-        return userList.size
+    override fun getItemCount(): Int = userList.size
+
+    fun addUser(username: String){
+        userList.add(username)
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(binding: UserFragmentBinding) : RecyclerView.ViewHolder(binding.root) {

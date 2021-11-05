@@ -1,13 +1,25 @@
 package com.example.pokersimulator.listener
 
+import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.AnimatedVectorDrawable
+import android.graphics.drawable.AnimationDrawable
 import android.util.Log
 import android.view.DragEvent
 import android.view.View
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pokersimulator.GameBoardViewModel
 import com.example.pokersimulator.R
 import com.example.pokersimulator.domain_object.GameActionEnum
 import kotlin.math.log
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RectShape
+import android.text.Html
+import androidx.core.graphics.drawable.toBitmap
+
 
 /**
  * The drag event listener specifically for in game actions to the cards
@@ -16,6 +28,7 @@ class MyDragListener(
     private val viewModel: GameBoardViewModel,
     private val logZone: TextView
 ): View.OnDragListener {
+    @SuppressLint("ResourceAsColor")
     override fun onDrag(view: View, dragEvent: DragEvent): Boolean {
         var gameActionType: GameActionEnum? = null
         // Determine the possible game play option of this drag and drop action
@@ -35,10 +48,22 @@ class MyDragListener(
         return when (dragEvent.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
                 //TODO use the correct image resource for the visual effect of droppable zone.
-                if (gameActionType != null) view.setBackgroundResource(R.drawable.background_drawable_blue)
+                println(gameActionType.toString())
+                if (gameActionType != null){
+                    when(gameActionType.toString()) {
+                        "PLAY" -> view.setBackgroundResource(R.drawable.table_hover_border)
+                        "DRAW","UNDO_PLAY" -> view.setBackgroundResource(R.drawable.cards_in_hands_hover)
+                    }
+                }
                 gameActionType != null
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
+                if (gameActionType != null){
+                    when(gameActionType.toString()) {
+                        "PLAY" -> view.setBackgroundResource(R.drawable.table_gold_border)
+                        "DRAW","UNDO_PLAY" -> view.setBackgroundResource(R.drawable.cards_in_hands)
+                    }
+                }
                 gameActionType != null
             }
             DragEvent.ACTION_DRAG_LOCATION -> {
@@ -67,7 +92,6 @@ class MyDragListener(
                 gameActionType != null
             }
             DragEvent.ACTION_DRAG_ENDED -> {
-                view.setBackgroundResource(R.drawable.background_light_corner)
                 gameActionType != null
             }
             else -> false

@@ -5,21 +5,25 @@
     android:id="@+id/gameBoardConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    android:padding="20dp"
+    android:background="@drawable/black_gold_background"
+    android:padding="10dp"
     tools:context=".GameBoardFragment">
 
     <TextView
         android:id="@+id/opponentName"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="27dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/name_background"
+        android:background="@drawable/ic_list_players_bacground"
         android:gravity="center"
         android:lines="1"
+        android:shadowColor="@color/black"
+        android:shadowRadius="10"
         android:text="The last active opponent's"
-        android:textColor="#FCF9AC"
+        android:textColor="#FFEB3B"
+        android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/opponentPlayedPile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,12 +34,14 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/background_light_corner"
+        android:background="@drawable/opponent_cards_played"
+
         app:layout_constraintBottom_toTopOf="@id/numberCardsInDrawPile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/opponentName"
         tools:itemCount="1"
+        android:padding="5dp"
         tools:listitem="@layout/card_fragment">
 
     </androidx.recyclerview.widget.RecyclerView>
@@ -98,12 +104,13 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/background_light_corner"
+        android:background="@drawable/table_gold_border"
         app:layout_constraintBottom_toTopOf="@+id/includeUserFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonHostPrevilege_action"
         tools:itemCount="1"
+        android:padding="5dp"
         tools:listitem="@layout/card_fragment" />
 
 
@@ -112,13 +119,16 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
 
+
+
         android:layout_marginTop="8dp"
-        android:background="@drawable/background_light_corner"
+        android:background="@drawable/cards_in_hands"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/includeUserFragment"
         tools:itemCount="1"
+        android:padding="5dp"
         tools:listitem="@layout/card_fragment" />
 
     <include
