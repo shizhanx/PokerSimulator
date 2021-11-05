@@ -24,6 +24,7 @@ class MyUsernameRecyclerViewAdapter(
     private val userList:MutableList<String>,
     private val username:String,
     private val isHost: Boolean,
+    private val inRoom: Boolean,
 //    userList:MutableList<PlayerData>,
 //    data:MutableList<PlayerData>,
 //    onClickListener: View.OnClickListener
@@ -41,23 +42,26 @@ class MyUsernameRecyclerViewAdapter(
         val currentUser = userList[position]
         holder.usernameView.text = userList[position]
 
-//        if(currentUser == username){
-//            holder.itemView.visibility = View.GONE
-//            holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
-//        }
+        //block of
+        if(currentUser == username){
+            holder.itemView.visibility = View.GONE
+            holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
+        }
+        else{
+            holder.itemView.visibility = View.VISIBLE
+            holder.itemView.layoutParams =
+                RecyclerView.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+        }
 
-        if(isHost)
-            holder.buttonAction.text = "Accept"
-        else
-            holder.buttonAction.text = "Join"
+        when {
+            isHost -> holder.buttonAction.text = "Accept"
+            inRoom -> holder.buttonAction.visibility = View.GONE
+            else -> holder.buttonAction.text = "Join"
+        }
 
-//        holder.buttonAction.setOnClickListener(View.OnClickListener {
-//            Toast.makeText(
-//                parent.context,
-//                "Recycle Click$position",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//        })
     }
 
     override fun getItemCount(): Int = userList.size

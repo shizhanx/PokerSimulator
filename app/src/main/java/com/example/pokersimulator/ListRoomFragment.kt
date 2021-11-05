@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokersimulator.databinding.ListRoomFragmentBinding
 import com.example.pokersimulator.MainActivity.Companion.database
@@ -38,6 +39,7 @@ class ListRoomFragment : Fragment() {
     ): View {
         val username = activityViewModel.username
         val isHost = activityViewModel.isHost
+        val inRoom = false
 
         lobbynames = ArrayList()
 
@@ -46,14 +48,11 @@ class ListRoomFragment : Fragment() {
 
         with(binding.listOfRooms) {
             layoutManager = LinearLayoutManager(context)
-            adapter = MyUsernameRecyclerViewAdapter(lobbynames, username, isHost)
+            adapter = MyUsernameRecyclerViewAdapter(lobbynames, username, isHost, inRoom)
         }
 
 //        binding.listOfRooms.buttonAction.setOnClickListener()
-//        binding.listOfRooms.buttonAction.setOnClickListener(
-//            MySendMessageClickListener(requireContext()) {
-//            }
-//        )
+
         return binding.root
     }
 
@@ -79,6 +78,14 @@ class ListRoomFragment : Fragment() {
         roomRef.addValueEventListener(roomListener)
 
         // TODO define navigation to the room fragment
+        //once accepted
+        var roomJoined = "testing 8878"
+        activityViewModel.roomPath = "rooms/" + "testing 8878"+ "/players"
+
+        val playerRef = database.getReference(activityViewModel.roomPath)
+        playerRef.child(activityViewModel.username).setValue("")
+        findNavController().navigate(ListRoomFragmentDirections.actionJoinSelectedRoom())
+
     }
 
     override fun onDestroyView() {

@@ -39,6 +39,9 @@ class RoomFragment : Fragment() {
         val username = activityViewModel.username
         val isHost = activityViewModel.isHost
 
+        // once they're in this view, they'll be classed as in room/lobby
+        val inRoom = true
+
         usernames = ArrayList()
 
         _binding = RoomFragmentBinding.inflate(inflater, container, false)
@@ -46,7 +49,7 @@ class RoomFragment : Fragment() {
 
         with(binding.listOfPlayers) {
             layoutManager = LinearLayoutManager(context)
-            adapter = MyUsernameRecyclerViewAdapter(usernames, username, isHost)
+            adapter = MyUsernameRecyclerViewAdapter(usernames, username, isHost, inRoom)
         }
 
         return binding.root

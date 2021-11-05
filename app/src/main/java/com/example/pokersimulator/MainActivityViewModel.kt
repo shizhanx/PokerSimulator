@@ -4,6 +4,7 @@ import android.net.Uri
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pokersimulator.domain_object.PlayerData
 
 /**
  * This viewModel is owned by the main activity, therefore available for ALL the fragments, as a
